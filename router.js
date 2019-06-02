@@ -3,19 +3,22 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  Button,
+  Platform,
+  TouchableOpacity,
 } from 'react-native'
 import { Route } from 'react-router-native'
+import TabBarIcon from './components/TabBarIcon'
 import News from './Pages/News'
 import TestPage from './Pages/TestPage'
 
 const RouterView = (props) => (
   <ScrollView style={styles.container}>
       <View style={styles.nav}>
-        <Button
+      <TouchableOpacity style={{alignSelf: 'flex-start', marginTop: 20}}
           onPress={props.openDrawer}
-          title="Open Drawer"
-        />
+        >
+          <TabBarIcon name={Platform.OS === 'ios' ? 'ios-menu' : 'md-menu'} />
+        </TouchableOpacity>
       </View>
     
     <Route exact path="/" component={News} />
@@ -30,8 +33,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   nav: {
+    flex: 1,
     flexDirection: "row",
-    justifyContent: "space-around"
   },
 })
 

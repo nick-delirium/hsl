@@ -1,28 +1,7 @@
 import React from 'react'
-import { StyleSheet, View, ScrollView, Text, Button } from 'react-native'
-import { NativeRouter, Route, Link } from "react-router-native"
 import Drawer from 'react-native-drawer'
 import DrawerPanel from './components/DrawerPanel'
 import RouterView from '../router.js'
-
-const FirstScreen = () => (
-  <View>
-    <Text style={styles.header}>
-      Screen One
-    </Text>
-    <Link to="/news">
-      <Text>go to news</Text>
-    </Link>
-  </View>
-)
-
-const News = () => (
-  <View>
-    <Text>
-      News
-    </Text>
-  </View>
-)
 
 class RouterWithDrawer extends React.Component {
   constructor(props, context) {
@@ -72,35 +51,5 @@ class RouterWithDrawer extends React.Component {
     )
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#7699dd',
-    padding: 20,
-    flex: 1,
-  },
-  drawerLinks: {
-    flexDirection: "column",
-  },
-  header: {
-    fontSize: 20
-  },
-  nav: {
-    flexDirection: "row",
-    justifyContent: "space-around"
-  },
-  navItem: {
-    flex: 1,
-    alignItems: "center",
-    padding: 10
-  },
-  subNavItem: {
-    padding: 5
-  },
-  topic: {
-    textAlign: "center",
-    fontSize: 15
-  }
-})
 
 export default RouterWithDrawer

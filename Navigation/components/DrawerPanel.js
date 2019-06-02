@@ -4,35 +4,31 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
 } from 'react-native'
-import { Link } from 'react-router-native'
+import { withRouter } from 'react-router-native'
 
 class DrawerPanel extends React.Component {
   constructor(props) {
     super(props)
   }
 
+  onItemPress = (path) => {
+    this.props.history.push(path)
+    this.props.closeDrawer()
+  }
+
   render() {
-    const { closeDrawer } = this.props
     return (
       <ScrollView style={styles.container}>
         <Text style={styles.controlText}>
           Control Panel
         </Text>
 
-        <Link to="/">
+        <TouchableOpacity onPress={() => this.onItemPress('/')}>
           <Text style={styles.button}>News</Text>
-        </Link>
-        <Link to="/testpage">
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.onItemPress('/testpage')}>
           <Text style={styles.button}>TestPage</Text>
-        </Link>
-
-        <TouchableOpacity
-          style={styles.button} 
-          onPress={closeDrawer}
-        >
-          <Text>Close Drawer</Text>
         </TouchableOpacity>
       </ScrollView>
     )
@@ -56,4 +52,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default DrawerPanel
+export default withRouter(DrawerPanel)
