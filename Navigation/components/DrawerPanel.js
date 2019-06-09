@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native'
+import { LinearGradient } from 'expo'
 import { withRouter } from 'react-router-native'
 
 class DrawerPanel extends React.Component {
@@ -19,18 +20,25 @@ class DrawerPanel extends React.Component {
 
   render() {
     return (
-      <ScrollView style={styles.container}>
-        <Text style={styles.controlText}>
-          Control Panel
-        </Text>
+      <LinearGradient
+        style={{ flex: 1 }}
+        colors={['#1323DD', '#DD13DD']}
+        start={[0,1]}
+        end={[1,0]}
+      >
+        <ScrollView style={styles.container}>
+          <Text style={styles.controlText}>
+            Control Panel
+          </Text>
 
-        <TouchableOpacity onPress={() => this.onItemPress('/')}>
-          <Text style={styles.button}>Все</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.onItemPress('/testpage')}>
-          <Text style={styles.button}>TestPage</Text>
-        </TouchableOpacity>
-      </ScrollView>
+          <TouchableOpacity onPress={() => this.onItemPress('/')}>
+            <Text style={styles.button}>News</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.onItemPress('/testpage')}>
+            <Text style={styles.button}>TestPage</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </LinearGradient>
     )
   }
 }
@@ -39,7 +47,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: 'white',
   },
   controlText: {
     color: 'white',
