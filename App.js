@@ -3,7 +3,6 @@ import {
   StyleSheet, 
   View, 
   StatusBar,
-  AppRegistry,
 } from 'react-native'
 import { Provider } from 'react-redux'
 import { NativeRouter } from 'react-router-native'
