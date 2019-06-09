@@ -18,7 +18,7 @@ class DrawerPanel extends React.Component {
 
   render() {
     const items = [{
-      text: 'News',
+      text: 'Все',
       href: '/',
     }, {
       text: 'Test',

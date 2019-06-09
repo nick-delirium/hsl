@@ -9,6 +9,7 @@ import { compose } from 'redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router-native'
+import { changeLocation } from '../reducer'
 
 class DrawerItem extends React.Component {
   constructor(props) {
@@ -17,12 +18,13 @@ class DrawerItem extends React.Component {
 
   onItemPress = (path) => {
     this.props.history.push(path)
+    this.props.changeLoc(path)
     this.props.closeDrawer()
   }
 
-  isButtonActive = (path) => {
-    const { match: { url } } = this.props
-    return url === path
+  isButtonActive = (url) => {
+    const { path } = this.props
+    return path === url
   }
 
   render() {
@@ -66,7 +68,12 @@ const styles = StyleSheet.create({
 const mapStateToProps = createStructuredSelector({
   path: (state) => get(state, 'url.path'),
 })
-const withConnect = connect(mapStateToProps)
+const mapDispatchToProps = (dispatch) => ({
+  changeLoc: (path) => dispatch(changeLocation(path))
+})
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps)
+
 export default compose(
   withConnect,
   withRouter,

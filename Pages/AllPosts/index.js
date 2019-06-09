@@ -12,8 +12,8 @@ import { getPosts } from './reducer'
 
 class AllPosts extends React.Component {
   componentDidMount() {
-    const { fetchPosts } = this.props
-    fetchPosts(20)
+    const { fetchPosts, posts } = this.props
+    if (posts.length === 0) fetchPosts(20)
   }
 
   render() {
