@@ -28,7 +28,7 @@ const RouterView = (props) => (
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#7699dd',
+    backgroundColor: '#EEEEEE',
     padding: 20,
     flex: 1,
   },
