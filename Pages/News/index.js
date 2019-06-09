@@ -4,30 +4,27 @@ import {
   View,
   Text,
 } from 'react-native'
+import get from 'lodash/get'
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
 import Article from './components/Article.js'
+import { getPosts } from './reducer'
 
 class News extends React.Component {
-  state = {
-    data: [],
-    isFetching: true,
-    error: null,
-  }
   componentDidMount() {
-    fetch('http://hansanglab.com/wp-json/wp/v2/posts?per_page=30')
-      .then(response => response.json())
-      .then(result => this.setState({data: result, isFetching: false }))
-      .catch(e => {
-        console.error(e)
-        this.setState({isFetching: false, error: e })
-      });
+    const { fetchPosts } = this.props
+    fetchPosts(20)
   }
 
   render() {
-    const { data } = this.state
+    const { posts, isLoading } = this.props
     return (
       <View>
         <Text style={styles.header}>News</Text>
-        {data && data.map((item, i) => {
+        {isLoading && (
+          <Text>Загрузка</Text>
+        )}
+        {posts && posts.map((item, i) => {
           let mediaUrl = item._links['wp:attachment'] && item._links['wp:attachment'][0] && item._links['wp:attachment'][0].href
           return (
           <Article 
@@ -50,4 +47,17 @@ const styles = StyleSheet.create({
   },
 })
 
-export default News
+const mapStateFromProps = createStructuredSelector({
+  isLoading: (state) => get(state, 'posts.isLoading'),
+  isError: (state) => get(state, 'posts.isError'),
+  posts: (state) => get(state, 'posts.posts'),
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchPosts: (limit) => dispatch(getPosts(limit))
+})
+
+export default connect(
+  mapStateFromProps,
+  mapDispatchToProps, 
+)(News)
