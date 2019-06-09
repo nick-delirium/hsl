@@ -1,20 +1,8 @@
-import { combineReducers, createStore, applyMiddleware, compose } from 'redux'
+import { combineReducers, applyMiddleware, compose } from 'redux'
+import postsReducer from '../Pages/News/reducer'
 
-const initialState = {
-  foo: 'bar'
-}
 
-function reducer(state = initialState, action) {
-  switch (action.type) {
-    default: 
-      return state
-  }
-}
 
-export default () => {
-  const rootReducer = combineReducers({
-    main: reducer
-  })
-
-  return createStore(rootReducer)
-}
+export const rootReducer = combineReducers({
+  posts: postsReducer,
+})

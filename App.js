@@ -1,11 +1,17 @@
 import React from 'react'
-import { StyleSheet, View, StatusBar } from 'react-native'
+import { 
+  StyleSheet, 
+  View, 
+  StatusBar,
+} from 'react-native'
 import { Provider } from 'react-redux'
-import createStore from './Redux'
 import { NativeRouter } from 'react-router-native'
 import RouterWithDrawer from './Navigation'
+import { createStore, applyMiddleware } from 'redux'
+import createSagaMiddleware from 'redux-saga'
+import configureStore from './configureStore'
 
-const store = createStore();
+const store = configureStore()
 
 export default class App extends React.Component {
   render() {
