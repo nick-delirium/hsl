@@ -7,8 +7,6 @@ import {
 import { Provider } from 'react-redux'
 import { NativeRouter } from 'react-router-native'
 import RouterWithDrawer from './Navigation'
-import { createStore, applyMiddleware } from 'redux'
-import createSagaMiddleware from 'redux-saga'
 import configureStore from './configureStore'
 
 const store = configureStore()

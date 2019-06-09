@@ -10,7 +10,7 @@ import { createStructuredSelector } from 'reselect'
 import Article from './components/Article.js'
 import { getPosts } from './reducer'
 
-class News extends React.Component {
+class AllPosts extends React.Component {
   componentDidMount() {
     const { fetchPosts } = this.props
     fetchPosts(20)
@@ -20,7 +20,7 @@ class News extends React.Component {
     const { posts, isLoading } = this.props
     return (
       <View>
-        <Text style={styles.header}>News</Text>
+        <Text style={styles.header}>Все</Text>
         {isLoading && (
           <Text>Загрузка</Text>
         )}
@@ -60,4 +60,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
   mapStateFromProps,
   mapDispatchToProps, 
-)(News)
+)(AllPosts)

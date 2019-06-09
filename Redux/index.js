@@ -1,5 +1,5 @@
 import { combineReducers, applyMiddleware, compose } from 'redux'
-import postsReducer from '../Pages/News/reducer'
+import postsReducer from '../Pages/AllPosts/reducer'
 
 
 

@@ -25,7 +25,7 @@ class DrawerPanel extends React.Component {
         </Text>
 
         <TouchableOpacity onPress={() => this.onItemPress('/')}>
-          <Text style={styles.button}>News</Text>
+          <Text style={styles.button}>Все</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => this.onItemPress('/testpage')}>
           <Text style={styles.button}>TestPage</Text>

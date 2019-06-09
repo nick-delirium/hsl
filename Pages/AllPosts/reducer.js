@@ -1,8 +1,8 @@
 import api from '../../api'
 
-const FETCH_POSTS_START = 'app.news.fetch.start'
-const FETCH_POSTS_SUCCESS = 'app.news.fetch.succes'
-const FETCH_POSTS_FAIL = 'app.news.fetch.fail'
+const FETCH_POSTS_START = 'app.allposts.fetch.start'
+const FETCH_POSTS_SUCCESS = 'app.allposts.fetch.succes'
+const FETCH_POSTS_FAIL = 'app.allposts.fetch.fail'
 
 const DEFAULT_LIMIT = 20
 

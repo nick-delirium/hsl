@@ -38,7 +38,7 @@ render () {
     {imgUrl && <Image style={{flex: 1, height: 140}} source={{uri: imgUrl}}/>}
     <View style={styles.cardText}>
       <Text style={{fontWeight: 'bold'}}>{title}</Text>
-      <Text>{descr.split(' \n<')[0]}...</Text>
+      <Text>{descr.split('\n<')[0]}...</Text>
       <Text>{imgSrc}</Text>
     </View>
   </View>

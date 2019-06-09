@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { Route } from 'react-router-native'
 import TabBarIcon from './components/TabBarIcon'
-import News from './Pages/News'
+import AllPosts from './Pages/AllPosts'
 import TestPage from './Pages/TestPage'
 
 const RouterView = (props) => (
@@ -21,7 +21,7 @@ const RouterView = (props) => (
         </TouchableOpacity>
       </View>
     
-    <Route exact path="/" component={News} />
+    <Route exact path="/" component={AllPosts} />
     <Route path="/testpage" component={TestPage} />
   </ScrollView>
 )
