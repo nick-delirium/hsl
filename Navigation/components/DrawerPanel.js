@@ -2,13 +2,11 @@ import React from 'react'
 import {
   ScrollView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   Image,
   View,
 } from 'react-native'
 import { LinearGradient } from 'expo'
-import { withRouter } from 'react-router-native'
+import pages from '../../constants/pages'
 import DrawerItem from './DrawerItem'
 
 class DrawerPanel extends React.Component {
@@ -17,13 +15,7 @@ class DrawerPanel extends React.Component {
   }
 
   render() {
-    const items = [{
-      text: 'Все',
-      href: '/',
-    }, {
-      text: 'Test',
-      href: '/testpage'
-    }]
+    const items = Object.keys(pages)
     return (
       <LinearGradient
         style={{ flex: 1 }}
@@ -47,12 +39,11 @@ class DrawerPanel extends React.Component {
             {items.map((item) => (
               <DrawerItem
                 closeDrawer={this.props.closeDrawer}
-                href={item.href}
-                text={item.text}
-                key={item.text}
+                href={pages[item].path}
+                text={pages[item].name}
+                key={pages[item].name}
               />
             ))}
-           
           </View>
         </ScrollView>
       </LinearGradient>

@@ -5,52 +5,62 @@ import {
   Text,
   Image,
 } from 'react-native'
+import { withRouter } from 'react-router-native'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+import get from 'lodash/get'
+import { changeLocation } from '../../../Navigation/reducer'
+import { createStructuredSelector } from 'reselect'
+import HTMLView from 'react-native-htmlview';
 
 class Article extends React.Component {
-constructor(props) {
+  constructor(props) {
     super(props)
-    this.state = {
-    imgUrl: null,
-    isFetching: false,
-    error: null,
+  }
+
+  onLinkPress = (url) => {
+    let found = this.props.allPosts.find(post => (post.link === url))
+    if (found) {
+      this.props.history.push(`post/${found.id}`)
+      this.props.changeLoc(path)
     }
-}
+  }
 
-componentDidMount() {
-    if (this.props.mediaUrl) {
-    fetch(this.props.mediaUrl)
-        .then(response => response.json())
-        .then(result => this.setState({imgUrl: result && result[0] && result[0].source_url, isFetching: false }))
-        .catch(e => {
-        console.error(e)
-        this.setState({isFetching: false, error: e })
-        })
-    }
-}
+  render () {
+    const { 
+      match: { params: { id } }, 
+      allPosts,
+      article,
+    } = this.props
+  
+    // const post = allPosts.find(a => (a.id == id))
+    // const content = get(post, 'content.rendered')
+    // const title = get(post, 'title.rendered')
 
-render () {
-  const { title, descr, imgSrc } = this.props, 
-    { imgUrl } = this.state;
+    const { title, content: { rendered: content }, imgUrl } = article
+    console.log(content)
+    return (
+      <View style={styles.card}>
 
-  return (
-    <View style={styles.card}>
-
-    {imgUrl && <Image style={{flex: 1, height: 140}} source={{uri: imgUrl}}/>}
-    <View style={styles.cardText}>
-      <Text style={{fontWeight: 'bold'}}>{title}</Text>
-      <Text>{descr.split('\n<')[0]}...</Text>
-      <Text>{imgSrc}</Text>
-    </View>
-  </View>
-  )
-}
+        <View style={styles.cardText}>
+          <Text style={{fontWeight: 'bold'}}>{title}</Text>
+          {imgUrl && <Image style={{flex: 1, height: 140}} source={{uri: imgUrl}}/>}
+          <HTMLView
+            value={content}
+            stylesheet={styles}
+            onLinkPress={(url) => console.log('clicked link: ', url)}
+        />
+        </View>
+      </View>
+    )
+  }
 }
 
 const styles = StyleSheet.create({
   card: {
     marginBottom: 10,
-    marginRight: 17,
-    marginLeft: 17,
+    marginRight: 0,
+    marginLeft: 0,
     backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOpacity: 0.25,
@@ -61,7 +71,32 @@ const styles = StyleSheet.create({
     paddingTop: 18,
     paddingRight: 18,
     paddingLeft: 18,
+  },
+  
+  p: {
+    paddingBottom: 0,
+    paddingTop: 0,
+    padding: 0,
+    marginBottom: 0,
+    marginTop: 0,
+    textIndent: 10, 
   }
+  
 })
 
-export default Article;
+const mapDispatchToProps = (dispatch) => ({
+  changeLoc: (path) => dispatch(changeLocation(path))
+})
+
+const mapStateToProps = createStructuredSelector({
+  path: (state) => get(state, 'url.path'),
+  allPosts: (state) => get(state, 'posts.posts'),
+  article: (state) => get(state, 'article')
+})
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps)
+
+export default compose(
+  withConnect,
+  withRouter,
+)(Article)

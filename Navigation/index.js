@@ -2,6 +2,10 @@ import React from 'react'
 import Drawer from 'react-native-drawer'
 import DrawerPanel from './components/DrawerPanel'
 import RouterView from '../router.js'
+import { getCategories } from './reducer'
+import get from 'lodash/get'
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
 
 class RouterWithDrawer extends React.Component {
   constructor(props, context) {
@@ -11,7 +15,7 @@ class RouterWithDrawer extends React.Component {
       drawerDisabled: false,
     }
   }
-
+  
   closeDrawer = () => {
     this._drawer.close()
   }
@@ -52,4 +56,15 @@ class RouterWithDrawer extends React.Component {
   }
 }
 
-export default RouterWithDrawer
+const mapStateFromProps = createStructuredSelector({
+  categories: (state) => get(state, 'url.categories'),
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  fetchCategories: () => dispatch(getCategories()),
+})
+
+export default connect(
+  mapStateFromProps,
+  mapDispatchToProps, 
+)(RouterWithDrawer)
