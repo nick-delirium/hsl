@@ -23,7 +23,10 @@ const pages = {
     name: 'Медиа',
     path: '/media',
   },
-  //map here 
+  places: {
+    name: 'Места',
+    path: '/places'
+  },
 
   // invite: {
   //   name: 'Пригласить друга',
