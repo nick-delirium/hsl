@@ -37,12 +37,12 @@ class DrawerPanel extends React.Component {
             }}
           >
             {items.map((item) => (
-              <DrawerItem
+              pages[item].name ? (<DrawerItem
                 closeDrawer={this.props.closeDrawer}
                 href={pages[item].path}
                 text={pages[item].name}
                 key={pages[item].name}
-              />
+              />) : null
             ))}
           </View>
         </ScrollView>
