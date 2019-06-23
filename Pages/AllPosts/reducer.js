@@ -15,7 +15,7 @@ const fetchAllPostsReq = (limit) => ({
   payload: limit,
 })
 
-const fetchAllSuccess = (data) => ({
+export const fetchAllSuccess = (data) => ({
   type: FETCH_ALLPOSTS_SUCCESS,
   payload: data,
 })
