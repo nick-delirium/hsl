@@ -6,12 +6,11 @@
     "sdkVersion": "32.0.0",
     "platforms": [
       "ios",
-      "android"
+      "android",
     ],
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    
     "updates": {
       "fallbackToCacheTimeout": 0
     },
