@@ -17,15 +17,12 @@ class DrawerPanel extends React.Component {
   render() {
     const items = Object.keys(pages)
     return (
-      <LinearGradient
-        style={{ flex: 1 }}
-        colors={['#1323DD', '#DD13DD']}
-        start={[0,1]}
-        end={[1,0]}
-      >
         <ScrollView contentContainerStyle={{
           flexDirection: 'column',
-          paddingTop: 50,
+          flex: 1,
+          paddingTop: 80,
+          backgroundColor: "#eee",
+          width: 240,
         }}>
           <Image 
             source={require('./logo_HSL.png')}
@@ -46,7 +43,6 @@ class DrawerPanel extends React.Component {
             ))}
           </View>
         </ScrollView>
-      </LinearGradient>
     )
   }
 }
@@ -68,7 +64,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#000',
   },
   activeButton: {
     backgroundColor: 'rgba(0,0,0,0.3)',
