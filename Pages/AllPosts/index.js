@@ -10,6 +10,7 @@ import { createStructuredSelector } from 'reselect'
 import CardArticle from './components/CardArticle.js'
 import { getPosts, getPostsByCategory } from './reducer'
 import { getCategories } from '../../Navigation/reducer'
+import pages from '../../constants/pages'
 
 class AllPosts extends React.Component {
   constructor(props) {
@@ -18,34 +19,44 @@ class AllPosts extends React.Component {
 
   componentDidMount() {
     const { 
-      fetchPosts, 
-      fetchNews,
-      fetchCategories, 
-      posts, 
-      onlyNews, 
-      data, 
+      fetchPosts,
+      fetchByCategory,
+      fetchCategories,
+      posts,
+      type,
+      data,
       categories
     } = this.props
-    if (onlyNews && data.length === 0) fetchNews()
-    if (posts.length === 0) fetchPosts()
+
     if (!categories || categories.length === 0) {
       fetchCategories()
     }
+    let category = categories.find(cat => (cat.slug === type))
+    if (type && category && (!data[`${category.id}`] || data[`${category.id}`].length === 0)) {
+      if (category && category.id) {
+        // console.log(`fetching for ${type}`)
+        fetchByCategory(category.id)
+      } else {
+        console.log(`Error: category ${type} not found`)
+      }
+    }
+    if (posts.length === 0) fetchPosts()
   }
 
   render() {
-    const { posts, isLoading, onlyNews, data, categories } = this.props
-    let displayingPosts = onlyNews ? data : posts
+    const { posts, isLoading, type, data, categories } = this.props
+    let category = categories.find(cat => (cat.slug === type))
+    let displayingPosts = type ? data[`${category.id}`] : posts
+    const headerText = type ? pages[type].name : 'KORYOSARAM SYNERGY'
 
     return (
       <View>
-        {!onlyNews && <Text style={styles.header}>Все</Text>}
-        {isLoading && <Text>Загрузка</Text>}
+        {<Text style={styles.header}>{headerText}</Text>}
+        {isLoading && <Text>Загрузка</Text> /* TODO: add loader */}
         {displayingPosts && displayingPosts.map((item, i) => {
           const mediaUrl = get(item, `_links.wp:featuredmedia.href`) || 'https://hansanglab.com/wp-json/wp/v2/media/' +get(item, 'featured_media')
 
           // const mediaUrl = get(item, `_links.wp:attachment[0].href`)
-          console.log(mediaUrl)
           return (
             <CardArticle
               key={item.id}
@@ -80,7 +91,7 @@ const mapStateFromProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   fetchPosts: (limit) => dispatch(getPosts(limit)),
-  fetchNews: (limit) => dispatch(getPostsByCategory(3, limit)), //TODO: map categories
+  fetchByCategory: (cat, limit) => dispatch(getPostsByCategory(cat, limit)), //TODO: map categories
   fetchCategories: () => dispatch(getCategories()),
 })
 

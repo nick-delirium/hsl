@@ -31,9 +31,9 @@ const fetchPostsReq = (category, limit) => ({
   payload: {limit, category},
 })
 
-const fetchSuccess = (data) => ({
+const fetchSuccess = (data, category) => ({
   type: FETCH_POSTS_SUCCESS,
-  payload: data,
+  payload: {category: category, data: data}
 })
 
 const fetchFail = (reason) => ({
@@ -56,14 +56,14 @@ export const getPostsByCategory = (category, limit = DEFAULT_LIMIT) => {
     dispatch(fetchPostsReq(category))
     const result = fetch(api.getPostsByCategory(category, limit))
       .then((response) => response.json())
-      .then((result) => dispatch(fetchSuccess(result)))
+      .then((result) => dispatch(fetchSuccess(result, category)))
       .catch(e => dispatch(fetchFail(e)))
   }
 }
 
 const initialState = {
   posts: [],
-  data: [],
+  data: {},
   isLoading: false,
   isError: false,
   errorMessage: '',
@@ -99,7 +99,7 @@ export default function(state = initialState, action) {
     case FETCH_POSTS_SUCCESS:
       return {
         ...state,
-        data: [...action.payload],
+        data: {...state.data, [`${action.payload.category}`]: [...action.payload.data]},
         isLoading: false,
       }
     case FETCH_POSTS_FAIL:

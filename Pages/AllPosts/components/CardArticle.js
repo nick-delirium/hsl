@@ -23,57 +23,10 @@ constructor(props) {
     error: null,
     }
   }
-  /*
-  chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-  btoa = (input = '')  => {
-    let str = input;
-    let output = '';
-
-    for (let block = 0, charCode, i = 0, map = this.chars;
-    str.charAt(i | 0) || (map = '=', i % 1);
-    output += map.charAt(63 & block >> 8 - i % 1 * 8)) {
-
-      charCode = str.charCodeAt(i += 3/4);
-
-      if (charCode > 0xFF) {
-        throw new Error("'btoa' failed: The string to be encoded contains characters outside of the Latin1 range.");
-      }
-
-      block = block << 8 | charCode;
-    }
-
-    return output;
-  }
-
-  atob = (input = '') => {
-    let str = input.replace(/=+$/, '');
-    let output = '';
-
-    if (str.length % 4 == 1) {
-      throw new Error("'atob' failed: The string to be decoded is not correctly encoded.");
-    }
-    for (let bc = 0, bs = 0, buffer, i = 0;
-      buffer = str.charAt(i++);
-
-      ~buffer && (bs = bc % 4 ? bs * 64 + buffer : buffer,
-        bc++ % 4) ? output += String.fromCharCode(255 & bs >> (-2 * bc & 6)) : 0
-    ) {
-      buffer = this.chars.indexOf(buffer);
-    }
-
-    return output;
-  }
-  */
-
 
   componentDidMount() {
     if (this.props.mediaUrl) {
-    fetch(this.props.mediaUrl
-      // , {
-      // headers: new Headers({
-      //   "Authorization": `Basic ${this.btoa(`login.ru:pass`)}`
-      // })}
-      )
+    fetch(this.props.mediaUrl)
         .then(response => response.json())
         .then(result => this.setState({ imgUrl: result && result.source_url, isFetching: false }))
         .catch(e => {
@@ -110,15 +63,14 @@ constructor(props) {
     <TouchableOpacity onPress={() => this.onItemPress(id)}>
       <View style={styles.card}>
 
-      {imgUrl && <Image style={{flex: 1, height: 140}} source={{uri: imgUrl}}/>}
+      {imgUrl && <Image style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}} source={{uri: imgUrl}}/>}
       {imgUrl && categories[0] && 
         <View style={styles.category}>
           <Text style={{color: '#fff'}}>{categories[0].name}</Text>
         </View>}
       <View style={styles.cardText} >
-        <Text style={{fontWeight: 'bold'}}>{title}</Text>
-        <Text>{descr.split('\n<')[0]}...</Text>
-        <Text>{this.props.mediaUrl}</Text>
+        <Text style={{fontWeight: 'bold', fontSize: 18, paddingBottom: 4}}>{title}</Text>
+        <Text style={{fontSize: 14}}>{descr.split('\n<')[0]}...</Text>
       </View>
     </View>
   </TouchableOpacity>
@@ -138,8 +90,12 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 4},
   },
   cardText: {
-    padding: 10,
+    paddingTop: 10,
+    paddingLeft: 10,
+    paddingBottom: 10,
+    paddingRight: 10,
     fontSize: 18,
+    // marginTop: -14,
   },
   category: {
     padding: 7,
@@ -149,7 +105,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     color: '#fff',
     alignSelf: 'flex-start',
-    top: -130,
+    top: -180,
   }
 })
 
