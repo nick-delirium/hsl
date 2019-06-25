@@ -28,20 +28,16 @@ class DrawerPanel extends React.Component {
             source={require('./logo_HSL.png')}
             style={styles.image}
           />
-          <View
-            styles={{
-              alignItems: 'stretch'
-            }}
-          >
-            {items.map((item) => (
-              pages[item].name ? (<DrawerItem
+          {items.map((item) => (
+            pages[item].name ? (
+              <DrawerItem
                 closeDrawer={this.props.closeDrawer}
                 href={pages[item].path}
                 text={pages[item].name}
                 key={pages[item].name}
-              />) : null
-            ))}
-          </View>
+              />
+            ) : null
+          ))}
         </ScrollView>
     )
   }

@@ -38,19 +38,17 @@ class Article extends React.Component {
     // const title = get(post, 'title.rendered')
 
     const { title, content: { rendered: content }, imgUrl } = article
-    console.log(content)
+    console.log(content.replace(/(\r\n|\n|\r)/gm, ""))
     return (
       <View style={styles.card}>
+        <Text style={{fontWeight: 'bold'}}>{title}</Text>
+        {imgUrl && <Image style={{flex: 1, height: 140}} source={{uri: imgUrl}}/>}
+        <HTMLView
+          value={`<div>${content.replace(/(\r\n|\n|\r)/gm, "")}</div>`}
+          stylesheet={HTMLStyles}
 
-        <View style={styles.cardText}>
-          <Text style={{fontWeight: 'bold'}}>{title}</Text>
-          {imgUrl && <Image style={{flex: 1, height: 140}} source={{uri: imgUrl}}/>}
-          <HTMLView
-            value={content}
-            stylesheet={styles}
-            onLinkPress={(url) => console.log('clicked link: ', url)}
+          onLinkPress={(url) => console.log('clicked link: ', url)}
         />
-        </View>
       </View>
     )
   }
@@ -58,7 +56,7 @@ class Article extends React.Component {
 
 const styles = StyleSheet.create({
   card: {
-    marginBottom: 10,
+    marginBottom: 30,
     marginRight: 0,
     marginLeft: 0,
     backgroundColor: '#fff',
@@ -66,21 +64,28 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     shadowOffset: {width: 0, height: 4},
-  },
-  cardText: {
     paddingTop: 18,
+    paddingBottom: 30,
     paddingRight: 18,
     paddingLeft: 18,
-  },
-  
-  p: {
-    paddingBottom: 0,
-    paddingTop: 0,
-    padding: 0,
-    marginBottom: 0,
-    marginTop: 0,
   }
-  
+})
+const HTMLStyles = StyleSheet.create({
+  div: {
+    marginTop: 0,
+    marginBottom: 0,
+  },
+  li: {
+    marginTop: 0,
+  },
+  ul: {
+    marginTop: 0,
+    marginBottom: 0,
+  },
+  p: {
+    marginBottom: 10,
+    paddingBottom: 10,
+  },
 })
 
 const mapDispatchToProps = (dispatch) => ({
