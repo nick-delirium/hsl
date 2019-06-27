@@ -10,7 +10,7 @@ import {
   Easing,
   Dimensions
 } from 'react-native'
-import { Asset, AppLoading, SplashScreen } from 'expo';
+import { Asset, AppLoading, SplashScreen } from 'expo'
 import { connect } from 'react-redux'
 import { NativeRouter } from 'react-router-native'
 import get from 'lodash/get'

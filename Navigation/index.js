@@ -1,4 +1,5 @@
 import React from 'react'
+import { BackHandler } from 'react-native'
 import Drawer from 'react-native-drawer'
 import DrawerPanel from './components/DrawerPanel'
 import RouterView from '../router.js'
@@ -6,6 +7,7 @@ import { getCategories } from './reducer'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
+import { withRouter } from 'react-router-native'
 
 class RouterWithDrawer extends React.Component {
   constructor(props, context) {
@@ -16,6 +18,18 @@ class RouterWithDrawer extends React.Component {
     }
   }
   
+  componentDidMount() { 
+    const { history, location } = this.props
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
+  }
+
+  handleBackPress = () => {
+    const { history, location } = this.props
+    if (location.pathname === '/') return false
+    history.goBack()
+    return true
+  }
+
   closeDrawer = () => {
     this._drawer.close()
   }
@@ -64,7 +78,9 @@ const mapDispatchToProps = (dispatch) => ({
   fetchCategories: () => dispatch(getCategories()),
 })
 
+const RouterWithRouter = withRouter(RouterWithDrawer)
+
 export default connect(
   mapStateFromProps,
   mapDispatchToProps, 
-)(RouterWithDrawer)
+)(RouterWithRouter)
