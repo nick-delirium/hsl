@@ -8,6 +8,10 @@ const FETCH_POSTS_START = 'app.posts.fetch.start'
 const FETCH_POSTS_SUCCESS = 'app.posts.fetch.succes'
 const FETCH_POSTS_FAIL = 'app.posts.fetch.fail'
 
+const FETCH_EVENTS_START = 'app.events.fetch.start'
+const FETCH_EVENTS_SUCCESS = 'app.events.fetch.succes'
+const FETCH_EVENTS_FAIL = 'app.events.fetch.fail'
+
 const DEFAULT_LIMIT = 20
 
 const fetchAllPostsReq = (limit) => ({
@@ -25,6 +29,15 @@ const fetchAllFail = (reason) => ({
   payload: reason,
 })
 
+export const getPosts = (limit = DEFAULT_LIMIT) => {
+  return dispatch => {
+    dispatch(fetchAllPostsReq())
+    const result = fetch(api.getPosts(limit))
+      .then((response) => response.json())
+      .then((result) => dispatch(fetchAllSuccess(result)))
+      .catch(e => dispatch(fetchAllFail(e)))
+  }
+}
 
 const fetchPostsReq = (category, limit) => ({
   type: FETCH_POSTS_START,
@@ -41,16 +54,6 @@ const fetchFail = (reason) => ({
   payload: reason,
 })
 
-export const getPosts = (limit = DEFAULT_LIMIT) => {
-  return dispatch => {
-    dispatch(fetchAllPostsReq())
-    const result = fetch(api.getPosts(limit))
-      .then((response) => response.json())
-      .then((result) => dispatch(fetchAllSuccess(result)))
-      .catch(e => dispatch(fetchAllFail(e)))
-  }
-}
-
 export const getPostsByCategory = (category, limit = DEFAULT_LIMIT) => {
   return dispatch => {
     dispatch(fetchPostsReq(category))
@@ -61,13 +64,38 @@ export const getPostsByCategory = (category, limit = DEFAULT_LIMIT) => {
   }
 }
 
+const fetchEventsReq = (startDate, endDate, limit) => ({
+  type: FETCH_EVENTS_START,
+  payload: {startDate, endDate, limit},
+})
+
+const fetchEventsSuccess = (data) => ({
+  type: FETCH_EVENTS_SUCCESS,
+  payload: data
+})
+
+const fetchEventsFail = (reason) => ({
+  type: FETCH_EVENTS_FAIL,
+  payload: reason,
+})
+
+export const getEvents = (startDate, endDate, limit = DEFAULT_LIMIT) => {
+  return dispatch => {
+    dispatch(fetchEventsReq(startDate, endDate, limit))
+    const result = fetch(api.getEvents(startDate, endDate, limit))
+      .then((response) => response.json())
+      .then((result) => dispatch(fetchEventsSuccess(result.events)))
+      .catch(e => dispatch(fetchEventsFail(e)))
+  }
+}
+
 const initialState = {
   posts: [],
   data: {},
   isLoading: false,
   isError: false,
   errorMessage: '',
-  category: '',
+  // category: '',
 }
 
 export default function(state = initialState, action) {
@@ -90,7 +118,7 @@ export default function(state = initialState, action) {
         isLoading: false,
         isError: true,
       }
-      case FETCH_POSTS_START:
+    case FETCH_POSTS_START:
       return {
         ...state,
         category: action.payload.category,
@@ -103,6 +131,26 @@ export default function(state = initialState, action) {
         isLoading: false,
       }
     case FETCH_POSTS_FAIL:
+      return {
+        ...state,
+        errorMessage: action.payload,
+        isLoading: false,
+        isError: true,
+      }
+    case FETCH_EVENTS_START:
+      return {
+        ...state,
+        // category: action.payload.category,
+        isLoading: true,
+      }
+    case FETCH_EVENTS_SUCCESS:
+      console.log(Object.keys(action.payload))
+      return {
+        ...state,
+        data: {...state.data, [`00`]: [...action.payload]}, //00 is our id for events
+        isLoading: false,
+      }
+    case FETCH_EVENTS_FAIL:
       return {
         ...state,
         errorMessage: action.payload,

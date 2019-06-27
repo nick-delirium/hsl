@@ -28,7 +28,7 @@ const RouterView = (props) => (
 
     <Route exact path={pages.all.path} component={AllPosts} />
     <Route path={pages.news.path} render={() => (<AllPosts type='news'/>)} />
-    {/* <Route path={pages.events.path} render={() => (<AllPosts type='events'/>)} /> */}
+    <Route path={pages.events.path} render={() => (<AllPosts type='events'/>)} />
     <Route path={pages.blogs.path} render={() => (<AllPosts type='blogs'/>)} />
     <Route path={pages.programs.path} render={() => (<AllPosts type='programs'/>)} />
     <Route path={pages.media.path} render={() => (<AllPosts type='media'/>)} />

@@ -7,10 +7,10 @@ const pages = {
     name: 'Новости',
     path: '/news',
   },
-  // events: {
-  //   name: 'Мероприятия',
-  //   path: '/events',
-  // },
+  events: {
+    name: 'Мероприятия',
+    path: '/events',
+  },
   blogs: {
     name: 'Блоги',
     path: '/blogs',

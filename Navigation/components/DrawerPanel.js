@@ -21,11 +21,11 @@ class DrawerPanel extends React.Component {
           flexDirection: 'column',
           flex: 1,
           paddingTop: 80,
-          backgroundColor: "#eee",
+          backgroundColor: "#fff",
           width: 240,
         }}>
           <Image 
-            source={require('./logo_HSL.png')}
+            source={require('../../assets/images/HSL-logo.png')}
             style={styles.image}
           />
           <View
