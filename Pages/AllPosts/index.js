@@ -120,7 +120,7 @@ class AllPosts extends React.Component {
       }
     })
     return (
-      <View>
+      <View style={styles.list}>
         {<Text style={styles.header}>{headerText}</Text>}
         {/* {isLoading && <Text>Загрузка</Text> /* TODO: add loader */}
         <FlatList
@@ -139,6 +139,9 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20
   },
+  list: {
+    padding: 20
+  }
 })
 
 const mapStateFromProps = createStructuredSelector({

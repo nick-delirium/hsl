@@ -13,8 +13,9 @@ import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import { changeLocation } from '../../../Navigation/reducer'
 import { setData } from '../../../Redux/articleReducer'
+import CachedImage from '../../../components/CachedImage'
 
-class CardArticle extends React.Component {
+class CardArticle extends React.PureComponent {
 constructor(props) {
     super(props)
     this.state = {
@@ -27,12 +28,12 @@ constructor(props) {
   componentDidMount() {
     if (this.props.mediaUrl) {
     fetch(this.props.mediaUrl)
-        .then(response => response.json())
-        .then(result => this.setState({ imgUrl: result && result.source_url, isFetching: false }))
-        .catch(e => {
-          console.error(e)
-          this.setState({isFetching: false, error: e })
-        })
+      .then(response => response.json())
+      .then(result => this.setState({ imgUrl: result && result.source_url, isFetching: false }))
+      .catch(e => {
+        console.error(e)
+        this.setState({isFetching: false, error: e })
+      })
     }
   }
   onItemPress = (id) => {
@@ -63,7 +64,13 @@ constructor(props) {
     <TouchableOpacity onPress={() => this.onItemPress(id)}>
       <View style={styles.card}>
 
-      {imgUrl && <Image style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}} source={{uri: imgUrl}}/>}
+      {imgUrl && (
+        <CachedImage
+          source={imgUrl}
+          title={id}
+          style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}}
+        />
+      )}
       {imgUrl && categories[0] && 
         <View style={styles.category}>
           <Text style={{color: '#fff'}}>{categories[0].name}</Text>

@@ -46,16 +46,16 @@ class RouterWithDrawer extends React.Component {
         content={<DrawerPanel closeDrawer={this.closeDrawer} />}
         styles={{main: {shadowColor: '#000000', shadowOpacity: 0.4, shadowRadius: 15}}}
         onOpen={() => {
-          this.setState({drawerOpen: true})
+          setTimeout(() => { this.setState({drawerOpen: true}) }, 0)
         }}
         onClose={() => {
-          this.setState({drawerOpen: false})
+          setTimeout(() => { this.setState({drawerOpen: false}) }, 0)
         }}
         tweenDuration={100}
         panThreshold={0.08}
         disabled={this.state.drawerDisabled}
         openDrawerOffset={(viewport) => 100}
-        closedDrawerOffset={() => 0}
+        closedDrawerOffset={0}
         panOpenMask={0.2}
         acceptDoubleTap
         tapToClose
