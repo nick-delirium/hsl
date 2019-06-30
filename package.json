@@ -12,10 +12,11 @@
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
-    "expo": "^32.0.0",
+    "expo": "^33.0.0",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-drawer": "^2.5.1",
+    "react-native-htmlview": "^0.14.0",
     "react-redux": "^5.1.1",
     "react-router-native": "^5.0.0",
     "redux": "^3.7.2",

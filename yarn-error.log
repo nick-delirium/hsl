@@ -1,0 +1,57 @@
+Arguments: 
+  /usr/local/Cellar/node/11.5.0/bin/node /usr/local/Cellar/yarn/1.12.3/libexec/bin/yarn.js
+
+PATH: 
+  /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+
+Yarn version: 
+  1.12.3
+
+Node version: 
+  11.5.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: getaddrinfo ENOTFOUND registry.yarnpkg.com registry.yarnpkg.com:443
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:57:26)
+
+npm manifest: 
+  {
+    "main": "node_modules/expo/AppEntry.js",
+    "scripts": {
+      "start": "expo start",
+      "android": "expo start --android",
+      "ios": "expo start --ios",
+      "eject": "expo eject",
+      "test": "node ./node_modules/jest/bin/jest.js --watchAll"
+    },
+    "jest": {
+      "preset": "jest-expo"
+    },
+    "dependencies": {
+      "@expo/samples": "2.1.1",
+      "expo": "^32.0.0",
+      "react": "16.5.0",
+      "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+      "react-native-drawer": "^2.5.1",
+      "react-native-htmlview": "^0.14.0",
+      "react-redux": "^5.1.1",
+      "react-router-native": "^5.0.0",
+      "redux": "^3.7.2",
+      "redux-thunk": "^2.3.0",
+      "reselect": "^4.0.0"
+    },
+    "devDependencies": {
+      "babel-preset-expo": "^5.0.0",
+      "jest-expo": "^32.0.0"
+    },
+    "private": true
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

@@ -11,10 +11,6 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "splash": {
-      "image": "./assets/images/intro.png",
-      "resizeMode": "cover"
-    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },

@@ -2,13 +2,11 @@ import React from 'react'
 import {
   ScrollView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
   Image,
   View,
 } from 'react-native'
 import { LinearGradient } from 'expo'
-import { withRouter } from 'react-router-native'
+import pages from '../../constants/pages'
 import DrawerItem from './DrawerItem'
 
 class DrawerPanel extends React.Component {
@@ -17,45 +15,30 @@ class DrawerPanel extends React.Component {
   }
 
   render() {
-    const items = [{
-      text: 'Все',
-      href: '/',
-    }, {
-      text: 'Test',
-      href: '/testpage'
-    }]
+    const items = Object.keys(pages)
     return (
-      <LinearGradient
-        style={{ flex: 1 }}
-        colors={['#1323DD', '#DD13DD']}
-        start={[0,1]}
-        end={[1,0]}
-      >
         <ScrollView contentContainerStyle={{
           flexDirection: 'column',
-          paddingTop: 50,
+          flex: 1,
+          paddingTop: 80,
+          backgroundColor: "#fff",
+          width: 240,
         }}>
           <Image 
-            source={require('./logo_HSL.png')}
+            source={require('../../assets/images/HSL-logo.png')}
             style={styles.image}
           />
-          <View
-            styles={{
-              alignItems: 'stretch'
-            }}
-          >
-            {items.map((item) => (
+          {items.map((item) => (
+            pages[item].name ? (
               <DrawerItem
                 closeDrawer={this.props.closeDrawer}
-                href={item.href}
-                text={item.text}
-                key={item.text}
+                href={pages[item].path}
+                text={pages[item].name}
+                key={pages[item].name}
               />
-            ))}
-           
-          </View>
+            ) : null
+          ))}
         </ScrollView>
-      </LinearGradient>
     )
   }
 }
@@ -77,7 +60,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#000',
   },
   activeButton: {
     backgroundColor: 'rgba(0,0,0,0.3)',
