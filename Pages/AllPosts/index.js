@@ -16,9 +16,6 @@ import pages from '../../constants/pages'
 class AllPosts extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      refreshing: false,
-    }
   }
 
   componentDidMount() {
@@ -36,9 +33,6 @@ class AllPosts extends React.Component {
       data,
       categories
     } = this.props
-    this.setState({
-      refreshing: true,
-    })
     if (!categories || categories.length === 0) {
       fetchCategories()
     }
@@ -57,9 +51,6 @@ class AllPosts extends React.Component {
       }
     }
     if (posts.length === 0) fetchPosts()
-    this.setState({
-      refreshing: false,
-    })
   }
 
   refreshData = () => {
@@ -75,9 +66,6 @@ class AllPosts extends React.Component {
     } = this.props
     if (type === 'events') {
       fetchEvents('2019-06-17%2000:00:00') //TODO: get and format current
-      this.setState({
-        refreshing: false,
-      })
     } else {
       let category = categories.find(cat => (cat.slug === type))
       if (type && category) {
