@@ -11,10 +11,10 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
-import { changeLocation } from '../../../Navigation/reducer'
-import { setData } from '../../../Redux/articleReducer'
+// import { changeLocation } from '../../../Navigation/reducer' 
+// import { setData } from '../../../Redux/articleReducer'
 
-class CardArticle extends React.Component {
+class CardEvent extends React.Component {
 constructor(props) {
     super(props)
     this.state = {
@@ -36,7 +36,6 @@ constructor(props) {
     }
   }
   onItemPress = (id) => {
-    console.log(this.props)
     const { 
       setPost, 
       changeLoc, 
@@ -58,7 +57,9 @@ constructor(props) {
   }
 
   render () {
-    const { title, descr, categories, id } = this.props
+    //organizer //array [0].organizer, url
+                
+    const { id, title, description, dateStart, dateEnd, image, organizer, url, place } = this.props
     const { imgUrl } = this.state
     return (
     <TouchableOpacity onPress={() => this.onItemPress(id)}>
@@ -110,12 +111,12 @@ const styles = StyleSheet.create({
   }
 })
 
-const mapDispatchToProps = (dispatch) => ({
-  changeLoc: (path) => dispatch(changeLocation(path)),
-  setPost: (article) => dispatch(setData(article)),
-})
+// const mapDispatchToProps = (dispatch) => ({
+//   changeLoc: (path) => dispatch(changeLocation(path)),
+//   setPost: (article) => dispatch(setData(article)),
+// })
 const mapStateToProps = createStructuredSelector({
-  path: (state) => get(state, 'url.path'),
+  // path: (state) => get(state, 'url.path'),
 })
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps)
@@ -123,4 +124,4 @@ const withConnect = connect(mapStateToProps, mapDispatchToProps)
 export default compose(
   withConnect,
   withRouter,
-)(CardArticle)
+)(CardEvent)

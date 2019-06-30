@@ -38,7 +38,7 @@ class Article extends React.Component {
     // const title = get(post, 'title.rendered')
 
     const { title, content: { rendered: content }, imgUrl } = article
-    console.log(content.replace(/(\r\n|\n|\r)/gm, ""))
+    // console.log(content.replace(/(\r\n|\n|\r)/gm, ""))
     return (
       <View style={styles.card}>
         <Text style={{fontWeight: 'bold'}}>{title}</Text>
@@ -47,7 +47,7 @@ class Article extends React.Component {
           value={`<div>${content.replace(/(\r\n|\n|\r)/gm, "")}</div>`}
           stylesheet={HTMLStyles}
 
-          onLinkPress={(url) => console.log('clicked link: ', url)}
+          onLinkPress={(url) => {onLinkPress(url); console.log('clicked link: ', url)}}
         />
       </View>
     )

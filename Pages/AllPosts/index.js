@@ -9,6 +9,7 @@ import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import CardArticle from './components/CardArticle.js'
+import CardEvent from '../Events/CardEvent'
 import { getPosts, getPostsByCategory, getEvents } from './reducer'
 import { getCategories } from '../../Navigation/reducer'
 import pages from '../../constants/pages'
@@ -57,11 +58,8 @@ class AllPosts extends React.Component {
     const { 
       fetchPosts,
       fetchByCategory,
-      fetchCategories,
       fetchEvents,
-      posts,
       type,
-      data,
       categories,
     } = this.props
     if (type === 'events') {
@@ -87,7 +85,28 @@ class AllPosts extends React.Component {
   _keyExtractor = (item) => item.id
 
   renderCardItem = ({ item }) => {
-    const { categories } = this.props
+    const { categories, type } = this.props
+    if (type === 'events') {
+      let categories = item.data.categories && item.data.categories.map(cat => ({
+        name: cat.name,
+        slug: cat.slug, //TODO: filter by cats
+      }
+      ))
+      return (
+        <CardEvent
+          key={item.id}
+          id={item.id}
+          description={item.data.description}
+          title={item.data.title}
+          dateStart={item.data.date}
+          dateEnd={item.data.end_date}
+          image={get(item, `data.image.url`)}
+          organizer={item.data.organizer} //array [0].organizer, url
+          url={item.data.website}
+          place={item.data.venue}
+        />
+      )
+    }
     return (
       <CardArticle
         key={item.id}
@@ -130,6 +149,8 @@ class AllPosts extends React.Component {
           refreshing={isLoading}
           keyExtractor={this._keyExtractor}
         />
+        {/* ------------------- */}
+        {isLoading && <Text>Загрузка</Text> /* TODO: add loader */}
       </View>
     )
   }
