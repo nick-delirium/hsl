@@ -2,6 +2,7 @@ import React from 'react'
 import {
   StyleSheet,
   View,
+  FlatList,
   Text,
 } from 'react-native'
 import get from 'lodash/get'
@@ -15,9 +16,16 @@ import pages from '../../constants/pages'
 class AllPosts extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      refreshing: false,
+    }
   }
 
   componentDidMount() {
+    this.getInitialData()
+  }
+
+  getInitialData = () => {
     const { 
       fetchPosts,
       fetchByCategory,
@@ -28,7 +36,9 @@ class AllPosts extends React.Component {
       data,
       categories
     } = this.props
-
+    this.setState({
+      refreshing: true,
+    })
     if (!categories || categories.length === 0) {
       fetchCategories()
     }
@@ -47,6 +57,61 @@ class AllPosts extends React.Component {
       }
     }
     if (posts.length === 0) fetchPosts()
+    this.setState({
+      refreshing: false,
+    })
+  }
+
+  refreshData = () => {
+    const { 
+      fetchPosts,
+      fetchByCategory,
+      fetchCategories,
+      fetchEvents,
+      posts,
+      type,
+      data,
+      categories,
+    } = this.props
+    if (type === 'events') {
+      fetchEvents('2019-06-17%2000:00:00') //TODO: get and format current
+      this.setState({
+        refreshing: false,
+      })
+    } else {
+      let category = categories.find(cat => (cat.slug === type))
+      if (type && category) {
+        if (category && category.id) {
+          fetchByCategory(category.id)
+          this.setState({
+            refreshing: false,
+          })
+        } else {
+          console.log(`Error: category ${type} not found`)
+        }
+      }
+    }
+    if (type === undefined) {
+      fetchPosts()
+    }
+  }
+
+  _keyExtractor = (item) => item.id
+
+  renderCardItem = ({ item }) => {
+    const { categories } = this.props
+    return (
+      <CardArticle
+        key={item.id}
+        id={item.id}
+        data={item}
+        title={item.title.rendered}
+        descr={item.excerpt.rendered || item.description}
+        mediaUrl={item.mediaUrl ? item.mediaUrl : null}
+        categories={categories.filter(cat => (item.categories.includes(cat.id)))}
+        content={get(item, 'content.rendered')}
+      />
+    )
   }
 
   render() {
@@ -55,31 +120,28 @@ class AllPosts extends React.Component {
 
     }
     let category = categories.find(cat => (cat.slug === type))
-    console.log(data)
     let displayingPosts = type ? (category ? data[`${category.id}`] : data[`00`]) : posts
     const headerText = type ? pages[type].name : 'KORYOSARAM SYNERGY'
-
+    
+    const dataWithMedia = displayingPosts && displayingPosts.map((item) => {
+      const mediaUrl = get(item, '_links.wp:featuredmedia.href', null) 
+        || `https://hansanglab.com/wp-json/wp/v2/media/${get(item, 'featured_media')}`
+      return {
+        ...item,
+        mediaUrl,
+      }
+    })
     return (
       <View>
         {<Text style={styles.header}>{headerText}</Text>}
-        {isLoading && <Text>Загрузка</Text> /* TODO: add loader */}
-        {displayingPosts && displayingPosts.map((item, i) => {
-          const mediaUrl = get(item, `_links.wp:featuredmedia.href`) || 'https://hansanglab.com/wp-json/wp/v2/media/' +get(item, 'featured_media')
-
-          // const mediaUrl = get(item, `_links.wp:attachment[0].href`)
-          return (
-            <CardArticle
-              key={item.id}
-              id={item.id}
-              data={item}
-              title={item.title.rendered}
-              descr={item.excerpt.rendered || item.description}
-              mediaUrl={mediaUrl ? mediaUrl : null}
-              categories={categories.filter(cat => (item.categories.includes(cat.id)))}
-              content={get(item, 'content.rendered')}
-            />
-          )
-        })}
+        {/* {isLoading && <Text>Загрузка</Text> /* TODO: add loader */}
+        <FlatList
+          data={dataWithMedia}
+          renderItem={this.renderCardItem}
+          onRefresh={this.refreshData}
+          refreshing={isLoading}
+          keyExtractor={this._keyExtractor}
+        />
       </View>
     )
   }

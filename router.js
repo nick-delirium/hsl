@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  ScrollView,
   StyleSheet,
   View,
   Text,
@@ -16,7 +15,7 @@ import pages from './constants/pages'
 let scrollRef = null
 
 const RouterView = (props) => (
-  <ScrollView ref={(ref) => scrollRef = ref} style={styles.container}>
+  <View ref={(ref) => scrollRef = ref} style={styles.container}>
       {/* <View style={styles.nav}>
         <TouchableOpacity style={{alignSelf: 'flex-start', marginTop: 20}}
           onPress={props.openDrawer}
@@ -38,7 +37,7 @@ const RouterView = (props) => (
         return <Article id />
       }}
     />
-  </ScrollView>
+  </View>
 )
 const NavBar = (props) => { //TODO: do normal header
   return (
