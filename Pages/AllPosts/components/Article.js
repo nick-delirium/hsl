@@ -3,6 +3,7 @@ import {
   StyleSheet,
   View,
   Text,
+  ScrollView,
   Image,
 } from 'react-native'
 import { withRouter } from 'react-router-native'
@@ -16,6 +17,10 @@ import HTMLView from 'react-native-htmlview';
 class Article extends React.Component {
   constructor(props) {
     super(props)
+  }
+
+  componentDidMount() {
+    this.refs._scrollRef.scrollTo({ x: 0, y: 0, animated: false })
   }
 
   onLinkPress = (url) => {
@@ -38,23 +43,27 @@ class Article extends React.Component {
     // const title = get(post, 'title.rendered')
 
     const { title, content: { rendered: content }, imgUrl } = article
-    console.log(content.replace(/(\r\n|\n|\r)/gm, ""))
     return (
-      <View style={styles.card}>
-        <Text style={{fontWeight: 'bold'}}>{title}</Text>
-        {imgUrl && <Image style={{flex: 1, height: 140}} source={{uri: imgUrl}}/>}
-        <HTMLView
-          value={`<div>${content.replace(/(\r\n|\n|\r)/gm, "")}</div>`}
-          stylesheet={HTMLStyles}
+      <ScrollView ref='_scrollRef' contentContainerStyle={styles.scrollview}>
+        <View style={styles.card}>
+          <Text style={{fontWeight: 'bold'}}>{title}</Text>
+          {imgUrl && <Image style={{flex: 1, height: 140}} source={{uri: imgUrl}}/>}
+          <HTMLView
+            value={`<div>${content.replace(/(\r\n|\n|\r)/gm, "")}</div>`}
+            stylesheet={HTMLStyles}
 
-          onLinkPress={(url) => console.log('clicked link: ', url)}
-        />
-      </View>
+            onLinkPress={(url) => console.log('clicked link: ', url)}
+          />
+        </View>
+      </ScrollView>
     )
   }
 }
 
 const styles = StyleSheet.create({
+  scrollview: {
+    padding: 20,
+  },
   card: {
     marginBottom: 30,
     marginRight: 0,
