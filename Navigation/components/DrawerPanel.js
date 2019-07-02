@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  ScrollView,
   StyleSheet,
   Image,
   View,
@@ -16,8 +15,9 @@ class DrawerPanel extends React.Component {
 
   render() {
     const items = Object.keys(pages)
+    const validMenuItems = items.filter(item => Boolean(pages[item].name))
     return (
-        <ScrollView contentContainerStyle={{
+        <View style={{
           flexDirection: 'column',
           flex: 1,
           paddingTop: 80,
@@ -28,17 +28,15 @@ class DrawerPanel extends React.Component {
             source={require('../../assets/images/HSL-logo.png')}
             style={styles.image}
           />
-          {items.map((item) => (
-            pages[item].name ? (
-              <DrawerItem
-                closeDrawer={this.props.closeDrawer}
-                href={pages[item].path}
-                text={pages[item].name}
-                key={pages[item].name}
-              />
-            ) : null
+          {validMenuItems.map((item) => (
+            <DrawerItem
+              closeDrawer={this.props.closeDrawer}
+              href={pages[item].path}
+              text={pages[item].name}
+              key={pages[item].name}
+            />
           ))}
-        </ScrollView>
+        </View>
     )
   }
 }

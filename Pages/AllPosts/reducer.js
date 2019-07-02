@@ -79,7 +79,7 @@ const fetchEventsFail = (reason) => ({
   payload: reason,
 })
 
-export const getEvents = (startDate, endDate, limit = DEFAULT_LIMIT) => {
+export const getEvents = (startDate, endDate = undefined, limit = DEFAULT_LIMIT) => {
   return dispatch => {
     dispatch(fetchEventsReq(startDate, endDate, limit))
     const result = fetch(api.getEvents(startDate, endDate, limit))

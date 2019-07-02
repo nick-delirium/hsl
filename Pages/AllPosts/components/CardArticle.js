@@ -13,28 +13,13 @@ import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import { changeLocation } from '../../../Navigation/reducer'
 import { setData } from '../../../Redux/articleReducer'
+import CachedImage from '../../../components/CachedImage'
 
-class CardArticle extends React.Component {
-constructor(props) {
+class CardArticle extends React.PureComponent {
+  constructor(props) {
     super(props)
-    this.state = {
-    imgUrl: null,
-    isFetching: false,
-    error: null,
-    }
   }
 
-  componentDidMount() {
-    if (this.props.mediaUrl) {
-    fetch(this.props.mediaUrl)
-        .then(response => response.json())
-        .then(result => this.setState({ imgUrl: result && result.source_url, isFetching: false }))
-        .catch(e => {
-          console.error(e)
-          this.setState({isFetching: false, error: e })
-        })
-    }
-  }
   onItemPress = (id) => {
     console.log(this.props)
     const { 
@@ -58,17 +43,20 @@ constructor(props) {
   }
 
   render () {
-    const { title, descr, categories, id } = this.props
-    const { imgUrl } = this.state
+    const { title, descr, categories, id, mediaUrl } = this.props
+
     return (
     <TouchableOpacity onPress={() => this.onItemPress(id)}>
       <View style={styles.card}>
 
-      {imgUrl && <Image style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}} source={{uri: imgUrl}}/>}
-      {imgUrl && categories[0] && 
-        <View style={styles.category}>
-          <Text style={{color: '#fff'}}>{categories[0].name}</Text>
-        </View>}
+      {mediaUrl && (
+        <CachedImage
+          source={mediaUrl}
+          title={id}
+          categories={categories[0] ? categories[0] : undefined}
+          style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}}
+        />
+      )}
       <View style={styles.cardText} >
         <Text style={{fontWeight: 'bold', fontSize: 18, paddingBottom: 4}}>{title}</Text>
         <Text style={{fontSize: 14}}>{descr.split('\n<')[0]}...</Text>
@@ -98,16 +86,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     // marginTop: -14,
   },
-  category: {
-    padding: 7,
-    marginLeft: 10,
-    fontSize: 12,
-    backgroundColor: '#000',
-    borderRadius: 2,
-    color: '#fff',
-    alignSelf: 'flex-start',
-    top: -180,
-  }
 })
 
 const mapDispatchToProps = (dispatch) => ({
