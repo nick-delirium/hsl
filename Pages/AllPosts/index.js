@@ -87,26 +87,30 @@ class AllPosts extends React.Component {
   renderCardItem = ({ item }) => {
     const { categories, type } = this.props
     if (type === 'events') {
-      let categories = item.data.categories && item.data.categories.map(cat => ({
-        name: cat.name,
-        slug: cat.slug, //TODO: filter by cats
-      }
-      ))
+      console.log(item.title)
+      // let categories = item.categories && item.categories.map(cat => (
+    //     //{
+    //     cat.name
+    //     //slug: cat.slug, //TODO: filter by cats
+    //  //}
+    //   ))
       return (
         <CardEvent
           key={item.id}
           id={item.id}
-          description={item.data.description}
-          title={item.data.title}
-          dateStart={item.data.date}
-          dateEnd={item.data.end_date}
-          image={get(item, `data.image.url`)}
-          organizer={item.data.organizer} //array [0].organizer, url
-          url={item.data.website}
-          place={item.data.venue}
+          description={item.description}
+          title={item.title}
+          dateStart={item.date}
+          dateEnd={item.end_date}
+          image={get(item, `image.url`)}
+          organizer={item.organizer} //array [0].organizer, url
+          url={item.website}
+          place={item.venue}
+          // categories={categories}
         />
       )
     }
+    else
     return (
       <CardArticle
         key={item.id}
