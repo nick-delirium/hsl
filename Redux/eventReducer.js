@@ -1,9 +1,4 @@
-const SET_DATA = 'app.article.set'
-
-export const setData = (article) => ({
-  type: SET_DATA,
-  payload: article,
-})
+const SET_DATA = 'app.event.set'
 
 export const setEvent = (event) => ({
   type: SET_DATA,

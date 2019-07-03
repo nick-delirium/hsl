@@ -9,6 +9,7 @@ import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import CardArticle from './components/CardArticle.js'
+import CardEvent from '../Events/CardEvent'
 import { getPosts, getPostsByCategory, getEvents } from './reducer'
 import { getCategories } from '../../Navigation/reducer'
 import pages from '../../constants/pages'
@@ -102,11 +103,8 @@ class AllPosts extends React.PureComponent {
     const { 
       fetchPosts,
       fetchByCategory,
-      fetchCategories,
       fetchEvents,
-      posts,
       type,
-      data,
       categories,
     } = this.props
     if (type === 'events') {
@@ -132,7 +130,33 @@ class AllPosts extends React.PureComponent {
   _keyExtractor = (item) => `_${item.id}`
 
   renderCardItem = ({ item }) => {
-    const { categories } = this.props
+    const { categories, type } = this.props
+    if (type === 'events') {
+      // console.log(item.slug)
+      // let categories = item.categories && item.categories.map(cat => (
+    //     //{
+    //     cat.name
+    //     //slug: cat.slug, //TODO: filter by cats
+    //  //}
+    //   ))
+      return (
+        <CardEvent
+          key={item.id}
+          id={item.id}
+          description={item.description}
+          title={item.title}
+          dateStart={item.date}
+          dateEnd={item.end_date}
+          image={get(item, `image.url`)}
+          organizer={item.organizer} //array [0].organizer, url
+          url={item.website}
+          place={item.venue}
+          slug={item.slug}
+          // categories={categories}
+        />
+      )
+    }
+    else
     return (
       <CardArticle
         key={item.id}
@@ -177,6 +201,8 @@ class AllPosts extends React.PureComponent {
           onEndReached={this.loadMoreData}
           onEndReachedThreshold={5}
         />
+        {/* ------------------- */}
+        {isLoading && <Text>Загрузка</Text> /* TODO: add loader */}
       </View>
     )
   }

@@ -11,6 +11,7 @@ import { Route } from 'react-router-native'
 import TabBarIcon from './components/TabBarIcon'
 import AllPosts from './Pages/AllPosts'
 import Article from './Pages/AllPosts/components/Article'
+import Event from './Pages/Events/Event'
 import pages from './constants/pages'
 
 let scrollRef = null
@@ -47,6 +48,7 @@ const RouterView = (props) => (
     <Route path={pages.programs.path} render={() => (<AllPosts type='programs'/>)} />
     <Route path={pages.media.path} render={() => (<AllPosts type='media'/>)} />
     <Route path={pages.post.path} render={() => (<Article id />)} />
+    <Route path={pages.event.path} render={() => (<Event slug />)} />
   </View>
 )
   

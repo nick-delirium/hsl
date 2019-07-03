@@ -32,6 +32,10 @@ const pages = {
   post: {
     name: '',
     path: '/post/:id',
+  },
+  event: {
+    name: '',
+    path: '/event/:slug',
   }
 }
 
