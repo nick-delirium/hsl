@@ -11,30 +11,37 @@ import {
 import { FileSystem } from 'expo'
 
 class CachedImage extends PureComponent {
+  _isMounted = false;
   state = { 
     loading: true, 
     failed: false,
     imguri: '', 
   }
 
+  componentWillUnmount() {
+    this._isMounted = false
+  }
+
   componentDidMount() {
-    fetch(this.props.source)
-      .then(response => response.json())
-      .then(result => {
-        const url = result.source_url || '.err'
-        const extension = url.slice((url.lastIndexOf(".") - 1 >>> 0) + 2)
-        // if not jpg/png/gif => error
-        if ((extension.toLowerCase() !== 'jpg') && (extension.toLowerCase() !== 'png') && (extension.toLowerCase() !== 'gif')) {
-          this.setState({ loading: false, failed: true })
-        } else {
-          FileSystem.getInfoAsync(
-            `${FileSystem.cacheDirectory + this.props.title}.${extension}`
-          ).then(({ exists, uri }) => {
-            if (exists) this.loadLocal(uri)
-            else {
+    this._isMounted = true
+    FileSystem.getInfoAsync(
+      `${FileSystem.cacheDirectory + this.props.title}.jpg`
+    ).then(({ exists, uri }) => {
+      if (exists) this.loadLocal(uri)
+      else {
+
+        fetch(this.props.source)
+          .then(response => response.json())
+          .then(result => {
+            const url = result.source_url || '.err'
+            const extension = url.slice((url.lastIndexOf(".") - 1 >>> 0) + 2)
+            // if not jpg/png/gif => error
+            if ((extension.toLowerCase() !== 'jpg') && (extension.toLowerCase() !== 'png') && (extension.toLowerCase() !== 'gif')) {
+              this.setSafeState({ loading: false, failed: true })
+            } else {
               FileSystem.downloadAsync(
                 url,
-              `${FileSystem.cacheDirectory + this.props.title}.${extension}`
+                `${FileSystem.cacheDirectory + this.props.title}.${extension}`
               ).then(({ uri }) => {
                 this.loadLocal(Platform.OS === 'ios'? uri : url)
               }).catch(e => {
@@ -44,12 +51,17 @@ class CachedImage extends PureComponent {
               });
             }
           })
-        }
-      })
+
+      }
+    })
   }
 
   loadLocal(uri) {
-    this.setState({ imguri: uri, loading: false })
+    this.setSafeState({ imguri: uri, loading: false })
+  }
+
+  setSafeState = (data) => {
+    return this._isMounted ? this.setState(data) : null
   }
 
   render() {

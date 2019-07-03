@@ -39,6 +39,7 @@ class RouterWithDrawer extends React.Component {
   }
 
   render() {
+    const { history, location } = this.props
     return (
       <Drawer
         ref={(ref) => this._drawer = ref}
@@ -64,6 +65,8 @@ class RouterWithDrawer extends React.Component {
       >
         <RouterView 
           openDrawer={this.openDrawer.bind(this)}
+          location={location.pathname}
+          goBack={history.goBack}
         />
       </Drawer>
     )
