@@ -12,8 +12,9 @@ import { compose } from 'redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 // import CalendarIcon from '../../assets/images/CalendarIcon.svg'
-// import { changeLocation } from '../../../Navigation/reducer' 
-// import { setData } from '../../../Redux/articleReducer'
+import { changeLocation } from '../../Navigation/reducer' 
+import { setEvent } from '../../Redux/eventReducer'
+import { formatText, formatDate } from '../../common/format'
 
 class CardEvent extends React.Component {
 constructor(props) {
@@ -36,53 +37,36 @@ constructor(props) {
         })
     }
   }
-  onItemPress = (id) => {
+  onItemPress = (event) => {
     const { 
-      setPost, 
+      setEvent, 
       changeLoc, 
       history, 
       path,
-      title,
-      data,
+      // title, 
+      // description,
+      // dateStart, dateEnd,
+      // image,
+      // organizer, url, place, slug
     } = this.props
     console.log(this.props)
     const { imgUrl } = this.state
-    const newPath = 'post/' + id
-    const article = {
-      title,
-      imgUrl,
-      content: data.content,
-    }
-    // setPost(article)
-    // history.push(newPath)
-    // changeLoc(path)
-  }
-  formatText = (text) => {
-    let newText = text.replace(/(<p>)/gm, "")
-    // console.log(newText.split('<'))
-    newText = newText.split('<')[0] + '...'
-    return(newText)
-  }
-
-  formatDate = (date) => {
-    if (!date) {
-      return;
-    }
-    const months = {'01': "января", '02': "февраля", '03': "марта", '04': "апреля", '05': "мая", '06': "июня",
-      '07': "июля", '08': "августа", '09': "сентября", '10': "октября", '11': "ноября", '12': "декабря"};
-    date = date.split(' ')[0].split('-');
-    let month = months[date[1]];
-      return (`${date[2]} ${month}`)
+    const newPath = 'event/' + event.slug
+    // const event = props
+    setEvent(event)
+    history.push(newPath)
+    changeLoc(path)
   }
 
   render () {
     //organizer //array [0].organizer, url
 
-    const { id, title, description, dateStart, dateEnd, image, organizer, url, place } = this.props
+    const { id, title, description, dateStart, dateEnd, image, organizer, url, place, slug } = this.props
     // const { imgUrl } = this.state
     // console.log(item.place)
+    //TODO receive slug
     return (
-    <TouchableOpacity onPress={() => this.onItemPress(id)}>
+    <TouchableOpacity onPress={() => this.onItemPress(this.props)}> 
       <View style={styles.card}>
 
       {image && <Image style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}} source={{uri: image}}/>}
@@ -92,12 +76,17 @@ constructor(props) {
         </View>} */}
       <View style={styles.cardText} >
         <Text style={{fontWeight: 'bold', fontSize: 18, paddingBottom: 4}}>{title}</Text>
-        <Text style={{fontSize: 14}}>{this.formatText(description)}</Text>
-        <Image source={require('../../assets/images/CalendarIcon.svg')}/>
-        <Text>{this.formatDate(dateStart)} - </Text>
-        <Text>{this.formatDate(dateEnd)}</Text>
+        <Text style={{fontSize: 14}}>{formatText(description)}</Text>
+        <View slyle={{ flex: 1, flexDirection: 'row'}}>
+          <Image source={require('../../assets/images/calendar-circle-icon.png')} style={{
+            height: 36, width: 36 }}/>
+          <View>
+            <Text>{formatDate(dateStart)} - </Text>
+            <Text>{formatDate(dateEnd)}</Text>
+          </View>
+        </View>
         {/* <Text>{organizer}</Text> */}
-        <Text>{url}</Text>
+        {/* <Text>{url}</Text> */}
         
 
       </View>
@@ -140,7 +129,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => ({
   changeLoc: (path) => dispatch(changeLocation(path)),
-  setPost: (article) => dispatch(setData(article)),
+  setEvent: (event) => dispatch(setEvent(event)),
 })
 const mapStateToProps = createStructuredSelector({
   // path: (state) => get(state, 'url.path'),

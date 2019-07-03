@@ -132,7 +132,7 @@ class AllPosts extends React.PureComponent {
   renderCardItem = ({ item }) => {
     const { categories, type } = this.props
     if (type === 'events') {
-      console.log(item.title)
+      // console.log(item.slug)
       // let categories = item.categories && item.categories.map(cat => (
     //     //{
     //     cat.name
@@ -151,6 +151,7 @@ class AllPosts extends React.PureComponent {
           organizer={item.organizer} //array [0].organizer, url
           url={item.website}
           place={item.venue}
+          slug={item.slug}
           // categories={categories}
         />
       )

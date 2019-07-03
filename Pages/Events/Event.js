@@ -10,12 +10,14 @@ import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import get from 'lodash/get'
-import { changeLocation } from '../../../Navigation/reducer'
+import { changeLocation } from '../../Navigation/reducer'
 import { createStructuredSelector } from 'reselect'
 import HTMLView from 'react-native-htmlview';
-import CachedImage from '../../../components/CachedImage'
+import CachedImage from '../../components/CachedImage'
+import { formatText, formatDate } from '../../common/format'
 
-class Article extends React.Component {
+
+class Event extends React.Component {
   constructor(props) {
     super(props)
   }
@@ -35,36 +37,50 @@ class Article extends React.Component {
 
   render () {
     const { 
-      match: { params: { id } }, 
+      match: { params: { slug } }, 
       allPosts,
-      article,
+      event,
     } = this.props
   
     // const post = allPosts.find(a => (a.id == id))
     // const content = get(post, 'content.rendered')
     // const title = get(post, 'title.rendered')
 
-    const { title, content: { rendered: content }, mediaUrl, categories } = article
-    console.log(mediaUrl)
+    const { id, title, description, dateStart, dateEnd, image, organizer, url, place } = event
+    // console.log(image)
     return (
       <ScrollView ref='_scrollRef' contentContainerStyle={styles.scrollview}>
-        <View style={styles.card}>
-          <Text style={{fontWeight: 'bold'}}>{title}</Text>
+        <View style={styles.description}>
           {/* {imgUrl && <Image style={{flex: 1, height: 140}} source={{uri: imgUrl}}/>} */}
-          {mediaUrl && (
+          {image && (
+            // <Text>f</Text>
             <CachedImage
-              source={mediaUrl}
+              source={image}
               title={id}
-              categories={categories[0] ? categories[0] : undefined}
+              categories={undefined}
               style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}}
             />
           )}
+          <Text style={{fontWeight: 'bold', fontSize: 22}}>{title}</Text>
           <HTMLView
-            value={`<div>${content.replace(/(\r\n|\n|\r)/gm, "")}</div>`}
+            value={`<div>${description.replace(/(\r\n|\n|\r)/gm, "")}</div>`}
             stylesheet={HTMLStyles}
 
             onLinkPress={(url) => {this.onLinkPress(url); console.log('clicked link: ', url)}}
           />
+        </View>
+        <View style={styles.card}>
+        
+          <View slyle={styles.row}>
+            <View>
+              <Image source={require('../../assets/images/time-icon.png')} style={{flex: 1, width: 20, backgroundColor: '#000'}}/>
+            </View>
+            <View>
+              <Text>
+                {formatDate(dateStart)} - {formatDate(dateEnd)}
+              </Text>
+            </View>
+          </View>
         </View>
       </ScrollView>
     )
@@ -88,7 +104,17 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
     paddingRight: 18,
     paddingLeft: 18,
-  }
+  },
+  description: {
+    paddingTop: 18,
+    paddingBottom: 30,
+    paddingRight: 18,
+    paddingLeft: 18,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+  },
 })
 const HTMLStyles = StyleSheet.create({
   div: {
@@ -115,7 +141,7 @@ const mapDispatchToProps = (dispatch) => ({
 const mapStateToProps = createStructuredSelector({
   path: (state) => get(state, 'url.path'),
   allPosts: (state) => get(state, 'posts.posts'),
-  article: (state) => get(state, 'article')
+  event: (state) => get(state, 'event')
 })
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps)
@@ -123,4 +149,4 @@ const withConnect = connect(mapStateToProps, mapDispatchToProps)
 export default compose(
   withConnect,
   withRouter,
-)(Article)
+)(Event)

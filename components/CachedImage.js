@@ -67,7 +67,7 @@ class CachedImage extends PureComponent {
     }
 
     if (this.state.failed) {
-      return <Text></Text>
+      return <View style={{...style}}></View>
     }
 
     return (

@@ -29,12 +29,15 @@ class CardArticle extends React.PureComponent {
       path,
       title,
       data,
+      categories,
+      mediaUrl,
     } = this.props
-    const { imgUrl } = this.state
     const newPath = 'post/' + id
     const article = {
       title,
-      imgUrl,
+      mediaUrl,
+      id,
+      categories,
       content: data.content,
     }
     setPost(article)
@@ -44,7 +47,6 @@ class CardArticle extends React.PureComponent {
 
   render () {
     const { title, descr, categories, id, mediaUrl } = this.props
-
     return (
     <TouchableOpacity onPress={() => this.onItemPress(id)}>
       <View style={styles.card}>
