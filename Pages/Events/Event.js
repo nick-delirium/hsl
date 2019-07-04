@@ -43,31 +43,24 @@ class Event extends React.Component {
       event,
     } = this.props
   
-    // const post = allPosts.find(a => (a.id == id))
-    // const content = get(post, 'content.rendered')
-    // const title = get(post, 'title.rendered')
-
-    const { id, title, description, dateStart, dateEnd, image, organizer, url, place } = event
+    const { id, title, description, dateStart, dateEnd, image, organizer, url, place, allDay } = event
     const { width, height } = Dimensions.get('window')
-
+    let startDate = formatDate(dateStart) 
+    let endDate = formatDate(dateEnd)
+    console.log('aaaaa', !!url)
     return (
       <ScrollView ref='_scrollRef' contentContainerStyle={styles.scrollview}>
         <View style={styles.description}>
-          {/* {imgUrl && <Image style={{flex: 1, height: 140}} source={{uri: imgUrl}}/>} */}
           {image && (
-            // <Text>f</Text>
             <CachedImage
               source={image}
               title={id}
               categories={undefined}
+              streight
               style={{ width, minHeight: 200, borderBottomWidth: 1, borderColor: '#000'}}
             />
           )}
-          <Text 
-            style={{
-              fontWeight: 'bold', fontSize: 22,
-            }}
-          >{title}</Text>
+          <Text style={styles.title}>{title}</Text>
           <HTMLView
             value={`<div>${description.replace(/(\r\n|\n|\r)/gm, "")}</div>`}
             stylesheet={HTMLStyles}
@@ -77,16 +70,40 @@ class Event extends React.Component {
         </View>
         <View style={styles.card}>
         
-          <View slyle={styles.row}>
-            <View>
-              <Image source={require('../../assets/images/time-icon.png')} style={{flex: 1, width: 20, backgroundColor: '#000'}}/>
-            </View>
-            <View>
-              <Text>
-                {formatDate(dateStart)} - {formatDate(dateEnd)}
-              </Text>
-            </View>
+          <View style={{...styles.row, paddingtop: 16,}}>
+              <Image source={require('../../assets/images/calendar-icon.png')} style={styles.icon}/>
+              <Text>{`${startDate.date} - ${endDate.date}`}</Text>
           </View>
+          {allDay && (
+            <View style={styles.row}>
+              <Image source={require('../../assets/images/time-icon.png')} style={styles.icon}/>
+              <Text>{`${startDate.time} - ${endDate.time}`}</Text>
+            </View>
+          )}
+          {!!url && url.length &&(
+            <View style={styles.row}>
+              <Image source={require('../../assets/images/desktop-icon.png')} style={{marginRight: 9,}}/>
+              <Text>{url}</Text>
+            </View>
+          )}
+
+          {place && place.venue && (
+            <View style={styles.row}>
+              <Image source={require('../../assets/images/place-icon.png')} style={styles.icon}/>
+              <View style={{flex: 0.9}}>
+                <Text>{place.venue}</Text>
+                {place.address && <Text>{place.address}</Text>}
+                {place.city && place.country && <Text>{`${place.city}, ${place.country}`}</Text>}
+                </View>
+            </View>
+          )}
+          {organizer[0] && (
+            <View style={styles.row}>
+              <Image source={require('../../assets/images/human-icon.png')} style={styles.icon}/>
+              <Text style={{flex: 0.9}}>{organizer[0].organizer}</Text>
+            </View>
+          )}
+
         </View>
       </ScrollView>
     )
@@ -109,13 +126,27 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 4},
     paddingTop: 18,
     paddingBottom: 30,
+    paddingRight: 18,
+    paddingLeft: 18,
+  },
+  icon: {
+    marginRight: 12,
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 22,
+    textAlign: 'center',
+    paddingTop: 20,
+    paddingBottom: 20,
   },
   description: { 
     paddingBottom: 30,
   },
   row: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    paddingBottom: 16,
   },
 })
 const HTMLStyles = StyleSheet.create({

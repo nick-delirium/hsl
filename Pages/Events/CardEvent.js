@@ -32,26 +32,16 @@ constructor(props) {
       changeLoc, 
       history, 
       path,
-      // title, 
-      // description,
-      // dateStart, dateEnd,
-      // image,
-      // organizer, url, place, slug
     } = this.props
     console.log(this.props)
-    const { imgUrl } = this.state
     const newPath = 'event/' + event.slug
-    // const event = props
     setEvent(event)
     history.push(newPath)
     changeLoc(path)
   }
 
   render () {
-    //organizer //array [0].organizer, url
-
-    const { id, title, description, dateStart, dateEnd, image, organizer, url, place, slug } = this.props
-    // const { imgUrl } = this.state
+    const { id, title, description, dateStart, dateEnd, image } = this.props
     //TODO receive slug
     return (
     <TouchableOpacity onPress={() => this.onItemPress(this.props)}> 
@@ -69,13 +59,26 @@ constructor(props) {
       <View style={styles.cardText} >
         <Text style={{fontWeight: 'bold', fontSize: 18, paddingBottom: 4}}>{title}</Text>
         <Text style={{fontSize: 14}}>{formatText(description)}</Text>
-        <View slyle={{ flex: 1, flexDirection: 'row'}}>
-          <Image source={require('../../assets/images/calendar-circle-icon.png')} style={{
-            height: 36, width: 36 }}/>
-          <View>
-            <Text>{formatDate(dateStart)} - </Text>
-            <Text>{formatDate(dateEnd)}</Text>
+        
+        <View style={{ ...styles.row, justifyContent: 'space-between', paddingTop: 10, paddingBottom: 20 }}>
+          <View style={styles.row}>
+            <Image source={require('../../assets/images/calendar-circle-icon.png')} 
+              style={{ height: 36, width: 36, marginRight: 10 }}/>
+            <View>
+              <Text>{formatDate(dateStart).date} - </Text>
+              <Text>{formatDate(dateEnd).date}</Text>
+            </View>
           </View>
+          {true && (
+            <View style={styles.row}>
+              <Image source={require('../../assets/images/time-circle-icon.png')} 
+                style={{ height: 36, width: 36, marginRight: 5 }}
+              />
+              <View>
+                <Text>19:00 - 21:30</Text>
+              </View>
+            </View>
+          )}
         </View>
       </View>
     </View>
@@ -97,11 +100,10 @@ const styles = StyleSheet.create({
   },
   cardText: {
     paddingTop: 10,
-    paddingLeft: 10,
+    paddingLeft: 15,
     paddingBottom: 10,
-    paddingRight: 10,
+    paddingRight: 15,
     fontSize: 18,
-    // marginTop: -14,
   },
   category: {
     padding: 7,
@@ -112,18 +114,20 @@ const styles = StyleSheet.create({
     color: '#fff',
     alignSelf: 'flex-start',
     top: -180,
-  }
+  },
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
 })
 
 const mapDispatchToProps = (dispatch) => ({
   changeLoc: (path) => dispatch(changeLocation(path)),
   setEvent: (event) => dispatch(setEvent(event)),
 })
-const mapStateToProps = createStructuredSelector({
-  // path: (state) => get(state, 'url.path'),
-})
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps)
+const withConnect = connect(()=>({}), mapDispatchToProps)
 
 export default compose(
   withConnect,

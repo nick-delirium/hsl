@@ -3,7 +3,6 @@ import {
   StyleSheet,
   View,
   Text,
-  Image,
   TouchableOpacity,
 } from 'react-native'
 import { withRouter } from 'react-router-native'
