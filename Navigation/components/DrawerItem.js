@@ -34,12 +34,14 @@ class DrawerItem extends React.Component {
     return (
       <TouchableOpacity
         onPress={() => this.onItemPress(href)}
-        style={[
-          styles.button,
-          isActive && styles.activeButton
-        ]}
+        style={styles.button}
       >
-        <Text style={styles.text}>
+        <Text 
+          style={[
+            styles.text,
+            isActive && styles.activeButton
+          ]}
+        >
           {text}
         </Text>
       </TouchableOpacity>
@@ -56,7 +58,7 @@ const styles = StyleSheet.create({
     paddingLeft: 40,
   },
   activeButton: {
-    backgroundColor: 'rgba(0,0,0,0.3)',
+    color: '#a3a3a3',
   },
   text: {
     fontSize: 16,

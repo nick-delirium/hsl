@@ -39,4 +39,11 @@ const pages = {
   }
 }
 
+export const pageTitles = {
+  [pages.all.path]: 'KORYOSARAM SYNERGY',
+  [pages.news.path]: pages.news.name,
+  [pages.blogs.path]: pages.blogs.name,
+  [pages.programs.path]: pages.programs.name,
+  [pages.media.path]: pages.media.name,
+}
 export default pages

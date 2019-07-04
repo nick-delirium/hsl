@@ -4,6 +4,7 @@ import {
   ScrollView,
   View,
   Text,
+  Image,
   Platform,
   TouchableOpacity,
 } from 'react-native'
@@ -12,34 +13,54 @@ import TabBarIcon from './components/TabBarIcon'
 import AllPosts from './Pages/AllPosts'
 import Article from './Pages/AllPosts/components/Article'
 import Event from './Pages/Events/Event'
-import pages from './constants/pages'
+import pages, { pageTitles, } from './constants/pages'
 
-let scrollRef = null
 
-const NavBar = (props) => { //TODO: do normal header
+const NavBar = ({ openDrawer, goBack, location }) => {
+  const title = pageTitles[location]
+  const shouldRenderBackButton = /event|post/.test(location)
+  const onIconPress = shouldRenderBackButton ? goBack : openDrawer
+  const icon = shouldRenderBackButton ? 'back' : 'menu_icon'
   return (
     <View style={styles.nav}>
       <TouchableOpacity 
-        style={{alignSelf: 'flex-start', marginTop: 20}}
-        onPress={props.onPress}
+        onPress={onIconPress}
       >
-        <TabBarIcon name={Platform.OS === 'ios' ? 'ios-menu' : 'md-menu'} />
+        {shouldRenderBackButton ? (
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              paddingTop: 9,
+              paddingBottom: 9,
+            }}
+          >
+            <Image 
+              source={require(`./assets/images/back.png`)}
+              style={{ width: 19, height: 19 }}  
+            />
+          </View>
+        ) : (
+          <Image 
+            source={require(`./assets/images/menu_icon.png`)}
+            style={{ width: 38, height: 38 }}  
+          />
+        )}
       </TouchableOpacity>
-      <Text>{props.title}</Text>
+      <Text style={styles.navTitle}>
+        {title}
+      </Text>
     </View>
   )
 } 
 
 const RouterView = (props) => (
   <View style={styles.container}>
-    {/* <View style={styles.nav}>
-      <TouchableOpacity style={{alignSelf: 'flex-start', marginTop: 20}}
-        onPress={props.openDrawer}
-      >
-        <TabBarIcon name={Platform.OS === 'ios' ? 'ios-menu' : 'md-menu'} />
-      </TouchableOpacity>
-    </View> */}
-    <NavBar onPress={props.openDrawer} />
+    <NavBar 
+      openDrawer={props.openDrawer}
+      location={props.location}
+      goBack={props.goBack}
+    />
 
     <Route exact path={pages.all.path} component={AllPosts} />
     <Route path={pages.news.path} render={() => (<AllPosts type='news'/>)} />
@@ -59,9 +80,21 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   nav: {
-    flex: 1,
-    flexDirection: "row",
+    flexDirection: 'row',
+    paddingTop: 30,
+    paddingLeft: 20,
+    paddingRight: 30,
+    paddingBottom: 10,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    backgroundColor: '#333376',
   },
+  navTitle: {
+    marginLeft: 5,
+    fontSize: 16,
+    color: '#fff',
+    fontWeight: 'bold',
+  }
 })
 
 export default RouterView

@@ -156,7 +156,6 @@ class AllPosts extends React.PureComponent {
         />
       )
     }
-    else
     return (
       <CardArticle
         key={item.id}
@@ -190,7 +189,6 @@ class AllPosts extends React.PureComponent {
     })
     return (
       <View style={styles.list}>
-        {<Text style={styles.header}>{headerText}</Text>}
         {/* {isLoading && <Text>Загрузка</Text> /* TODO: add loader */}
         <OptimizedFlatList
           data={dataWithMedia}
@@ -199,9 +197,9 @@ class AllPosts extends React.PureComponent {
           refreshing={isLoading}
           keyExtractor={this._keyExtractor}
           onEndReached={this.loadMoreData}
+          removeClippedSubviews
           onEndReachedThreshold={5}
         />
-        {/* ------------------- */}
         {isLoading && <Text>Загрузка</Text> /* TODO: add loader */}
       </View>
     )
@@ -213,7 +211,7 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   list: {
-    padding: 20
+    paddingTop: 20
   }
 })
 

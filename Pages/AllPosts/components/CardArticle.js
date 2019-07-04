@@ -47,25 +47,26 @@ class CardArticle extends React.PureComponent {
 
   render () {
     const { title, descr, categories, id, mediaUrl } = this.props
-    return (
-    <TouchableOpacity onPress={() => this.onItemPress(id)}>
-      <View style={styles.card}>
-
-      {mediaUrl && (
-        <CachedImage
-          source={mediaUrl}
-          title={id}
-          categories={categories[0] ? categories[0] : undefined}
-          style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}}
-        />
-      )}
-      <View style={styles.cardText} >
-        <Text style={{fontWeight: 'bold', fontSize: 18, paddingBottom: 4}}>{title}</Text>
-        <Text style={{fontSize: 14}}>{descr.split('\n<')[0]}...</Text>
+      return (
+        <View style={{ paddingLeft: 20, paddingRight: 20 }}>
+          <TouchableOpacity onPress={() => this.onItemPress(id)}>
+            <View style={styles.card}>
+            {mediaUrl && (
+              <CachedImage
+                source={mediaUrl}
+                title={id}
+                categories={categories[0] ? categories[0] : undefined}
+                style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}}
+              />
+            )}
+            <View style={styles.cardText} >
+              <Text style={{fontWeight: 'bold', fontSize: 18, paddingBottom: 4}}>{title}</Text>
+              <Text style={{fontSize: 14}}>{descr.split('\n<')[0]}...</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
       </View>
-    </View>
-  </TouchableOpacity>
-  )
+    )
   }
 }
 
@@ -86,7 +87,6 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
     paddingRight: 10,
     fontSize: 18,
-    // marginTop: -14,
   },
 })
 
