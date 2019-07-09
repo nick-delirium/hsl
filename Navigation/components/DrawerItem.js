@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 10,
     backgroundColor: 'rgba(0,0,0,0)',
-    paddingLeft: 40,
+    paddingLeft: 30,
   },
   activeButton: {
     color: '#a3a3a3',

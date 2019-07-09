@@ -78,7 +78,11 @@ class AppIndex extends React.Component {
     return (
       <NativeRouter>
         <View style={styles.container}>
-          <StatusBar barStyle='light-content' />
+          <StatusBar 
+            style={{ zIndex: 10 }}
+            barStyle='light-content'
+            backgroundColor="#333376"
+          />
           <RouterWithDrawer />
         </View>
       </NativeRouter>

@@ -4,9 +4,10 @@ import {
   Image,
   View,
 } from 'react-native'
-import { LinearGradient } from 'expo'
 import pages from '../../constants/pages'
 import DrawerItem from './DrawerItem'
+import Contacts from './Contacts'
+import Social from './Social'
 
 class DrawerPanel extends React.Component {
   constructor(props) {
@@ -20,13 +21,14 @@ class DrawerPanel extends React.Component {
         <View style={{
           flexDirection: 'column',
           flex: 1,
-          paddingTop: 80,
+          paddingTop: 10,
           backgroundColor: "#fff",
-          width: 240,
+          width: 260,
         }}>
           <Image 
             source={require('../../assets/images/HSL-logo.png')}
             style={styles.image}
+            resizeMode="contain"
           />
           {validMenuItems.map((item) => (
             <DrawerItem
@@ -36,6 +38,8 @@ class DrawerPanel extends React.Component {
               key={pages[item].name}
             />
           ))}
+          <Social />
+          <Contacts />
         </View>
     )
   }
@@ -45,15 +49,14 @@ const styles = StyleSheet.create({
   image: {
     alignSelf: 'center',
     width: 180,
-    height: 62,
-    marginBottom: 35,
+    marginBottom: 0,
   },
   button: {
     alignSelf: 'stretch',
     paddingTop: 10,
     paddingBottom: 10,
     backgroundColor: 'rgba(0,0,0,0)',
-    paddingLeft: 40,
+    paddingLeft: 30,
   },
   text: {
     fontSize: 16,

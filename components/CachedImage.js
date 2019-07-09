@@ -95,11 +95,13 @@ class CachedImage extends PureComponent {
     }
 
     return (
-      <View>
+      <View
+        style={{ ...style, backgroundColor: '#525252' }}
+      >
         <Image
-          style={style}
           source={{ uri: this.state.imguri }}
           resizeMethod="scale"
+          style={{ height: style.height}}
         />
         {categories && (
           <View style={styles.category}>

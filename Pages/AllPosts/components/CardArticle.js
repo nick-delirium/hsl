@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 4},
   },
   cardText: {
-    paddingTop: 10,
     paddingLeft: 10,
     paddingBottom: 10,
     paddingRight: 10,
