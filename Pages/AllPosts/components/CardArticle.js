@@ -48,7 +48,7 @@ class CardArticle extends React.PureComponent {
   render () {
     const { title, descr, categories, id, mediaUrl } = this.props
       return (
-        <View style={{ paddingLeft: 20, paddingRight: 20 }}>
+        <View>
           <TouchableOpacity onPress={() => this.onItemPress(id)}>
             <View style={styles.card}>
             {mediaUrl && (

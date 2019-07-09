@@ -41,6 +41,7 @@ const pages = {
 
 export const pageTitles = {
   [pages.all.path]: 'KORYOSARAM SYNERGY',
+  [pages.events.path]: pages.events.name,
   [pages.news.path]: pages.news.name,
   [pages.blogs.path]: pages.blogs.name,
   [pages.programs.path]: pages.programs.name,

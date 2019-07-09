@@ -11,7 +11,7 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
-// import CalendarIcon from '../../assets/images/CalendarIcon.svg'
+import CachedImage from '../../components/CachedImage'
 import { changeLocation } from '../../Navigation/reducer' 
 import { setEvent } from '../../Redux/eventReducer'
 import { formatText, formatDate } from '../../common/format'
@@ -26,17 +26,6 @@ constructor(props) {
     }
   }
 
-  componentDidMount() {
-    if (this.props.mediaUrl) {
-    fetch(this.props.mediaUrl)
-        .then(response => response.json())
-        .then(result => this.setState({ imgUrl: result && result.source_url, isFetching: false }))
-        .catch(e => {
-          console.error(e)
-          this.setState({isFetching: false, error: e })
-        })
-    }
-  }
   onItemPress = (event) => {
     const { 
       setEvent, 
@@ -63,17 +52,20 @@ constructor(props) {
 
     const { id, title, description, dateStart, dateEnd, image, organizer, url, place, slug } = this.props
     // const { imgUrl } = this.state
-    // console.log(item.place)
     //TODO receive slug
     return (
     <TouchableOpacity onPress={() => this.onItemPress(this.props)}> 
       <View style={styles.card}>
 
-      {image && <Image style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}} source={{uri: image}}/>}
-      {/* {imgUrl && categories[0] && 
-        <View style={styles.category}>
-          <Text style={{color: '#fff'}}>{categories[0].name}</Text>
-        </View>} */}
+      {image && (
+        <CachedImage
+          source={image}
+          streight
+          title={id}
+          categories={undefined}
+          style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}}
+        />
+      )}
       <View style={styles.cardText} >
         <Text style={{fontWeight: 'bold', fontSize: 18, paddingBottom: 4}}>{title}</Text>
         <Text style={{fontSize: 14}}>{formatText(description)}</Text>
@@ -85,10 +77,6 @@ constructor(props) {
             <Text>{formatDate(dateEnd)}</Text>
           </View>
         </View>
-        {/* <Text>{organizer}</Text> */}
-        {/* <Text>{url}</Text> */}
-        
-
       </View>
     </View>
   </TouchableOpacity>
