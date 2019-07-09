@@ -82,8 +82,8 @@ class Event extends React.Component {
           )}
           {!!url && url.length &&(
             <View style={styles.row}>
-              <Image source={require('../../assets/images/desktop-icon.png')} style={{marginRight: 9,}}/>
-              <Text>{url}</Text>
+              <Image source={require('../../assets/images/desktop-icon.png')} style={styles.icon}/>
+              <Text style={{flex: 0.9}}>{url}</Text>
             </View>
           )}
 
@@ -130,7 +130,10 @@ const styles = StyleSheet.create({
     paddingLeft: 18,
   },
   icon: {
-    marginRight: 12,
+    flex: 0.1,
+    width: null,
+    height: 20,
+    resizeMode: 'contain'
   },
   title: {
     fontWeight: 'bold',
