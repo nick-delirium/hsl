@@ -23,13 +23,12 @@ class CachedImage extends PureComponent {
   }
 
   componentDidMount() {
-    this._isMounted = true
     FileSystem.getInfoAsync(
       `${FileSystem.cacheDirectory + this.props.title}.jpg`
     ).then(({ exists, uri }) => {
       if (exists) this.loadLocal(uri)
       else {
-
+        if (!this.props.streight) {
         fetch(this.props.source)
           .then(response => response.json())
           .then(result => {
@@ -51,9 +50,22 @@ class CachedImage extends PureComponent {
               });
             }
           })
-
+        } else {
+          const extension = this.props.source.slice((this.props.source.lastIndexOf(".") - 1 >>> 0) + 2)
+          FileSystem.downloadAsync(
+            this.props.source,
+            `${FileSystem.cacheDirectory + this.props.title}.${extension}`
+          ).then(({ uri }) => {
+            this.loadLocal(Platform.OS === 'ios'? uri : this.props.source)
+          }).catch(e => {
+            console.log('Image loading error:', e)
+            // if the online download fails, load the local version
+            this.loadLocal(`${FileSystem.cacheDirectory + this.props.title}.${extension}`)
+          });
+        }
       }
     })
+    this._isMounted = true
   }
 
   loadLocal(uri) {
@@ -69,7 +81,7 @@ class CachedImage extends PureComponent {
 
     if (this.state.loading) {
       return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', ...style }}>
+        <View style={{ alignItems: 'center', justifyContent: 'center', ...style }}>
           <ActivityIndicator
             color='#42C2F3'
             size='large'
@@ -79,7 +91,7 @@ class CachedImage extends PureComponent {
     }
 
     if (this.state.failed) {
-      return <View style={{...style}}></View>
+      return <View style={style}></View>
     }
 
     return (

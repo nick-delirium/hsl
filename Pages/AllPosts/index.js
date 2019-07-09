@@ -4,16 +4,17 @@ import {
   View,
   FlatList,
   Text,
+  ActivityIndicator,
 } from 'react-native'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
+import { OptimizedFlatList } from 'react-native-optimized-flatlist'
 import CardArticle from './components/CardArticle.js'
 import CardEvent from '../Events/CardEvent'
 import { getPosts, getPostsByCategory, getEvents } from './reducer'
 import { getCategories } from '../../Navigation/reducer'
 import pages from '../../constants/pages'
-import {OptimizedFlatList} from 'react-native-optimized-flatlist'
 
 
 class AllPosts extends React.PureComponent {
@@ -188,8 +189,8 @@ class AllPosts extends React.PureComponent {
       }
     })
     return (
-      <View style={styles.list}>
-        {/* {isLoading && <Text>Загрузка</Text> /* TODO: add loader */}
+      <View>
+        
         <OptimizedFlatList
           data={dataWithMedia}
           renderItem={this.renderCardItem}
@@ -200,7 +201,6 @@ class AllPosts extends React.PureComponent {
           removeClippedSubviews
           onEndReachedThreshold={5}
         />
-        {isLoading && <Text>Загрузка</Text> /* TODO: add loader */}
       </View>
     )
   }
@@ -210,9 +210,6 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 20
   },
-  list: {
-    paddingTop: 20
-  }
 })
 
 const mapStateFromProps = createStructuredSelector({

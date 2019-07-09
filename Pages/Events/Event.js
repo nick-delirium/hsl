@@ -15,6 +15,7 @@ import { createStructuredSelector } from 'reselect'
 import HTMLView from 'react-native-htmlview';
 import CachedImage from '../../components/CachedImage'
 import { formatText, formatDate } from '../../common/format'
+import Dimensions from 'Dimensions'
 
 
 class Event extends React.Component {
@@ -47,7 +48,8 @@ class Event extends React.Component {
     // const title = get(post, 'title.rendered')
 
     const { id, title, description, dateStart, dateEnd, image, organizer, url, place } = event
-    // console.log(image)
+    const { width, height } = Dimensions.get('window')
+
     return (
       <ScrollView ref='_scrollRef' contentContainerStyle={styles.scrollview}>
         <View style={styles.description}>
@@ -58,10 +60,14 @@ class Event extends React.Component {
               source={image}
               title={id}
               categories={undefined}
-              style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}}
+              style={{ width, minHeight: 200, borderBottomWidth: 1, borderColor: '#000'}}
             />
           )}
-          <Text style={{fontWeight: 'bold', fontSize: 22}}>{title}</Text>
+          <Text 
+            style={{
+              fontWeight: 'bold', fontSize: 22,
+            }}
+          >{title}</Text>
           <HTMLView
             value={`<div>${description.replace(/(\r\n|\n|\r)/gm, "")}</div>`}
             stylesheet={HTMLStyles}
@@ -89,10 +95,11 @@ class Event extends React.Component {
 
 const styles = StyleSheet.create({
   scrollview: {
-    padding: 20,
+    padding: 0,
+    flex: 1,
   },
   card: {
-    marginBottom: 30,
+    flex: 1,
     marginRight: 0,
     marginLeft: 0,
     backgroundColor: '#fff',
@@ -102,14 +109,9 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 4},
     paddingTop: 18,
     paddingBottom: 30,
-    paddingRight: 18,
-    paddingLeft: 18,
   },
-  description: {
-    paddingTop: 18,
+  description: { 
     paddingBottom: 30,
-    paddingRight: 18,
-    paddingLeft: 18,
   },
   row: {
     flexDirection: 'row',
@@ -118,6 +120,8 @@ const styles = StyleSheet.create({
 })
 const HTMLStyles = StyleSheet.create({
   div: {
+    paddingRight: 20,
+    paddingLeft: 20,
     marginTop: 0,
     marginBottom: 0,
   },

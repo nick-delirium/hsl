@@ -14,6 +14,7 @@ import { changeLocation } from '../../../Navigation/reducer'
 import { createStructuredSelector } from 'reselect'
 import HTMLView from 'react-native-htmlview';
 import CachedImage from '../../../components/CachedImage'
+import Dimensions from 'Dimensions'
 
 class Article extends React.Component {
   constructor(props) {
@@ -26,7 +27,6 @@ class Article extends React.Component {
 
   onLinkPress = (url) => {
     let found = this.props.allPosts.find(post => (post.link === url))
-    console.log(found)
     if (found) {
       this.props.history.push(`post/${found.id}`)
       this.props.changeLoc(path)
@@ -45,18 +45,25 @@ class Article extends React.Component {
     // const title = get(post, 'title.rendered')
 
     const { title, content: { rendered: content }, mediaUrl, categories } = article
-    console.log(mediaUrl)
+    const { width, height } = Dimensions.get('window')
+
     return (
       <ScrollView ref='_scrollRef' contentContainerStyle={styles.scrollview}>
-        <View style={styles.card}>
-          <Text style={{fontWeight: 'bold'}}>{title}</Text>
+        <View style={{ ...styles.card }}>
+          <Text style={{ 
+            fontWeight: 'bold', 
+            paddingRight: 20, 
+            paddingLeft: 20, 
+            fontSize: 22,
+            marginBottom: 15,
+          }}>{title}</Text>
           {/* {imgUrl && <Image style={{flex: 1, height: 140}} source={{uri: imgUrl}}/>} */}
           {mediaUrl && (
             <CachedImage
               source={mediaUrl}
               title={id}
               categories={categories[0] ? categories[0] : undefined}
-              style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}}
+              style={{ width, minHeight: 200, borderBottomWidth: 1, borderColor: '#000'}}
             />
           )}
           <HTMLView
@@ -73,11 +80,12 @@ class Article extends React.Component {
 
 const styles = StyleSheet.create({
   scrollview: {
-    padding: 20,
+    padding: 0,
+    flex: 1,
   },
   card: {
-    marginBottom: 30,
     marginRight: 0,
+    flex: 1,
     marginLeft: 0,
     backgroundColor: '#fff',
     shadowColor: '#000',
@@ -86,12 +94,12 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 4},
     paddingTop: 18,
     paddingBottom: 30,
-    paddingRight: 18,
-    paddingLeft: 18,
   }
 })
 const HTMLStyles = StyleSheet.create({
   div: {
+    paddingRight: 20,
+    paddingLeft: 20,
     marginTop: 0,
     marginBottom: 0,
   },
