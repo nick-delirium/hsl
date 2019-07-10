@@ -1,23 +1,22 @@
 import React from 'react'
 import {
   StyleSheet,
-  ScrollView,
+  Dimensions,
   View,
   Text,
   Image,
-  Platform,
   TouchableOpacity,
 } from 'react-native'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import get from 'lodash/get'
 import { Route } from 'react-router-native'
-import TabBarIcon from './components/TabBarIcon'
 import AllPosts from './Pages/AllPosts'
 import Article from './Pages/AllPosts/components/Article'
 import Event from './Pages/Events/Event'
 import pages, { pageTitles, } from './constants/pages'
-
+const width = Dimensions.get('window').width
+const height = Dimensions.get('window').height
 
 const NavBar = ({ navTitle, openDrawer, goBack, location }) => {
   const isArticle = /post\//.test(location)
@@ -67,7 +66,8 @@ const NavBar = ({ navTitle, openDrawer, goBack, location }) => {
 
 const RouterView = (props) => (
   <View style={styles.container}>
-    <NavBar 
+    {props.drawerOpen && <View style={{position: 'absolute', zIndex: 10, top: 0, left: 0, height, width, backgroundColor: '#000000', opacity: 0.7}} />}
+    <NavBar
       openDrawer={props.openDrawer}
       location={props.location}
       goBack={props.goBack}
