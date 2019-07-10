@@ -70,25 +70,25 @@ class Event extends React.Component {
         
           <View style={{...styles.row, paddingtop: 16,}}>
               <Image source={require('../../assets/images/calendar-icon.png')} style={styles.icon}/>
-              <Text>{`${startDate.date} - ${endDate.date}`}</Text>
+              <Text style={{ flex: 0.9 }}>{`${startDate.date} - ${endDate.date}`}</Text>
           </View>
           {allDay && (
             <View style={styles.row}>
               <Image source={require('../../assets/images/time-icon.png')} style={styles.icon}/>
-              <Text>{`${startDate.time} - ${endDate.time}`}</Text>
+              <Text style={{ flex: 0.9 }}>{`${startDate.time} - ${endDate.time}`}</Text>
             </View>
           )}
           {!!url && url.length &&(
             <View style={styles.row}>
               <Image source={require('../../assets/images/desktop-icon.png')} style={styles.icon}/>
-              <Text style={{flex: 0.9}}>{url}</Text>
+              <Text style={{ flex: 0.9 }}>{url}</Text>
             </View>
           )}
 
           {place && place.venue && (
             <View style={styles.row}>
               <Image source={require('../../assets/images/place-icon.png')} style={styles.icon}/>
-              <View style={{flex: 0.9}}>
+              <View style={{ flex: 0.9 }}>
                 <Text>{place.venue}</Text>
                 {place.address && <Text>{place.address}</Text>}
                 {place.city && place.country && <Text>{`${place.city}, ${place.country}`}</Text>}
@@ -98,7 +98,7 @@ class Event extends React.Component {
           {organizer[0] && (
             <View style={styles.row}>
               <Image source={require('../../assets/images/human-icon.png')} style={styles.icon}/>
-              <Text style={{flex: 0.9}}>{organizer[0].organizer}</Text>
+              <Text style={{ flex: 0.9 }}>{organizer[0].organizer}</Text>
             </View>
           )}
 

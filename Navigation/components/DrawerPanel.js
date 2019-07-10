@@ -33,7 +33,8 @@ class DrawerPanel extends React.Component {
             resizeMode="contain"
           />
           <View style={{ flex:1 }}>
-            <ScrollView>
+            <ScrollView contentContainerStyle={{ flex:1, flexDirection: "column", justifyContent: "space-between", height: screenHeight }}>
+              <View style={{ flex: 1 }}>
               {validMenuItems.map((item) => (
                 <DrawerItem
                   closeDrawer={this.props.closeDrawer}
@@ -42,8 +43,9 @@ class DrawerPanel extends React.Component {
                   key={pages[item].name}
                 />
               ))}
-              <Social />
-              <Contacts />
+              </View>
+                <Social/>
+                <Contacts />
             </ScrollView>
           </View>
         </View>

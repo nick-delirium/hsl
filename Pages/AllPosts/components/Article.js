@@ -64,10 +64,11 @@ class Article extends React.Component {
               source={mediaUrl}
               title={id}
               categories={categories[0] ? categories[0] : undefined}
-              style={{ flex: 1, height: 200, borderBottomWidth: 1, borderColor: '#000'}}
+              style={{ flex: 1, height: 200, borderBottomWidth: 1, borderColor: '#000' }}
             />
           )}
           <HTMLView
+            style={{ paddingTop: 10 }}
             value={`<div>${content.replace(/(\r\n|\n|\r)/gm, "")}</div>`}
             stylesheet={HTMLStyles}
             onLinkPress={(url) => {this.onLinkPress(url)}}

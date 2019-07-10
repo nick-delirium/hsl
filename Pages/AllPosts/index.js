@@ -169,6 +169,7 @@ class AllPosts extends React.PureComponent {
         mediaUrl={item.mediaUrl ? item.mediaUrl : null}
         categories={categories.filter(cat => (item.categories.includes(cat.id)))}
         content={get(item, 'content.rendered')}
+        type={type}
       />
     )
   }

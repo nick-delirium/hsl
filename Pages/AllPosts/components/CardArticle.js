@@ -44,7 +44,7 @@ class CardArticle extends React.PureComponent {
   }
 
   render () {
-    const { title, descr, categories, id, mediaUrl } = this.props
+    const { title, descr, categories, id, mediaUrl, type } = this.props
       return (
         <View>
           <TouchableOpacity onPress={() => this.onItemPress(id)}>
@@ -53,7 +53,7 @@ class CardArticle extends React.PureComponent {
               <CachedImage
                 source={mediaUrl}
                 title={id}
-                categories={categories[0] ? categories[0] : undefined}
+                categories={!type && categories[0] ? categories[0] : undefined}
                 style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}}
               />
             )}
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingBottom: 10,
     paddingRight: 10,
+    paddingTop: 10,
     fontSize: 18,
   },
 })
