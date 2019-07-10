@@ -36,7 +36,6 @@ class Article extends React.Component {
   render () {
     const { 
       match: { params: { id } }, 
-      // allPosts,
       article,
     } = this.props
   
