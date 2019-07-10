@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   },
   nav: {
     flexDirection: 'row',
-    paddingTop: 30,
+    paddingTop: 45,
     paddingLeft: 20,
     paddingRight: 30,
     paddingBottom: 10,

@@ -31,7 +31,6 @@ const fetchFail = (reason) => ({
 
 export const getCategories = () => {
   return dispatch => {
-    console.log('_________________________')
     dispatch(fetchCategoriesReq())
     const res = fetch(api.getCategories())
       .then((response) => {

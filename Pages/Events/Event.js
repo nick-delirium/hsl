@@ -29,7 +29,6 @@ class Event extends React.Component {
 
   onLinkPress = (url) => {
     let found = this.props.allPosts.find(post => (post.link === url))
-    console.log(found)
     if (found) {
       this.props.history.push(`post/${found.id}`)
       this.props.changeLoc(path)
@@ -38,26 +37,25 @@ class Event extends React.Component {
 
   render () {
     const { 
-      match: { params: { slug } }, 
-      allPosts,
+      match: { params: { slug } }, // todo use slug
       event,
     } = this.props
   
     const { id, title, description, dateStart, dateEnd, image, organizer, url, place, allDay } = event
-    const { width, height } = Dimensions.get('window')
-    let startDate = formatDate(dateStart) 
-    let endDate = formatDate(dateEnd)
-    console.log('aaaaa', !!url)
+    const { width } = Dimensions.get('window')
+    const startDate = formatDate(dateStart)
+    const endDate = formatDate(dateEnd)
+
     return (
       <ScrollView ref='_scrollRef' contentContainerStyle={styles.scrollview}>
         <View style={styles.description}>
           {image && (
             <CachedImage
               source={image}
+              streight
               title={id}
               categories={undefined}
-              streight
-              style={{ width, minHeight: 200, borderBottomWidth: 1, borderColor: '#000'}}
+              style={{ width, height: 200, borderBottomWidth: 1, borderColor: '#000'}}
             />
           )}
           <Text style={styles.title}>{title}</Text>
@@ -65,7 +63,7 @@ class Event extends React.Component {
             value={`<div>${description.replace(/(\r\n|\n|\r)/gm, "")}</div>`}
             stylesheet={HTMLStyles}
 
-            onLinkPress={(url) => {this.onLinkPress(url); console.log('clicked link: ', url)}}
+            onLinkPress={(url) => {this.onLinkPress(url)}}
           />
         </View>
         <View style={styles.card}>
@@ -113,7 +111,6 @@ class Event extends React.Component {
 const styles = StyleSheet.create({
   scrollview: {
     padding: 0,
-    flex: 1,
   },
   card: {
     flex: 1,
@@ -141,6 +138,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingTop: 20,
     paddingBottom: 20,
+    paddingRight: 20,
+    paddingLeft: 20,
   },
   description: { 
     paddingBottom: 30,

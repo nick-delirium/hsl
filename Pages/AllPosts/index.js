@@ -59,7 +59,6 @@ class AllPosts extends React.PureComponent {
       let category = categories.find(cat => (cat.slug === type))
       if (type && category) {
         if (category && category.id) {
-          console.log(`fetching for ${type}`)
           fetchByCategory(category.id, treshold)
         } else {
           console.log(`Error: category ${type} not found`)

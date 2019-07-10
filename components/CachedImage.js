@@ -44,7 +44,6 @@ class CachedImage extends PureComponent {
               ).then(({ uri }) => {
                 this.loadLocal(Platform.OS === 'ios'? uri : url)
               }).catch(e => {
-                console.log('Image loading error:', e)
                 // if the online download fails, load the local version
                 this.loadLocal(`${FileSystem.cacheDirectory + this.props.title}.${extension}`)
               });

@@ -9,8 +9,6 @@ import {
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import get from 'lodash/get'
-import { createStructuredSelector } from 'reselect'
 import CachedImage from '../../components/CachedImage'
 import { changeLocation } from '../../Navigation/reducer' 
 import { setEvent } from '../../Redux/eventReducer'
@@ -33,7 +31,6 @@ constructor(props) {
       history, 
       path,
     } = this.props
-    console.log(this.props)
     const newPath = 'event/' + event.slug
     setEvent(event)
     history.push(newPath)
@@ -41,8 +38,10 @@ constructor(props) {
   }
 
   render () {
-    const { id, title, description, dateStart, dateEnd, image } = this.props
+    const { id, title, description, dateStart, dateEnd, image, allDay } = this.props
     //TODO receive slug
+    const startDate = formatDate(dateStart) 
+    const endDate = formatDate(dateEnd)
     return (
     <TouchableOpacity onPress={() => this.onItemPress(this.props)}> 
       <View style={styles.card}>
@@ -61,21 +60,24 @@ constructor(props) {
         <Text style={{fontSize: 14}}>{formatText(description)}</Text>
         
         <View style={{ ...styles.row, justifyContent: 'space-between', paddingTop: 10, paddingBottom: 20 }}>
-          <View style={styles.row}>
+          <View style={{...styles.row, flex: 1}}>
             <Image source={require('../../assets/images/calendar-circle-icon.png')} 
-              style={{ height: 36, width: 36, marginRight: 10 }}/>
+              style={{ height: 30, width: 30, marginRight: 10 }}/>
             <View>
-              <Text>{formatDate(dateStart).date} - </Text>
-              <Text>{formatDate(dateEnd).date}</Text>
+              <Text style={{color: '#525252', whiteSpace: 'wrap'}}>
+                {`${startDate.date} - ${endDate.date}`}
+              </Text>
             </View>
           </View>
-          {true && (
-            <View style={styles.row}>
+          {allDay && (
+            <View style={{...styles.row, flex: 1.5}}>
               <Image source={require('../../assets/images/time-circle-icon.png')} 
-                style={{ height: 36, width: 36, marginRight: 5 }}
+                style={{ height: 30, width: 30, marginRight: 5 }}
               />
               <View>
-                <Text>19:00 - 21:30</Text>
+                <Text style={{color: '#525252'}}>
+                  {`${startDate.time} - ${endDate.time}`}
+                </Text>
               </View>
             </View>
           )}

@@ -140,11 +140,9 @@ export default function(state = initialState, action) {
     case FETCH_EVENTS_START:
       return {
         ...state,
-        // category: action.payload.category,
         isLoading: true,
       }
     case FETCH_EVENTS_SUCCESS:
-      // console.log(Object.keys(action.payload))
       return {
         ...state,
         data: {...state.data, [`00`]: [...action.payload]}, //00 is our id for events

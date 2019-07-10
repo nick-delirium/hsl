@@ -9,7 +9,7 @@ export const formatDate = (date) => {
   let month = months[date[1]]
   let time = splitted[1].split(':')
   return ({ 
-    date: `${date[2]} ${month}`,
+    date: `${date[2]}\u00A0${month}`,
     time: `${time[0]}:${time[1]}`
   })
 }

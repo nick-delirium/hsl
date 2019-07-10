@@ -17,7 +17,6 @@ import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 
 import RouterWithDrawer from './Navigation'
-import getPosts from './Pages/AllPosts/reducer'
 import api from './api'
 import { fetchAllSuccess } from './Pages/AllPosts/reducer'
 
@@ -52,26 +51,23 @@ class AppIndex extends React.Component {
   
     if (this.state.isSplashReady && !this.state.isAppReady) {
       return (
-      <View>
         <Animated.View 
           style={{
             opacity: this.state.fadeAnim,
             justifyContent: 'center',
             alignItems: 'center',
-            flexDirection: 'column',
-            height: height
+            flex: 1,
           }}
         >
           <Animated.Image
             source={require("./assets/images/HSL-logo.png")}
-            styles={{
-                resizeMode: 'contain',
-                alignSelf: 'center',
+            style={{
+              aspectRatio: 2.3,
+              resizeMode: 'contain'
             }}
             onLoad={this._cacheResourcesAsync}
           />
         </Animated.View>
-       </View>
       )
     }
 
@@ -98,23 +94,23 @@ class AppIndex extends React.Component {
     SplashScreen.hide()
     const { posts } = this.props
     if (!posts || posts.length ===  0) {
-      const result = fetch(api.getPosts(20))
-      .then((response) => response.json())
-      .then((news) => {
-        this.props.setNews(news)
-      })
-      .then(async () => {
-        Animated.timing(
-          this.state.fadeAnim,
-          {
-            toValue: 1,
-            duration: 500,
-          }
-        ).start(() => {
-          this.setState({ isAppReady: true }) 
+      fetch(api.getPosts(20))
+        .then((response) => response.json())
+        .then((news) => {
+          this.props.setNews(news)
         })
-      })
-      .catch(e => console.error(e))
+        .then(async () => {
+          Animated.timing(
+            this.state.fadeAnim,
+            {
+              toValue: 1,
+              duration: 500,
+            }
+          ).start(() => {
+            this.setState({ isAppReady: true }) 
+          })
+        })
+        .catch(e => console.error(e))
     }
   }
 

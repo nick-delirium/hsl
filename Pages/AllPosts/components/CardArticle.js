@@ -20,7 +20,6 @@ class CardArticle extends React.PureComponent {
   }
 
   onItemPress = (id) => {
-    console.log(this.props)
     const { 
       setPost, 
       changeLoc, 
@@ -46,6 +45,7 @@ class CardArticle extends React.PureComponent {
 
   render () {
     const { title, descr, categories, id, mediaUrl } = this.props
+    console.log(title, mediaUrl)
       return (
         <View>
           <TouchableOpacity onPress={() => this.onItemPress(id)}>
