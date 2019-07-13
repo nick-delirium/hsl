@@ -34,6 +34,7 @@ class Article extends React.Component {
     if (found) {
       const article = {
         title: found.title.rendered,
+        link: found.link,
         mediaUrl: found.mediaUrl,
         id: found.id,
         categories: found.categories,

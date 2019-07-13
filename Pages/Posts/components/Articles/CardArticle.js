@@ -13,6 +13,7 @@ import { createStructuredSelector } from 'reselect'
 import { changeLocation } from '@/Navigation/reducer'
 import CachedImage from '@/components/CachedImage'
 import { setData } from './articleReducer'
+import { fonts } from '@/constants/Styles'
 
 class CardArticle extends React.PureComponent {
   constructor(props) {
@@ -27,6 +28,7 @@ class CardArticle extends React.PureComponent {
       path,
       title,
       data,
+      link,
       categories,
       mediaUrl,
       id,
@@ -37,10 +39,11 @@ class CardArticle extends React.PureComponent {
       title,
       mediaUrl,
       id,
+      link,
       categories,
       content: data.content,
     }
-
+    console.log(article.link)
     setPost(article)
     history.push(newPath)
     changeLoc(newPath)
@@ -60,9 +63,17 @@ class CardArticle extends React.PureComponent {
                 style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}}
               />
             )}
-            <View style={styles.cardText} >
-              <Text style={{fontWeight: 'bold', fontSize: 18, paddingBottom: 4}}>{title}</Text>
-              <Text style={{fontSize: 14}}>{descr.split('\n<')[0]}...</Text>
+            <View style={styles.cardText}>
+              <Text 
+                style={{fontWeight: 'bold', fontSize: fonts.big, paddingBottom: 4}}
+              >
+                {title}
+              </Text>
+              <Text 
+                style={{fontSize: fonts.normal}}
+              >
+                {descr.split('\n<')[0]}...
+              </Text>
             </View>
           </View>
         </TouchableOpacity>
