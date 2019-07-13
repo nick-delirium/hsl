@@ -36,7 +36,11 @@ const pages = {
   event: {
     name: '',
     path: '/event/:slug',
-  }
+  },
+  search: {
+    name: '',
+    path: '/search/:query',
+  },
 }
 
 export const pageTitles = {

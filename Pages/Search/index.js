@@ -10,9 +10,7 @@ import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { OptimizedFlatList } from 'react-native-optimized-flatlist'
-import CardArticle from './components/Articles/CardArticle.js'
-import CardEvent from './components/Events/CardEvent'
-import { getPosts, getPostsByCategory, getEvents } from './reducer'
+import { getPosts, getPostsByCategory, getEvents } from '../Posts/reducer'
 import { getCategories } from '@/Navigation/reducer'
 import pages from '@/constants/pages'
 
@@ -27,17 +25,6 @@ class AllPosts extends React.PureComponent {
 
   componentDidMount() {
     this.getInitialData()
-  }
-
-  loadMoreData = () => {
-    const { treshold } = this.state
-    const { isLoading } = this.props
-    if (isLoading) return null
-    else {
-      const newTreshold = treshold + 10
-      this.getData(newTreshold)
-      this.setState({ treshold: newTreshold })
-    }
   }
 
   getData = (treshold) => {
@@ -68,67 +55,7 @@ class AllPosts extends React.PureComponent {
     fetchPosts(treshold)
   }
 
-  getInitialData = () => {
-    const { 
-      fetchPosts,
-      fetchByCategory,
-      fetchCategories,
-      fetchEvents,
-      posts,
-      type,
-      data,
-      categories
-    } = this.props
-    if (!categories || categories.length === 0) {
-      fetchCategories()
-    }
-
-    if (type === 'events' && !data || !data[`00`] || !data[`00`].length === 0) {
-      fetchEvents('2019-06-17%2000:00:00', undefined) //TODO: get and format current
-    } else {
-      let category = categories.find(cat => (cat.slug === type))
-      if (type && category && (!data[`${category.id}`] || data[`${category.id}`].length === 0)) {
-        if (category && category.id) {
-          console.log(`fetching for ${type}`)
-          fetchByCategory(category.id)
-        } else {
-          console.log(`Error: category ${type} not found`)
-        }
-      }
-    }
-    if (posts.length === 0) fetchPosts()
-  }
-
-  refreshData = () => {
-    const { 
-      fetchPosts,
-      fetchByCategory,
-      fetchEvents,
-      type,
-      categories,
-    } = this.props
-    if (type === 'events') {
-      fetchEvents('2019-06-17%2000:00:00') //TODO: get and format current
-    } else {
-      let category = categories.find(cat => (cat.slug === type))
-      if (type && category) {
-        if (category && category.id) {
-          fetchByCategory(category.id)
-          this.setState({
-            refreshing: false,
-          })
-        } else {
-          console.log(`Error: category ${type} not found`)
-        }
-      }
-    }
-    if (type === undefined) {
-      fetchPosts()
-    }
-  }
-
-  _keyExtractor = (item) => `_${item.id}`
-
+ 
   renderCardItem = ({ item }) => {
     const { categories, type } = this.props
     if (type === 'events') {
@@ -142,7 +69,7 @@ class AllPosts extends React.PureComponent {
         <CardEvent
           key={item.id}
           id={item.id}
-          description={item.description.slice(0, 100).split('').join('')}
+          description={item.description}
           title={item.title}
           dateStart={item.start_date} //utc_start_date
           dateEnd={item.end_date}
@@ -155,7 +82,6 @@ class AllPosts extends React.PureComponent {
           categories={item.categories}
           tags={item.tags}
           cost={item.cost} //cost_details
-          link={item.url}
         />
       )
     }
@@ -164,9 +90,8 @@ class AllPosts extends React.PureComponent {
         key={item.id}
         id={item.id}
         data={item}
-        link={item.link}
         title={item.title.rendered}
-        descr={item.excerpt.rendered.slice(0, 100).split('').join('') || item.description.slice(0, 100).split('').join('')}
+        descr={item.excerpt.rendered || item.description}
         mediaUrl={item.mediaUrl ? item.mediaUrl : null}
         categories={categories.filter(cat => (item.categories.includes(cat.id)))}
         content={get(item, 'content.rendered')}
@@ -192,7 +117,7 @@ class AllPosts extends React.PureComponent {
       }
     })
     return (
-      <View style={{ paddingTop: 15 }}>
+      <View>
         <OptimizedFlatList
           data={dataWithMedia}
           renderItem={this.renderCardItem}

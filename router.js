@@ -17,6 +17,7 @@ import pages, { pageTitles, } from './constants/pages'
 import Posts from './Pages/Posts'
 import Article from './Pages/Posts/components/Articles/Article'
 import Event from './Pages/Posts/components/Events/Event'
+import Search from './Pages/Search';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -44,6 +45,9 @@ const NavBar = ({ navTitle, openDrawer, goBack, url, location }) => {
   }
   return (
     <View style={styles.nav}>
+      <TouchableOpacity
+        onPress={onIconPress}
+      >
         <View 
           style={{
             flexDirection: 'row',
@@ -99,6 +103,19 @@ const NavBar = ({ navTitle, openDrawer, goBack, url, location }) => {
           </View>
           )}
         </View>
+      </TouchableOpacity>
+      <TouchableOpacity 
+        onPress={onSearchPress}
+        style={{flexDirection: 'row', paddingLeft: 5, }}
+      >
+        <View style={{backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            borderRadius: 3, paddingRight: 7, paddingLeft: 8, paddingTop: 5, paddingBottom: 5, }}>
+          <Image 
+            source={require(`./assets/images/search-icon.png`)}
+            style={{ width: 17, height: 17, alignSelf: 'flex-end'}}
+          />
+        </View>
+      </TouchableOpacity>
     </View>
   )
 } 
@@ -122,6 +139,7 @@ const RouterView = (props) => (
     <Route path={pages.media.path} render={() => (<Posts type='media'/>)} />
     <Route path={pages.post.path} render={() => (<Article id />)} />
     <Route path={pages.event.path} render={() => (<Event slug />)} />
+    <Route path={pages.search.path} render={() => (<Search query />)} />
   </View>
 )
   
@@ -133,19 +151,22 @@ const styles = StyleSheet.create({
   },
   nav: {
     paddingTop: 45,
-    paddingLeft: 20,
-    paddingRight: 30,
+    paddingLeft: 15,
+    paddingRight: 15,
     paddingBottom: 10,
     backgroundColor: '#333376',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   articleTitle: {
     fontSize: 22,
     fontWeight: 'normal',
     color: 'rgba(255, 255, 255, 0.6)',
-    marginLeft: 10,
+    paddingLeft: 10,
   },
   navTitle: {
-    marginLeft: 10,
+    paddingLeft: 10,
     fontSize: 16,
     color: '#fff',
     fontWeight: 'bold',
