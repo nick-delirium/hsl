@@ -18,7 +18,7 @@ import { createStructuredSelector } from 'reselect'
 
 import RouterWithDrawer from './Navigation'
 import api from './api'
-import { fetchAllSuccess } from './Pages/AllPosts/reducer'
+import { fetchAllSuccess } from './Pages/Posts/reducer'
 
 //https://docs.expo.io/versions/latest/sdk/splash-screen/
 //https://docs.expo.io/versions/latest/react-native/animations/

@@ -9,10 +9,10 @@ import {
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import CachedImage from '../../components/CachedImage'
-import { changeLocation } from '../../Navigation/reducer' 
-import { setEvent } from '../../Redux/eventReducer'
-import { formatText, formatDate } from '../../common/format'
+import CachedImage from '@/components/CachedImage'
+import { changeLocation } from '@/Navigation/reducer' 
+import { setEvent } from './eventReducer'
+import { formatText, formatDate } from '@/common/format'
 
 class CardEvent extends React.Component {
 constructor(props) {
@@ -61,17 +61,17 @@ constructor(props) {
         
         <View style={{ ...styles.row, justifyContent: 'space-between', paddingTop: 10, paddingBottom: 20 }}>
           <View style={{...styles.row, flex: 1}}>
-            <Image source={require('../../assets/images/calendar-circle-icon.png')} 
+            <Image source={require('@/assets/images/calendar-circle-icon.png')} 
               style={{ height: 30, width: 30, marginRight: 10 }}/>
             <View>
-              <Text style={{color: '#525252', whiteSpace: 'wrap'}}>
+              <Text style={{color: '#525252'}}>
                 {`${startDate.date} - ${endDate.date}`}
               </Text>
             </View>
           </View>
           {allDay && (
             <View style={{...styles.row, flex: 1.5}}>
-              <Image source={require('../../assets/images/time-circle-icon.png')} 
+              <Image source={require('@/assets/images/time-circle-icon.png')} 
                 style={{ height: 30, width: 30, marginRight: 5 }}
               />
               <View>

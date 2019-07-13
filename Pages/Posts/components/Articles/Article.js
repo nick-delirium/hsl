@@ -10,11 +10,11 @@ import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import get from 'lodash/get'
-import { changeLocation } from '../../../Navigation/reducer'
-import { createStructuredSelector } from 'reselect'
-import HTMLView from 'react-native-htmlview';
-import CachedImage from '../../../components/CachedImage'
 import Dimensions from 'Dimensions'
+import HTMLView from 'react-native-htmlview'
+import { createStructuredSelector } from 'reselect'
+import { changeLocation } from '@/Navigation/reducer'
+import CachedImage from '@/components/CachedImage'
 
 class Article extends React.Component {
   constructor(props) {

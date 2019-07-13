@@ -11,10 +11,12 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import get from 'lodash/get'
 import { Route } from 'react-router-native'
-import AllPosts from './Pages/AllPosts'
-import Article from './Pages/AllPosts/components/Article'
-import Event from './Pages/Events/Event'
+
 import pages, { pageTitles, } from './constants/pages'
+import Posts from './Pages/Posts'
+import Article from './Pages/Posts/components/Articles/Article'
+import Event from './Pages/Posts/components/Events/Event'
+
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
@@ -33,33 +35,41 @@ const NavBar = ({ navTitle, openDrawer, goBack, location }) => {
       <TouchableOpacity 
         onPress={onIconPress}
       >
-        {shouldRenderBackButton ? (
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              paddingTop: 9,
-              paddingBottom: 9,
-            }}
-          >
+        <View 
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+          }}
+        >
+          {shouldRenderBackButton ? (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingTop: 9,
+                paddingBottom: 9,
+              }}
+            >
+              <Image 
+                source={require(`./assets/images/back.png`)}
+                style={{ width: 19, height: 19 }}  
+              />
+            </View>
+          ) : (
             <Image 
-              source={require(`./assets/images/back.png`)}
-              style={{ width: 19, height: 19 }}  
+              source={require(`./assets/images/menu_icon.png`)}
+              style={{ width: 38, height: 38 }}  
             />
-          </View>
-        ) : (
-          <Image 
-            source={require(`./assets/images/menu_icon.png`)}
-            style={{ width: 38, height: 38 }}  
-          />
-        )}
+          )}
+          <Text 
+            style={shouldRenderSpecificTitle ? styles.articleTitle : styles.navTitle}
+            numberOfLines={1}
+          >
+            {title}
+          </Text>
+        </View>
       </TouchableOpacity>
-      <Text 
-        style={shouldRenderSpecificTitle ? styles.articleTitle : styles.navTitle}
-        numberOfLines={1}
-      >
-        {title}
-      </Text>
     </View>
   )
 } 
@@ -74,12 +84,12 @@ const RouterView = (props) => (
       navTitle={props.title}
     />
 
-    <Route exact path={pages.all.path} component={AllPosts} />
-    <Route path={pages.news.path} render={() => (<AllPosts type='news'/>)} />
-    <Route path={pages.events.path} render={() => (<AllPosts type='events'/>)} />
-    <Route path={pages.blogs.path} render={() => (<AllPosts type='blogs'/>)} />
-    <Route path={pages.programs.path} render={() => (<AllPosts type='programs'/>)} />
-    <Route path={pages.media.path} render={() => (<AllPosts type='media'/>)} />
+    <Route exact path={pages.all.path} component={Posts} />
+    <Route path={pages.news.path} render={() => (<Posts type='news'/>)} />
+    <Route path={pages.events.path} render={() => (<Posts type='events'/>)} />
+    <Route path={pages.blogs.path} render={() => (<Posts type='blogs'/>)} />
+    <Route path={pages.programs.path} render={() => (<Posts type='programs'/>)} />
+    <Route path={pages.media.path} render={() => (<Posts type='media'/>)} />
     <Route path={pages.post.path} render={() => (<Article id />)} />
     <Route path={pages.event.path} render={() => (<Event slug />)} />
   </View>
@@ -92,13 +102,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   nav: {
-    flexDirection: 'row',
     paddingTop: 45,
     paddingLeft: 20,
     paddingRight: 30,
     paddingBottom: 10,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
     backgroundColor: '#333376',
   },
   articleTitle: {

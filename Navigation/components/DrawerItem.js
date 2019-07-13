@@ -10,6 +10,7 @@ import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router-native'
 import { changeLocation } from '../reducer'
+import { fonts } from '../../constants/Styles'
 
 class DrawerItem extends React.Component {
   constructor(props) {
@@ -51,10 +52,10 @@ class DrawerItem extends React.Component {
 
 const styles = StyleSheet.create({
   button: {
-    alignSelf: 'stretch',
     paddingTop: 10,
+    marginTop: 5,
+    marginBottom: 5,
     paddingBottom: 10,
-    flex: 1,
     backgroundColor: 'rgba(0,0,0,0)',
     paddingLeft: 30,
   },
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     color: '#a3a3a3',
   },
   text: {
-    fontSize: 16,
+    fontSize: fonts.normal,
     fontWeight: 'bold',
     color: '#000',
   },
