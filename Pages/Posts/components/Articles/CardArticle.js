@@ -43,7 +43,7 @@ class CardArticle extends React.PureComponent {
 
     setPost(article)
     history.push(newPath)
-    changeLoc(path)
+    changeLoc(newPath)
   }
 
   render () {

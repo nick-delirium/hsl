@@ -4,6 +4,7 @@ import {
   View,
   Text,
   ScrollView,
+  Linking,
   Image,
 } from 'react-native'
 import { withRouter } from 'react-router-native'
@@ -15,6 +16,7 @@ import HTMLView from 'react-native-htmlview'
 import { createStructuredSelector } from 'reselect'
 import { changeLocation } from '@/Navigation/reducer'
 import CachedImage from '@/components/CachedImage'
+import { setData } from './articleReducer'
 
 class Article extends React.Component {
   constructor(props) {
@@ -26,10 +28,24 @@ class Article extends React.Component {
   }
 
   onLinkPress = (url) => {
+    const { history, changeLoc, setPost } = this.props
     let found = this.props.allPosts.find(post => (post.link === url))
+
     if (found) {
-      this.props.history.push(`post/${found.id}`)
-      this.props.changeLoc(path)
+      const article = {
+        title: found.title.rendered,
+        mediaUrl: found.mediaUrl,
+        id: found.id,
+        categories: found.categories,
+        content: found.content,
+      }
+
+      const newPath = `post/${found.id}`
+      setPost(article)
+      history.push(newPath)
+      changeLoc(newPath)
+    } else {
+      if (!/hansanglab/.test(url)) Linking.openURL(url)
     }
   }
 
@@ -116,7 +132,8 @@ const HTMLStyles = StyleSheet.create({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  changeLoc: (path) => dispatch(changeLocation(path))
+  changeLoc: (path) => dispatch(changeLocation(path)),
+  setPost: (article) => dispatch(setData(article)),
 })
 
 const mapStateToProps = createStructuredSelector({

@@ -27,10 +27,24 @@ class Event extends React.Component {
   }
 
   onLinkPress = (url) => {
+    const { history, changeLoc, setPost } = this.props
     let found = this.props.allPosts.find(post => (post.link === url))
+
     if (found) {
-      this.props.history.push(`post/${found.id}`)
-      this.props.changeLoc(path)
+      const article = {
+        title: found.title.rendered,
+        mediaUrl: found.mediaUrl,
+        id: found.id,
+        categories: found.categories,
+        content: found.content,
+      }
+
+      const newPath = `post/${found.id}`
+      setPost(article)
+      history.push(newPath)
+      changeLoc(newPath)
+    } else {
+      if (!/hansanglab/.test(url)) Linking.openURL(url)
     }
   }
 
