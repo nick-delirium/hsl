@@ -10,13 +10,12 @@ import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import get from 'lodash/get'
-import { changeLocation } from '../../Navigation/reducer'
 import { createStructuredSelector } from 'reselect'
 import HTMLView from 'react-native-htmlview';
-import CachedImage from '../../components/CachedImage'
-import { formatText, formatDate } from '../../common/format'
 import Dimensions from 'Dimensions'
-
+import { changeLocation } from '@/Navigation/reducer'
+import CachedImage from '@/components/CachedImage'
+import { formatText, formatDate } from '@/common/format'
 
 class Event extends React.Component {
   constructor(props) {
@@ -69,25 +68,25 @@ class Event extends React.Component {
         <View style={styles.card}>
         
           <View style={{...styles.row, paddingtop: 16,}}>
-              <Image source={require('../../assets/images/calendar-icon.png')} style={styles.icon}/>
+              <Image source={require('@/assets/images/calendar-icon.png')} style={styles.icon}/>
               <Text style={{ flex: 0.9 }}>{`${startDate.date} - ${endDate.date}`}</Text>
           </View>
           {allDay && (
             <View style={styles.row}>
-              <Image source={require('../../assets/images/time-icon.png')} style={styles.icon}/>
+              <Image source={require('@/assets/images/time-icon.png')} style={styles.icon}/>
               <Text style={{ flex: 0.9 }}>{`${startDate.time} - ${endDate.time}`}</Text>
             </View>
           )}
           {!!url && url.length &&(
             <View style={styles.row}>
-              <Image source={require('../../assets/images/desktop-icon.png')} style={styles.icon}/>
+              <Image source={require('@/assets/images/desktop-icon.png')} style={styles.icon}/>
               <Text style={{ flex: 0.9 }}>{url}</Text>
             </View>
           )}
 
           {place && place.venue && (
             <View style={styles.row}>
-              <Image source={require('../../assets/images/place-icon.png')} style={styles.icon}/>
+              <Image source={require('@/assets/images/place-icon.png')} style={styles.icon}/>
               <View style={{ flex: 0.9 }}>
                 <Text>{place.venue}</Text>
                 {place.address && <Text>{place.address}</Text>}
@@ -97,7 +96,7 @@ class Event extends React.Component {
           )}
           {organizer[0] && (
             <View style={styles.row}>
-              <Image source={require('../../assets/images/human-icon.png')} style={styles.icon}/>
+              <Image source={require('@/assets/images/human-icon.png')} style={styles.icon}/>
               <Text style={{ flex: 0.9 }}>{organizer[0].organizer}</Text>
             </View>
           )}

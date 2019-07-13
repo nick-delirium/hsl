@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native'
-import { contacts } from '../../constants/contacts'
+import { contacts } from '@/constants/contacts'
+import { fonts } from '@/constants/Styles'
 
 const onLinkPress = ({ path, isEmail }) => {
   Linking.openURL(`${isEmail ? 'mailto://' : 'https://'}${path}`)
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   heading: {
-    fontSize: 16,
+    fontSize: fonts.heading,
     fontWeight: 'bold',
     color: '#959595',
     paddingBottom: 15,
@@ -54,11 +55,11 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   anchor: {
-    fontSize: 14,
+    fontSize: fonts.small,
     color: '#333376'
   },
   text: {
-    fontSize: 14,
+    fontSize: fonts.small,
     color: '#959595',
   }
 })

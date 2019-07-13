@@ -6,7 +6,7 @@ import {
   View,
   Dimensions,
 } from 'react-native'
-import pages from '../../constants/pages'
+import pages from '@/constants/pages'
 import DrawerItem from './DrawerItem'
 import Contacts from './Contacts'
 import Social from './Social'
@@ -26,28 +26,31 @@ class DrawerPanel extends React.Component {
           paddingTop: 10,
           backgroundColor: "#fff",
           flex: 1,
+          height: screenHeight,
         }}>
           <Image 
             source={require('../../assets/images/HSL-logo.png')}
             style={styles.image}
             resizeMode="contain"
           />
-          <View style={{ flex:1 }}>
-            <ScrollView contentContainerStyle={{ flex:1, flexDirection: "column", justifyContent: "space-between", height: screenHeight }}>
+          <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between'}}>
+            <View style={{ flex: 1, flexDirection: "column", justifyContent: "space-between" }}>
               <View style={{ flex: 1 }}>
-              {validMenuItems.map((item) => (
-                <DrawerItem
-                  closeDrawer={this.props.closeDrawer}
-                  href={pages[item].path}
-                  text={pages[item].name}
-                  key={pages[item].name}
-                />
-              ))}
+                {validMenuItems.map((item) => (
+                  <DrawerItem
+                    closeDrawer={this.props.closeDrawer}
+                    href={pages[item].path}
+                    text={pages[item].name}
+                    key={pages[item].name}
+                  />
+                ))}
               </View>
+              <View style={{ flex: 1, marginBottom: 'auto' }}>
                 <Social/>
                 <Contacts />
+              </View>
+            </View>
             </ScrollView>
-          </View>
         </View>
     )
   }
@@ -56,8 +59,7 @@ class DrawerPanel extends React.Component {
 const styles = StyleSheet.create({
   image: {
     alignSelf: 'center',
-    width: 180,
-    marginBottom: 0,
+    height: 70,
   },
   button: {
     alignSelf: 'stretch',

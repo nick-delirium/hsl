@@ -10,9 +10,9 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
-import { changeLocation } from '../../../Navigation/reducer'
-import { setData } from '../../../Redux/articleReducer'
-import CachedImage from '../../../components/CachedImage'
+import { changeLocation } from '@/Navigation/reducer'
+import CachedImage from '@/components/CachedImage'
+import { setData } from './articleReducer'
 
 class CardArticle extends React.PureComponent {
   constructor(props) {
