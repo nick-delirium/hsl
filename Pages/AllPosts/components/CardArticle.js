@@ -70,9 +70,10 @@ class CardArticle extends React.PureComponent {
 
 const styles = StyleSheet.create({
   card: {
-    marginBottom: 10,
-    marginRight: 0,
-    marginLeft: 0,
+    marginBottom: 15,
+    marginRight: 15,
+    marginLeft: 15,
+    borderRadius: 4,
     backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOpacity: 0.25,

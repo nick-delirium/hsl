@@ -91,9 +91,9 @@ constructor(props) {
 
 const styles = StyleSheet.create({
   card: {
-    marginBottom: 10,
-    marginRight: 0,
-    marginLeft: 0,
+    marginBottom: 15,
+    marginRight: 15,
+    marginLeft: 15,
     backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOpacity: 0.25,

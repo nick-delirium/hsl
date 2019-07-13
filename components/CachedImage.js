@@ -104,7 +104,7 @@ class CachedImage extends PureComponent {
         />
         {categories && (
           <View style={styles.category}>
-            <Text style={{color: '#fff'}}>{categories.name}</Text>
+            <Text style={{color: '#000', fontWeight: 'bold'}}>{categories.name}</Text>
           </View>
         )}
       </View>
@@ -117,9 +117,9 @@ const styles = StyleSheet.create({
     padding: 7,
     marginLeft: 10,
     fontSize: 12,
-    backgroundColor: '#000',
+    opacity: 0.7, 
     borderRadius: 2,
-    color: '#fff',
+    backgroundColor: '#fff',
     alignSelf: 'flex-start',
     top: -180,
   }
