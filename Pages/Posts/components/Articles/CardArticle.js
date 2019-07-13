@@ -19,7 +19,7 @@ class CardArticle extends React.PureComponent {
     super(props)
   }
 
-  onItemPress = (id) => {
+  onItemPress = () => {
     const { 
       setPost, 
       changeLoc, 
@@ -29,7 +29,9 @@ class CardArticle extends React.PureComponent {
       data,
       categories,
       mediaUrl,
+      id,
     } = this.props
+    
     const newPath = 'post/' + id
     const article = {
       title,
@@ -38,6 +40,7 @@ class CardArticle extends React.PureComponent {
       categories,
       content: data.content,
     }
+
     setPost(article)
     history.push(newPath)
     changeLoc(path)
@@ -47,7 +50,7 @@ class CardArticle extends React.PureComponent {
     const { title, descr, categories, id, mediaUrl, type } = this.props
       return (
         <View>
-          <TouchableOpacity onPress={() => this.onItemPress(id)}>
+          <TouchableOpacity onPress={this.onItemPress}>
             <View style={styles.card}>
             {mediaUrl && (
               <CachedImage

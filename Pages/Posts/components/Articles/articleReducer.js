@@ -5,11 +5,6 @@ export const setData = (article) => ({
   payload: article,
 })
 
-export const setEvent = (event) => ({
-  type: SET_DATA,
-  payload: event,
-})
-
 const initialState = {}
 
 export default function reducer(state = initialState, action) {
