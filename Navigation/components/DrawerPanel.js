@@ -6,7 +6,7 @@ import {
   View,
   Dimensions,
 } from 'react-native'
-import pages from '../../constants/pages'
+import pages from '@/constants/pages'
 import DrawerItem from './DrawerItem'
 import Contacts from './Contacts'
 import Social from './Social'

@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Platform,
 } from 'react-native'
-import { social } from '../../constants/contacts'
+import { social } from '@/constants/contacts'
 
 const onLinkPress = ({ url, iosUrl, anrdUrl, isEmail }) => {
   const appUrl = Platform.OS === 'ios' ? iosUrl : anrdUrl
