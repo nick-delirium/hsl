@@ -36,7 +36,6 @@ class Article extends React.Component {
   render () {
     const { 
       match: { params: { id } }, 
-      allPosts,
       article,
     } = this.props
   
@@ -45,32 +44,33 @@ class Article extends React.Component {
     // const title = get(post, 'title.rendered')
 
     const { title, content: { rendered: content }, mediaUrl, categories } = article
-    const { width, height } = Dimensions.get('window')
-
     return (
-      <ScrollView ref='_scrollRef' contentContainerStyle={styles.scrollview}>
+      <ScrollView ref='_scrollRef' contentContainerStyle={styles.scrollView}>
         <View style={{ ...styles.card }}>
-          <Text style={{ 
-            fontWeight: 'bold', 
-            paddingRight: 20, 
-            paddingLeft: 20, 
-            fontSize: 22,
-            marginBottom: 15,
-          }}>{title}</Text>
-          {/* {imgUrl && <Image style={{flex: 1, height: 140}} source={{uri: imgUrl}}/>} */}
+          <Text 
+            style={{ 
+              fontWeight: 'bold', 
+              paddingRight: 20, 
+              paddingLeft: 20, 
+              fontSize: 22,
+              marginBottom: 15,
+            }}
+          >
+            {title}
+          </Text>
           {mediaUrl && (
             <CachedImage
               source={mediaUrl}
               title={id}
               categories={categories[0] ? categories[0] : undefined}
-              style={{ width, minHeight: 200, borderBottomWidth: 1, borderColor: '#000'}}
+              style={{ flex: 1, height: 200, borderBottomWidth: 1, borderColor: '#000' }}
             />
           )}
           <HTMLView
+            style={{ paddingTop: 10 }}
             value={`<div>${content.replace(/(\r\n|\n|\r)/gm, "")}</div>`}
             stylesheet={HTMLStyles}
-
-            onLinkPress={(url) => {this.onLinkPress(url); console.log('clicked link: ', url)}}
+            onLinkPress={(url) => {this.onLinkPress(url)}}
           />
         </View>
       </ScrollView>
@@ -79,9 +79,8 @@ class Article extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  scrollview: {
+  scrollView: {
     padding: 0,
-    flex: 1,
   },
   card: {
     marginRight: 0,

@@ -19,7 +19,6 @@ class RouterWithDrawer extends React.Component {
   }
   
   componentDidMount() { 
-    const { history, location } = this.props
     this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
   }
 
@@ -31,21 +30,21 @@ class RouterWithDrawer extends React.Component {
   }
 
   closeDrawer = () => {
-    this._drawer.close()
+    this.setState({ drawerOpen: false }, () => this._drawer.close())
   }
 
   openDrawer = () => {
-    this._drawer.open()
+    this.setState({ drawerOpen: true }, () => this._drawer.open())
   }
 
   render() {
     const { history, location } = this.props
+    const { drawerOpen } = this.state
     return (
       <Drawer
         ref={(ref) => this._drawer = ref}
         type="overlay"
         content={<DrawerPanel closeDrawer={this.closeDrawer} />}
-        styles={{main: {shadowColor: '#000000', shadowOpacity: 0.4, shadowRadius: 15}}}
         onOpen={() => {
           setTimeout(() => { this.setState({drawerOpen: true}) }, 0)
         }}
@@ -67,6 +66,7 @@ class RouterWithDrawer extends React.Component {
           openDrawer={this.openDrawer.bind(this)}
           location={location.pathname}
           goBack={history.goBack}
+          drawerOpen={drawerOpen}
         />
       </Drawer>
     )

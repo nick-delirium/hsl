@@ -3,7 +3,6 @@ import {
   StyleSheet,
   View,
   Text,
-  Image,
   TouchableOpacity,
 } from 'react-native'
 import { withRouter } from 'react-router-native'
@@ -21,7 +20,6 @@ class CardArticle extends React.PureComponent {
   }
 
   onItemPress = (id) => {
-    console.log(this.props)
     const { 
       setPost, 
       changeLoc, 
@@ -46,7 +44,7 @@ class CardArticle extends React.PureComponent {
   }
 
   render () {
-    const { title, descr, categories, id, mediaUrl } = this.props
+    const { title, descr, categories, id, mediaUrl, type } = this.props
       return (
         <View>
           <TouchableOpacity onPress={() => this.onItemPress(id)}>
@@ -55,7 +53,7 @@ class CardArticle extends React.PureComponent {
               <CachedImage
                 source={mediaUrl}
                 title={id}
-                categories={categories[0] ? categories[0] : undefined}
+                categories={!type && categories[0] ? categories[0] : undefined}
                 style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}}
               />
             )}
@@ -82,9 +80,10 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 4},
   },
   cardText: {
-    paddingLeft: 10,
-    paddingBottom: 10,
-    paddingRight: 10,
+    paddingLeft: 15,
+    paddingBottom: 15,
+    paddingRight: 15,
+    paddingTop: 15,
     fontSize: 18,
   },
 })

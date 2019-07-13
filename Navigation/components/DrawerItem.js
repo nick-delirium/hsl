@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     alignSelf: 'stretch',
     paddingTop: 10,
     paddingBottom: 10,
+    flex: 1,
     backgroundColor: 'rgba(0,0,0,0)',
     paddingLeft: 30,
   },

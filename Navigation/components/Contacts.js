@@ -38,7 +38,7 @@ const Contacts = () => (
 
 const styles = StyleSheet.create({
   background: {
-    marginTop: 'auto',
+    flex: 1,
     backgroundColor: '#eeeeee',
     paddingTop: 15,
     paddingLeft: 30,
@@ -48,10 +48,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#959595',
-    marginBottom: 15,
+    paddingBottom: 15,
   },
   contacts: {
-    marginBottom: 15,
+    paddingBottom: 15,
   },
   anchor: {
     fontSize: 14,

@@ -9,8 +9,6 @@ import {
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import get from 'lodash/get'
-import { createStructuredSelector } from 'reselect'
 import CachedImage from '../../components/CachedImage'
 import { changeLocation } from '../../Navigation/reducer' 
 import { setEvent } from '../../Redux/eventReducer'
@@ -32,27 +30,18 @@ constructor(props) {
       changeLoc, 
       history, 
       path,
-      // title, 
-      // description,
-      // dateStart, dateEnd,
-      // image,
-      // organizer, url, place, slug
     } = this.props
-    console.log(this.props)
-    const { imgUrl } = this.state
     const newPath = 'event/' + event.slug
-    // const event = props
     setEvent(event)
     history.push(newPath)
     changeLoc(path)
   }
 
   render () {
-    //organizer //array [0].organizer, url
-
-    const { id, title, description, dateStart, dateEnd, image, organizer, url, place, slug } = this.props
-    // const { imgUrl } = this.state
+    const { id, title, description, dateStart, dateEnd, image, allDay } = this.props
     //TODO receive slug
+    const startDate = formatDate(dateStart) 
+    const endDate = formatDate(dateEnd)
     return (
     <TouchableOpacity onPress={() => this.onItemPress(this.props)}> 
       <View style={styles.card}>
@@ -69,13 +58,29 @@ constructor(props) {
       <View style={styles.cardText} >
         <Text style={{fontWeight: 'bold', fontSize: 18, paddingBottom: 4}}>{title}</Text>
         <Text style={{fontSize: 14}}>{formatText(description)}</Text>
-        <View slyle={{ flex: 1, flexDirection: 'row'}}>
-          <Image source={require('../../assets/images/calendar-circle-icon.png')} style={{
-            height: 36, width: 36 }}/>
-          <View>
-            <Text>{formatDate(dateStart)} - </Text>
-            <Text>{formatDate(dateEnd)}</Text>
+        
+        <View style={{ ...styles.row, justifyContent: 'space-between', paddingTop: 10, paddingBottom: 20 }}>
+          <View style={{...styles.row, flex: 1}}>
+            <Image source={require('../../assets/images/calendar-circle-icon.png')} 
+              style={{ height: 30, width: 30, marginRight: 10 }}/>
+            <View>
+              <Text style={{color: '#525252', whiteSpace: 'wrap'}}>
+                {`${startDate.date} - ${endDate.date}`}
+              </Text>
+            </View>
           </View>
+          {allDay && (
+            <View style={{...styles.row, flex: 1.5}}>
+              <Image source={require('../../assets/images/time-circle-icon.png')} 
+                style={{ height: 30, width: 30, marginRight: 5 }}
+              />
+              <View>
+                <Text style={{color: '#525252'}}>
+                  {`${startDate.time} - ${endDate.time}`}
+                </Text>
+              </View>
+            </View>
+          )}
         </View>
       </View>
     </View>
@@ -96,12 +101,11 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 4},
   },
   cardText: {
-    paddingTop: 10,
-    paddingLeft: 10,
-    paddingBottom: 10,
-    paddingRight: 10,
+    paddingTop: 15,
+    paddingLeft: 15,
+    paddingBottom: 15,
+    paddingRight: 15,
     fontSize: 18,
-    // marginTop: -14,
   },
   category: {
     padding: 7,
@@ -112,18 +116,20 @@ const styles = StyleSheet.create({
     color: '#fff',
     alignSelf: 'flex-start',
     top: -180,
-  }
+  },
+  row: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
 })
 
 const mapDispatchToProps = (dispatch) => ({
   changeLoc: (path) => dispatch(changeLocation(path)),
   setEvent: (event) => dispatch(setEvent(event)),
 })
-const mapStateToProps = createStructuredSelector({
-  // path: (state) => get(state, 'url.path'),
-})
 
-const withConnect = connect(mapStateToProps, mapDispatchToProps)
+const withConnect = connect(()=>({}), mapDispatchToProps)
 
 export default compose(
   withConnect,

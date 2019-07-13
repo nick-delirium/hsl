@@ -2,7 +2,9 @@ import React from 'react'
 import {
   StyleSheet,
   Image,
+  ScrollView,
   View,
+  Dimensions,
 } from 'react-native'
 import pages from '../../constants/pages'
 import DrawerItem from './DrawerItem'
@@ -17,29 +19,35 @@ class DrawerPanel extends React.Component {
   render() {
     const items = Object.keys(pages)
     const validMenuItems = items.filter(item => Boolean(pages[item].name))
+    const screenHeight = Dimensions.get('window').height
     return (
         <View style={{
           flexDirection: 'column',
-          flex: 1,
           paddingTop: 10,
           backgroundColor: "#fff",
-          width: 260,
+          flex: 1,
         }}>
           <Image 
             source={require('../../assets/images/HSL-logo.png')}
             style={styles.image}
             resizeMode="contain"
           />
-          {validMenuItems.map((item) => (
-            <DrawerItem
-              closeDrawer={this.props.closeDrawer}
-              href={pages[item].path}
-              text={pages[item].name}
-              key={pages[item].name}
-            />
-          ))}
-          <Social />
-          <Contacts />
+          <View style={{ flex:1 }}>
+            <ScrollView contentContainerStyle={{ flex:1, flexDirection: "column", justifyContent: "space-between", height: screenHeight }}>
+              <View style={{ flex: 1 }}>
+              {validMenuItems.map((item) => (
+                <DrawerItem
+                  closeDrawer={this.props.closeDrawer}
+                  href={pages[item].path}
+                  text={pages[item].name}
+                  key={pages[item].name}
+                />
+              ))}
+              </View>
+                <Social/>
+                <Contacts />
+            </ScrollView>
+          </View>
         </View>
     )
   }

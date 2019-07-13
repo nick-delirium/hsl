@@ -41,6 +41,7 @@ const Social = () => (
 const styles = StyleSheet.create({
   socialBlock: {
     paddingLeft: 30,
+    flex: 1,
     paddingRight: 30,
     flexDirection: 'row',
     alignItems: 'center',
