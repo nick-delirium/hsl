@@ -34,8 +34,7 @@ export const getCategories = () => {
     dispatch(fetchCategoriesReq())
     const res = fetch(api.getCategories())
       .then((response) => {
-        const r = JSON.parse(response._bodyInit)
-        return r
+        return response.json()
       })
       .then((result) => {
         result = result.map(cat => ({

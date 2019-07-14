@@ -24,6 +24,7 @@ class SearchPanel extends React.Component {
   onSearchPress = (e) => { 
     if (!this.props.isSearch) {
       this.props.history.push('/search')
+      this.inputRef && this.inputRef.current && this.inputRef.current.focus()
     } else {
       this.searchFn(this.state.inputValue)
     }
@@ -67,7 +68,6 @@ class SearchPanel extends React.Component {
             display: !isSearch ? 'none' : null
           }}
           keyboardType='web-search'
-          autoFocus
           onSubmitEditing={this.onSubmitEditing} 
           ref={this.inputRef}
           value={this.state.inputValue}

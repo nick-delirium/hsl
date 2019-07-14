@@ -138,11 +138,12 @@ class AllPosts extends React.PureComponent {
     //     //slug: cat.slug, //TODO: filter by cats
     //  //}
     //   ))
+      const descrItem = get(item, 'description', '')
       return (
         <CardEvent
           key={item.id}
           id={item.id}
-          description={item.description.slice(0, 100).split('').join('')}
+          description={descrItem.slice(0, 100).split('').join('')}
           title={item.title}
           dateStart={item.start_date} //utc_start_date
           dateEnd={item.end_date}
@@ -159,14 +160,16 @@ class AllPosts extends React.PureComponent {
         />
       )
     }
+    const descrRendered = get(item, 'excerpt.rendered', '')
+    const descrItem = get(item, 'description', '').replace(/<[^>]*>/g, '')
     return (
       <CardArticle
         key={item.id}
         id={item.id}
         data={item}
         link={item.link}
-        title={item.title.rendered}
-        descr={item.excerpt.rendered.slice(0, 100).split('').join('') || item.description.slice(0, 100).split('').join('')}
+        title={item.title.rendered || item.title}
+        descr={descrRendered.slice(0, 100).split('').join('') || descrItem.slice(0, 100).split('').join('')}
         mediaUrl={item.mediaUrl ? item.mediaUrl : null}
         categories={categories.filter(cat => (item.categories.includes(cat.id)))}
         content={get(item, 'content.rendered')}
@@ -192,18 +195,17 @@ class AllPosts extends React.PureComponent {
       }
     })
     return (
-      <View style={{ paddingTop: 15 }}>
-        <OptimizedFlatList
-          data={dataWithMedia}
-          renderItem={this.renderCardItem}
-          onRefresh={this.refreshData}
-          refreshing={isLoading}
-          keyExtractor={this._keyExtractor}
-          onEndReached={this.loadMoreData}
-          removeClippedSubviews
-          onEndReachedThreshold={5}
-        />
-      </View>
+      <FlatList
+        data={dataWithMedia}
+        style={{ paddingTop: 15 }}
+        renderItem={this.renderCardItem}
+        onRefresh={this.refreshData}
+        refreshing={isLoading}
+        keyExtractor={this._keyExtractor}
+        onEndReached={this.loadMoreData}
+        removeClippedSubviews
+        onEndReachedThreshold={5}
+      />
     )
   }
 }

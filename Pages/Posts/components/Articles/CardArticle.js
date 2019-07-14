@@ -50,6 +50,7 @@ class CardArticle extends React.PureComponent {
 
   render () {
     const { title, descr, categories, id, mediaUrl, type } = this.props
+    const renderDescr = this.props.htmlView ? descr : descr.split('\n<')[0]
       return (
         <View>
           <TouchableOpacity onPress={this.onItemPress}>
@@ -71,7 +72,7 @@ class CardArticle extends React.PureComponent {
               <Text 
                 style={{fontSize: fonts.normal}}
               >
-                {descr.split('\n<')[0]}...
+                {renderDescr}...
               </Text>
             </View>
           </View>

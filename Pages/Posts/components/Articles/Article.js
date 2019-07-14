@@ -1,6 +1,7 @@
 import React from 'react'
 import {
   StyleSheet,
+  WebView,
   View,
   Text,
   ScrollView,
@@ -50,22 +51,36 @@ class Article extends React.Component {
     }
   }
 
+  renderNode = (node, index, siblings, parent, defaultRenderer) => {
+    if (node.name == 'iframe') {
+      const a = node.attribs;
+      return (
+        <Text
+          key={a.src} 
+          style={{color: 'blue'}}
+          onPress={() => Linking.openURL(a.src)}
+        >
+          {a.src}
+        </Text>
+      )
+    }
+  }
+
   render () {
     const { 
       match: { params: { id } }, 
       article,
     } = this.props
-  
-    // const post = allPosts.find(a => (a.id == id))
-    // const content = get(post, 'content.rendered')
-    // const title = get(post, 'title.rendered')
 
     const { title, content: { rendered: content }, mediaUrl, categories } = article
+    const videoContent = content.replace(/<span data-mce-type="bookmark" style="display: inline-block; width: 0px; overflow: hidden; line-height: 0;" class="mce_SELRES_start">.*<\/span>/g, '')
+    const noText = videoContent.replace(/<p><iframe/g, '<div><br /><iframe').replace(/frame><\/p>/g, 'frame></div>')
+
     return (
       <ScrollView ref='_scrollRef' contentContainerStyle={styles.scrollView}>
         <View style={{ ...styles.card }}>
           <Text 
-            style={{ 
+            style={{
               fontWeight: 'bold', 
               paddingRight: 20, 
               paddingLeft: 20, 
@@ -84,10 +99,11 @@ class Article extends React.Component {
             />
           )}
           <HTMLView
-            style={{ paddingTop: 10 }}
-            value={`<div>${content.replace(/(\r\n|\n|\r)/gm, "")}</div>`}
+            style={{ flex: 1, paddingTop: 10 }}
+            value={`<div>${videoContent.replace(/(\r\n|\n|\r)/gm, "")}</div>`}
             stylesheet={HTMLStyles}
             onLinkPress={(url) => {this.onLinkPress(url)}}
+            renderNode={this.renderNode}
           />
         </View>
       </ScrollView>
