@@ -6,9 +6,9 @@ import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { OptimizedFlatList } from 'react-native-optimized-flatlist'
-import { getPosts, getPostsByCategory, getEvents } from '../Posts/reducer'
 import { getCategories } from '@/Navigation/reducer'
 import CardArticle from '@/Pages/Posts/components/Articles/CardArticle'
+import CardEvent from '@/Pages/Posts/components/Events/CardEvent'
 
 class AllPosts extends React.Component {
   constructor(props) {
@@ -56,12 +56,12 @@ class AllPosts extends React.Component {
     )
   }
 
+  _keyExtractor = (item) => `_${item.id}`
+
   render() {
-    const { posts, isLoading, type, data, categories } = this.props
-    let category = categories.find(cat => (cat.slug === type))
-    let displayingPosts = type ? (category ? data[`${category.id}`] : data[`00`]) : posts
+    const { posts, isLoading } = this.props
     
-    const dataWithMedia = displayingPosts && displayingPosts.map((item) => {
+    const dataWithMedia = posts && posts.map((item) => {
       const mediaUrl = get(item, '_links.wp:featuredmedia.href', null) 
         || `https://hansanglab.com/wp-json/wp/v2/media/${get(item, 'featured_media')}`
       return {
@@ -70,7 +70,7 @@ class AllPosts extends React.Component {
       }
     })
     return (
-      <View>
+      <View style={{ marginTop: 15 }}>
         <OptimizedFlatList
           data={dataWithMedia}
           renderItem={this.renderCardItem}
@@ -90,18 +90,9 @@ const mapStateFromProps = createStructuredSelector({
   isLoading: (state) => get(state, 'search.isLoading'),
   isError: (state) => get(state, 'search.isError'),
   posts: (state) => get(state, 'search.searchResult'),
-  data: (state) => get(state, 'search.data'),
   categories: (state) => get(state, 'url.categories'),
-})
-
-const mapDispatchToProps = (dispatch) => ({
-  fetchPosts: (limit) => dispatch(getPosts(limit)),
-  fetchByCategory: (cat, limit) => dispatch(getPostsByCategory(cat, limit)),
-  fetchEvents: (startDate, endDate, limit) => dispatch(getEvents(startDate, endDate, limit)),
-  fetchCategories: () => dispatch(getCategories()),
 })
 
 export default connect(
   mapStateFromProps,
-  mapDispatchToProps, 
 )(AllPosts)

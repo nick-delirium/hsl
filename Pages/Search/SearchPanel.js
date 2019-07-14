@@ -24,7 +24,6 @@ class SearchPanel extends React.Component {
   onSearchPress = (e) => { 
     if (!this.props.isSearch) {
       this.props.history.push('/search')
-      this.inputRef && this.inputRef.current && this.inputRef.current.focus()
     } else {
       this.searchFn(this.state.inputValue)
     }
@@ -47,16 +46,16 @@ class SearchPanel extends React.Component {
       <TouchableOpacity 
         onPress={this.onSearchPress}
         style={{
-          flexDirection: 'row', paddingLeft: 5,
-          flex: 1,
+          flexDirection: 'row', 
+          paddingLeft: 5,
+          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          borderRadius: 3, 
+          flex: isSearch ? 1 : null,
+          marginLeft: 'auto'
         }}
       >
         <TextInput 
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            borderRadius: 3, 
-            borderTopRightRadius: !isSearch ? 3 : 0,
-            borderBottomRightRadius: !isSearch ? 3 : 0,
             paddingRight: 8, 
             paddingLeft: 8, 
             paddingTop: 5, 
@@ -68,16 +67,14 @@ class SearchPanel extends React.Component {
             display: !isSearch ? 'none' : null
           }}
           keyboardType='web-search'
-          onSubmitEditing={this.onSubmitEditing} ref={this.inputRef}
+          autoFocus
+          onSubmitEditing={this.onSubmitEditing} 
+          ref={this.inputRef}
           value={this.state.inputValue}
           onChangeText={(inputValue) => this.setState({inputValue})}
         /> 
         <View 
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            borderRadius: 3,
-            borderTopLeftRadius: !isSearch ? 3 : 0,
-            borderBottomLeftRadius:  !isSearch ? 3 : 0,
             paddingRight: 7, 
             paddingLeft: !isSearch ? 20 : 5, 
             paddingTop: 5, 

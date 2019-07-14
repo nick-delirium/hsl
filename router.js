@@ -27,12 +27,16 @@ const NavBar = ({ navTitle, openDrawer, goBack, url, location }) => {
   const isArticle = /post\//.test(location)
   const isEvent = /event\//.test(location)
   const isSearch = /search/.test(location)
-  const shouldRenderSpecificTitle = isArticle || isEvent || isSearch
+  const isInsidePost = isArticle || isEvent
+  const shouldRenderSpecificTitle = isInsidePost || isSearch
   const specificTitle = isArticle ? navTitle.articleTitle 
-        : isEvent ? navTitle.eventTitle : ''
+  : isEvent ? navTitle.eventTitle : ''
+  const specificUrl = isArticle ? url.articleUrl : url.eventUrl
   const title = shouldRenderSpecificTitle ? specificTitle : pageTitles[location].toUpperCase()
-
+  
   const shouldRenderBackButton = shouldRenderSpecificTitle
+  const shouldRenderSearch = /news|blogs|programs|media|search/i.test(location) || location === '/'
+
   const onIconPress = shouldRenderBackButton ? goBack : openDrawer
   const icon = shouldRenderBackButton ? 'back' : 'menu_icon'
   const share = async () => {
@@ -46,9 +50,6 @@ const NavBar = ({ navTitle, openDrawer, goBack, url, location }) => {
   }
   return (
     <View style={styles.nav}>
-      <TouchableOpacity
-        onPress={onIconPress}
-      >
         <View 
           style={{
             flexDirection: 'row',
@@ -91,23 +92,22 @@ const NavBar = ({ navTitle, openDrawer, goBack, url, location }) => {
             {title.length > 20 && '...'}
           </Text>
         </TouchableOpacity>
-          {shouldRenderBackButton && (
-            <View style={{ marginLeft: 'auto' }}>
-              <TouchableOpacity 
-                onPress={share}
-                style={{ paddingLeft: 3, paddingRight: 3, paddingTop: 9, paddingBottom: 9 }}
-              >
-                <Image
-                  source={require('./assets/images/share.png')}
-                  style={{ height: 16, width: 16}}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
-          </View>
-          )}
         </View>
-      </TouchableOpacity>
-      <SearchPanel isSearch={isSearch} />
+        {isInsidePost && (
+          <View style={{ marginLeft: 'auto' }}>
+            <TouchableOpacity 
+              onPress={share}
+              style={{ paddingLeft: 3, paddingRight: 3, paddingTop: 9, paddingBottom: 9 }}
+            >
+              <Image
+                source={require('./assets/images/share.png')}
+                style={{ height: 16, width: 16}}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+        </View>
+        )}
+        {shouldRenderSearch && <SearchPanel isSearch={isSearch} />}
     </View>
   )
 } 
