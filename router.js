@@ -12,8 +12,6 @@ import { createStructuredSelector } from 'reselect'
 import get from 'lodash/get'
 import { Route } from 'react-router-native'
 import Places from './Pages/Places'
-import Article from './Pages/AllPosts/components/Article'
-import pages from './constants/pages'
 
 import pages, { pageTitles, } from './constants/pages'
 import Posts from './Pages/Posts'

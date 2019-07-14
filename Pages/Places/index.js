@@ -1,8 +1,15 @@
-import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import { Constants, MapView, Location, Permissions } from 'expo';
+import React, { Component } from 'react'
+import { Text, View, StyleSheet } from 'react-native'
+import { MapView, Location, Permissions } from 'expo'
+import { getPlaces } from './reducer'
+import { withRouter } from 'react-router-native'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+import get from 'lodash/get'
+import { createStructuredSelector } from 'reselect'
+import { loc, categories, locations, infoWindowContent} from '@/constants/places'
 
-export default class Places extends Component {
+class Places extends Component {
   state = {
     mapRegion: null,  //{ latitude: 59.9483, 30.2531:}
     hasLocationPermissions: false,
@@ -10,12 +17,17 @@ export default class Places extends Component {
   };
 
   componentDidMount() {
-    this._getLocationAsync();
+    this._getLocationAsync()
+    if (!this.props.places || !this.props.places.length){
+      console.log('fetching places')
+      this.props.getPlaces()
+    }
+    // console.log(this.props.places)
   }
 
   _handleMapRegionChange = mapRegion => {
-    console.log(mapRegion);
-    this.setState({ mapRegion });
+    console.log(mapRegion)
+    this.setState({ mapRegion })
   };
 
   _getLocationAsync = async () => {
@@ -25,24 +37,35 @@ export default class Places extends Component {
        locationResult: 'Permission to access location was denied',
      });
    } else {
-     this.setState({ hasLocationPermissions: true });
+     this.setState({ hasLocationPermissions: true })
    }
 
-   let location = await Location.getCurrentPositionAsync({});
-   this.setState({ locationResult: JSON.stringify(location) });
+   let location = await Location.getCurrentPositionAsync({})
+   this.setState({ locationResult: JSON.stringify(location) })
    
    // Center the map on the location we just fetched.
-    this.setState({mapRegion: { latitude: location.coords.latitude, longitude: location.coords.longitude, latitudeDelta: 0.0922, longitudeDelta: 0.0421 }});
+    this.setState({mapRegion: { 
+      latitude: 59.9483, //location.coords.latitude, 
+      longitude: 30.2531,//location.coords.longitude, 
+      latitudeDelta: 0.0922, 
+      longitudeDelta: 0.0421 
+    }})
   };
 
   render() {
+    // console.log(this.props.places)
+    //loc : name, lat, long, category ++ name, category, address, url, tel, time
+
     return (
       <View style={styles.container}>
-        <Text style={styles.paragraph}>
-          Наши места
-        </Text>
-        
-        {
+        {categories().map(cat => {
+          return <Text>
+            {cat}
+          </Text>
+        })
+
+        }
+        { 
           this.state.locationResult === null ?
           <Text>Finding your current location...</Text> :
           this.state.hasLocationPermissions === false ?
@@ -53,7 +76,17 @@ export default class Places extends Component {
               style={{ alignSelf: 'stretch', height: 400 }}
               region={this.state.mapRegion}
               onRegionChange={this._handleMapRegionChange}
-            />
+            >
+              {loc.map(location => (
+                <MapView.Marker
+                  coordinate={{latitude: location[1],
+                      longitude: location[2]}}
+                  title={location[0]}
+                  description={location[6]}
+                />
+              ))
+              }
+            </MapView>
         }
         
         <Text>
@@ -81,3 +114,18 @@ const styles = StyleSheet.create({
     color: '#34495e',
   },
 });
+
+const mapDispatchToProps = (dispatch) => ({
+  getPlaces: () => dispatch(getPlaces())
+})
+
+const mapStateToProps = createStructuredSelector({
+  places: (state) => get(state, 'places'),
+})
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps)
+
+export default compose(
+  withConnect,
+  withRouter,
+)(Places)
