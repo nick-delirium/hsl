@@ -8,7 +8,7 @@ import {
   Dimensions, 
   Platform 
 } from 'react-native'
-import { FileSystem } from 'expo'
+import * as FileSystem from 'expo-file-system'
 
 class CachedImage extends PureComponent {
   _isMounted = false;

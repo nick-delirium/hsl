@@ -1,5 +1,5 @@
 import React from 'react'
-import { BackHandler } from 'react-native'
+import { BackHandler, Keyboard } from 'react-native'
 import Drawer from 'react-native-drawer'
 import DrawerPanel from './components/DrawerPanel'
 import RouterView from '../router.js'
@@ -25,8 +25,15 @@ class RouterWithDrawer extends React.Component {
   handleBackPress = () => {
     const { history, location } = this.props
     if (location.pathname === '/') return false
+    Keyboard.dismiss()
     history.goBack()
     return true
+  }
+
+  goBack = () => {
+    const { history } = this.props
+    Keyboard.dismiss()
+    history.goBack()
   }
 
   closeDrawer = () => {
@@ -38,7 +45,7 @@ class RouterWithDrawer extends React.Component {
   }
 
   render() {
-    const { history, location } = this.props
+    const { location } = this.props
     const { drawerOpen } = this.state
     return (
       <Drawer
@@ -65,7 +72,7 @@ class RouterWithDrawer extends React.Component {
         <RouterView 
           openDrawer={this.openDrawer.bind(this)}
           location={location.pathname}
-          goBack={history.goBack}
+          goBack={this.goBack}
           drawerOpen={drawerOpen}
         />
       </Drawer>

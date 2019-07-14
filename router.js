@@ -17,6 +17,8 @@ import pages, { pageTitles, } from './constants/pages'
 import Posts from './Pages/Posts'
 import Article from './Pages/Posts/components/Articles/Article'
 import Event from './Pages/Posts/components/Events/Event'
+import Search from './Pages/Search'
+import SearchPanel from './Pages/Search/SearchPanel'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -24,13 +26,17 @@ const height = Dimensions.get('window').height
 const NavBar = ({ navTitle, openDrawer, goBack, url, location }) => {
   const isArticle = /post\//.test(location)
   const isEvent = /event\//.test(location)
-  const shouldRenderSpecificTitle = isArticle || isEvent
-  const specificTitle = isArticle ? navTitle.articleTitle : navTitle.eventTitle
+  const isSearch = /search/.test(location)
+  const isInsidePost = isArticle || isEvent
+  const shouldRenderSpecificTitle = isInsidePost || isSearch
+  const specificTitle = isArticle ? navTitle.articleTitle 
+  : isEvent ? navTitle.eventTitle : ''
   const specificUrl = isArticle ? url.articleUrl : url.eventUrl
-
   const title = shouldRenderSpecificTitle ? specificTitle : pageTitles[location].toUpperCase()
-
+  
   const shouldRenderBackButton = shouldRenderSpecificTitle
+  const shouldRenderSearch = /news|blogs|programs|media|search/i.test(location) || location === '/'
+
   const onIconPress = shouldRenderBackButton ? goBack : openDrawer
   const icon = shouldRenderBackButton ? 'back' : 'menu_icon'
   const share = async () => {
@@ -48,6 +54,8 @@ const NavBar = ({ navTitle, openDrawer, goBack, url, location }) => {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
+            justifyContent: 'flex-start',
+            paddingRight: 5,
           }}
         >
           <TouchableOpacity 
@@ -79,26 +87,27 @@ const NavBar = ({ navTitle, openDrawer, goBack, url, location }) => {
             )}
           <Text 
             style={shouldRenderSpecificTitle ? styles.articleTitle : styles.navTitle}
-            numberOfLines={1}
           >
-            {title.length > 17 ? title.slice(0, 17)+'...' : title}
+            {title.slice(0, 20)}
+            {title.length > 20 && '...'}
           </Text>
         </TouchableOpacity>
-          {shouldRenderBackButton && (
-            <View style={{ marginLeft: 'auto' }}>
-              <TouchableOpacity 
-                onPress={share}
-                style={{ paddingLeft: 3, paddingRight: 3, paddingTop: 9, paddingBottom: 9 }}
-              >
-                <Image
-                  source={require('./assets/images/share.png')}
-                  style={{ height: 16, width: 16}}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
-          </View>
-          )}
         </View>
+        {isInsidePost && (
+          <View style={{ marginLeft: 'auto' }}>
+            <TouchableOpacity 
+              onPress={share}
+              style={{ paddingLeft: 3, paddingRight: 3, paddingTop: 9, paddingBottom: 9 }}
+            >
+              <Image
+                source={require('./assets/images/share.png')}
+                style={{ height: 16, width: 16}}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+        </View>
+        )}
+        {shouldRenderSearch && <SearchPanel isSearch={isSearch} />}
     </View>
   )
 } 
@@ -120,6 +129,7 @@ const RouterView = (props) => (
     <Route path={pages.blogs.path} render={() => (<Posts type='blogs'/>)} />
     <Route path={pages.programs.path} render={() => (<Posts type='programs'/>)} />
     <Route path={pages.media.path} render={() => (<Posts type='media'/>)} />
+    <Route path={pages.search.path} render={() => (<Search query />)} />
     <Route path={pages.post.path} render={() => (<Article id />)} />
     <Route path={pages.event.path} render={() => (<Event slug />)} />
   </View>
@@ -133,19 +143,22 @@ const styles = StyleSheet.create({
   },
   nav: {
     paddingTop: 45,
-    paddingLeft: 20,
-    paddingRight: 30,
+    paddingLeft: 15,
+    paddingRight: 15,
     paddingBottom: 10,
     backgroundColor: '#333376',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   articleTitle: {
     fontSize: 22,
     fontWeight: 'normal',
     color: 'rgba(255, 255, 255, 0.6)',
-    marginLeft: 10,
+    paddingLeft: 10,
   },
   navTitle: {
-    marginLeft: 10,
+    paddingLeft: 10,
     fontSize: 16,
     color: '#fff',
     fontWeight: 'bold',
