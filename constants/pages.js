@@ -24,7 +24,7 @@ const pages = {
     path: '/media',
   },
   places: {
-    name: 'Места',
+    name: 'Карта',
     path: '/places'
   },
 
@@ -53,5 +53,6 @@ export const pageTitles = {
   [pages.blogs.path]: pages.blogs.name,
   [pages.programs.path]: pages.programs.name,
   [pages.media.path]: pages.media.name,
+  [pages.places.path]: pages.places.name,
 }
 export default pages
