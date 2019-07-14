@@ -53,6 +53,8 @@ const NavBar = ({ navTitle, openDrawer, goBack, url, location }) => {
           style={{
             flexDirection: 'row',
             alignItems: 'center',
+            justifyContent: 'flex-start',
+            paddingRight: 5,
           }}
         >
           <TouchableOpacity 
@@ -84,9 +86,9 @@ const NavBar = ({ navTitle, openDrawer, goBack, url, location }) => {
             )}
           <Text 
             style={shouldRenderSpecificTitle ? styles.articleTitle : styles.navTitle}
-            numberOfLines={1}
           >
-            {title.length > 17 ? title.slice(0, 17)+'...' : title}
+            {title.slice(0, 20)}
+            {title.length > 20 && '...'}
           </Text>
         </TouchableOpacity>
           {shouldRenderBackButton && (
