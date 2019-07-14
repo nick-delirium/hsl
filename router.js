@@ -17,7 +17,8 @@ import pages, { pageTitles, } from './constants/pages'
 import Posts from './Pages/Posts'
 import Article from './Pages/Posts/components/Articles/Article'
 import Event from './Pages/Posts/components/Events/Event'
-import Search from './Pages/Search';
+import Search from './Pages/Search'
+import SearchPanel from './Pages/Search/SearchPanel'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -25,10 +26,10 @@ const height = Dimensions.get('window').height
 const NavBar = ({ navTitle, openDrawer, goBack, url, location }) => {
   const isArticle = /post\//.test(location)
   const isEvent = /event\//.test(location)
-  const shouldRenderSpecificTitle = isArticle || isEvent
-  const specificTitle = isArticle ? navTitle.articleTitle : navTitle.eventTitle
-  const specificUrl = isArticle ? url.articleUrl : url.eventUrl
-
+  const isSearch = /search/.test(location)
+  const shouldRenderSpecificTitle = isArticle || isEvent || isSearch
+  const specificTitle = isArticle ? navTitle.articleTitle 
+        : isEvent ? navTitle.eventTitle : ''
   const title = shouldRenderSpecificTitle ? specificTitle : pageTitles[location].toUpperCase()
 
   const shouldRenderBackButton = shouldRenderSpecificTitle
@@ -104,18 +105,7 @@ const NavBar = ({ navTitle, openDrawer, goBack, url, location }) => {
           )}
         </View>
       </TouchableOpacity>
-      <TouchableOpacity 
-        onPress={onSearchPress}
-        style={{flexDirection: 'row', paddingLeft: 5, }}
-      >
-        <View style={{backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            borderRadius: 3, paddingRight: 7, paddingLeft: 8, paddingTop: 5, paddingBottom: 5, }}>
-          <Image 
-            source={require(`./assets/images/search-icon.png`)}
-            style={{ width: 17, height: 17, alignSelf: 'flex-end'}}
-          />
-        </View>
-      </TouchableOpacity>
+      <SearchPanel isSearch={isSearch} />
     </View>
   )
 } 
@@ -137,9 +127,9 @@ const RouterView = (props) => (
     <Route path={pages.blogs.path} render={() => (<Posts type='blogs'/>)} />
     <Route path={pages.programs.path} render={() => (<Posts type='programs'/>)} />
     <Route path={pages.media.path} render={() => (<Posts type='media'/>)} />
+    <Route path={pages.search.path} render={() => (<Search query />)} />
     <Route path={pages.post.path} render={() => (<Article id />)} />
     <Route path={pages.event.path} render={() => (<Event slug />)} />
-    <Route path={pages.search.path} render={() => (<Search query />)} />
   </View>
 )
   

@@ -1,10 +1,6 @@
 import React from 'react'
 import {
-  StyleSheet,
   View,
-  FlatList,
-  Text,
-  ActivityIndicator,
 } from 'react-native'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
@@ -12,10 +8,9 @@ import { createStructuredSelector } from 'reselect'
 import { OptimizedFlatList } from 'react-native-optimized-flatlist'
 import { getPosts, getPostsByCategory, getEvents } from '../Posts/reducer'
 import { getCategories } from '@/Navigation/reducer'
-import pages from '@/constants/pages'
+import CardArticle from '@/Pages/Posts/components/Articles/CardArticle'
 
-
-class AllPosts extends React.PureComponent {
+class AllPosts extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -23,48 +18,9 @@ class AllPosts extends React.PureComponent {
     }
   }
 
-  componentDidMount() {
-    this.getInitialData()
-  }
-
-  getData = (treshold) => {
-    const { 
-      fetchPosts,
-      fetchByCategory,
-      fetchCategories,
-      fetchEvents,
-      posts,
-      type,
-      data,
-      categories
-    } = this.props
-    fetchCategories()
-
-    if (type === 'events') {
-      fetchEvents('2019-06-17%2000:00:00', undefined, treshold) //TODO: get and format current
-    } else {
-      let category = categories.find(cat => (cat.slug === type))
-      if (type && category) {
-        if (category && category.id) {
-          fetchByCategory(category.id, treshold)
-        } else {
-          console.log(`Error: category ${type} not found`)
-        }
-      }
-    }
-    fetchPosts(treshold)
-  }
-
- 
   renderCardItem = ({ item }) => {
     const { categories, type } = this.props
     if (type === 'events') {
-      // let categories = item.categories && item.categories.map(cat => (
-    //     //{
-    //     cat.name
-    //     //slug: cat.slug, //TODO: filter by cats
-    //  //}
-    //   ))
       return (
         <CardEvent
           key={item.id}
@@ -102,9 +58,6 @@ class AllPosts extends React.PureComponent {
 
   render() {
     const { posts, isLoading, type, data, categories } = this.props
-    if (type === 'events') {
-
-    }
     let category = categories.find(cat => (cat.slug === type))
     let displayingPosts = type ? (category ? data[`${category.id}`] : data[`00`]) : posts
     
@@ -134,10 +87,10 @@ class AllPosts extends React.PureComponent {
 }
 
 const mapStateFromProps = createStructuredSelector({
-  isLoading: (state) => get(state, 'posts.isLoading'),
-  isError: (state) => get(state, 'posts.isError'),
-  posts: (state) => get(state, 'posts.posts'),
-  data: (state) => get(state, 'posts.data'),
+  isLoading: (state) => get(state, 'search.isLoading'),
+  isError: (state) => get(state, 'search.isError'),
+  posts: (state) => get(state, 'search.searchResult'),
+  data: (state) => get(state, 'search.data'),
   categories: (state) => get(state, 'url.categories'),
 })
 

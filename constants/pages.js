@@ -39,7 +39,7 @@ const pages = {
   },
   search: {
     name: '',
-    path: '/search/:query',
+    path: '/search',
   },
 }
 
