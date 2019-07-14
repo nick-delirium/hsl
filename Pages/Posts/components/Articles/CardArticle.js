@@ -43,7 +43,6 @@ class CardArticle extends React.PureComponent {
       categories,
       content: data.content,
     }
-    console.log(article.link)
     setPost(article)
     history.push(newPath)
     changeLoc(newPath)
