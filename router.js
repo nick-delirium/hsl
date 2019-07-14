@@ -5,6 +5,7 @@ import {
   View,
   Text,
   Image,
+  Share,
   TouchableOpacity,
 } from 'react-native'
 import { connect } from 'react-redux'
@@ -20,56 +21,84 @@ import Event from './Pages/Posts/components/Events/Event'
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const NavBar = ({ navTitle, openDrawer, goBack, location }) => {
+const NavBar = ({ navTitle, openDrawer, goBack, url, location }) => {
   const isArticle = /post\//.test(location)
   const isEvent = /event\//.test(location)
   const shouldRenderSpecificTitle = isArticle || isEvent
   const specificTitle = isArticle ? navTitle.articleTitle : navTitle.eventTitle
+  const specificUrl = isArticle ? url.articleUrl : url.eventUrl
+
   const title = shouldRenderSpecificTitle ? specificTitle : pageTitles[location].toUpperCase()
 
   const shouldRenderBackButton = shouldRenderSpecificTitle
   const onIconPress = shouldRenderBackButton ? goBack : openDrawer
   const icon = shouldRenderBackButton ? 'back' : 'menu_icon'
+  const share = async () => {
+    try {
+      const result = await Share.share({
+        message: `${specificTitle}\n${specificUrl}`,
+      });
+    } catch (error) {
+      alert(error.message);
+    }
+  }
   return (
     <View style={styles.nav}>
-      <TouchableOpacity 
-        onPress={onIconPress}
-      >
         <View 
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'flex-start',
           }}
         >
-          {shouldRenderBackButton ? (
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                paddingTop: 9,
-                paddingBottom: 9,
-              }}
-            >
+          <TouchableOpacity 
+            onPress={onIconPress}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}
+          >
+            {shouldRenderBackButton ? (
+              <View
+                style={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  paddingTop: 9,
+                  paddingBottom: 9,
+                }}
+              >
+                <Image 
+                  source={require(`./assets/images/back.png`)}
+                  style={{ width: 19, height: 19 }}  
+                />
+              </View>
+            ) : (
               <Image 
-                source={require(`./assets/images/back.png`)}
-                style={{ width: 19, height: 19 }}  
+                source={require(`./assets/images/menu_icon.png`)}
+                style={{ width: 38, height: 38 }}  
               />
-            </View>
-          ) : (
-            <Image 
-              source={require(`./assets/images/menu_icon.png`)}
-              style={{ width: 38, height: 38 }}  
-            />
-          )}
+            )}
           <Text 
             style={shouldRenderSpecificTitle ? styles.articleTitle : styles.navTitle}
             numberOfLines={1}
           >
-            {title}
+            {title.length > 17 ? title.slice(0, 17)+'...' : title}
           </Text>
+        </TouchableOpacity>
+          {shouldRenderBackButton && (
+            <View style={{ marginLeft: 'auto' }}>
+              <TouchableOpacity 
+                onPress={share}
+                style={{ paddingLeft: 3, paddingRight: 3, paddingTop: 9, paddingBottom: 9 }}
+              >
+                <Image
+                  source={require('./assets/images/share.png')}
+                  style={{ height: 16, width: 16}}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
+          </View>
+          )}
         </View>
-      </TouchableOpacity>
     </View>
   )
 } 
@@ -82,6 +111,7 @@ const RouterView = (props) => (
       location={props.location}
       goBack={props.goBack}
       navTitle={props.title}
+      url={props.url}
     />
 
     <Route exact path={pages.all.path} component={Posts} />
@@ -128,6 +158,12 @@ const mapStateToProps = createStructuredSelector({
     const eventTitle = get(state, 'event.title')
 
     return { articleTitle, eventTitle }
+  },
+  url: (state) => {
+    const articleUrl = get(state, 'article.link')
+    const eventUrl = get(state, 'event.link')
+
+    return { articleUrl, eventUrl }
   }
 })
 

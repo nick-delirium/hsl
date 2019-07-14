@@ -2,6 +2,7 @@ import React from 'react'
 import {
   TouchableOpacity,
   Text,
+  Share,
   StyleSheet,
 } from 'react-native'
 import { connect } from 'react-redux'
@@ -17,7 +18,16 @@ class DrawerItem extends React.Component {
     super(props)
   }
 
-  onItemPress = (path) => {
+  onItemPress = async (path) => {
+    if (this.props.share) {
+      try {
+        const result = await Share.share({
+          message: `Рекомендую мобильное приложение Hansang Lab\nhttps://hansanglab.com/get_app`,
+        });
+      } catch (error) {
+        alert(error.message);
+      }
+    }
     this.props.history.push(path)
     this.props.changeLoc(path)
     this.props.closeDrawer()

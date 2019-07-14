@@ -142,7 +142,7 @@ class AllPosts extends React.PureComponent {
         <CardEvent
           key={item.id}
           id={item.id}
-          description={item.description}
+          description={item.description.slice(0, 100).split('').join('')}
           title={item.title}
           dateStart={item.start_date} //utc_start_date
           dateEnd={item.end_date}
@@ -155,6 +155,7 @@ class AllPosts extends React.PureComponent {
           categories={item.categories}
           tags={item.tags}
           cost={item.cost} //cost_details
+          link={item.url}
         />
       )
     }
@@ -163,8 +164,9 @@ class AllPosts extends React.PureComponent {
         key={item.id}
         id={item.id}
         data={item}
+        link={item.link}
         title={item.title.rendered}
-        descr={item.excerpt.rendered || item.description}
+        descr={item.excerpt.rendered.slice(0, 100).split('').join('') || item.description.slice(0, 100).split('').join('')}
         mediaUrl={item.mediaUrl ? item.mediaUrl : null}
         categories={categories.filter(cat => (item.categories.includes(cat.id)))}
         content={get(item, 'content.rendered')}
@@ -191,7 +193,7 @@ class AllPosts extends React.PureComponent {
       }
     })
     return (
-      <View>
+      <View style={{ paddingTop: 10 }}>
         <OptimizedFlatList
           data={dataWithMedia}
           renderItem={this.renderCardItem}
@@ -206,12 +208,6 @@ class AllPosts extends React.PureComponent {
     )
   }
 }
-
-const styles = StyleSheet.create({
-  header: {
-    fontSize: 20
-  },
-})
 
 const mapStateFromProps = createStructuredSelector({
   isLoading: (state) => get(state, 'posts.isLoading'),

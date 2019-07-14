@@ -44,6 +44,11 @@ class DrawerPanel extends React.Component {
                     key={pages[item].name}
                   />
                 ))}
+                <DrawerItem
+                  closeDrawer={this.props.closeDrawer}
+                  share
+                  text="Пригласить друга"
+                />
               </View>
               <View style={{ flex: 1, marginBottom: 'auto' }}>
                 <Social/>
