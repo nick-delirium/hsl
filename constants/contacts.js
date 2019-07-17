@@ -27,21 +27,21 @@ export const social = [
   {
     name: 'inst',
     iosUrl: 'instagram://user?username=hansanglab',
-    anrdUrl: 'intent://instagram.com/_u/hansanglab/#Intent;package=com.instagram.android;scheme=https;end',
+    andrUrl: 'intent://instagram.com/_u/hansanglab/#Intent;package=com.instagram.android;scheme=https;end',
     image: require('../assets/images/social/inst.png'),
     url: 'https://www.instagram.com/hansanglab/',
   },
   {
     name: 'vk',
     iosUrl: 'vk://vk.com/hansanglab',
-    anrdUrl: 'intent://vk.com/hansanglab#Intent;package=com.vkontakte.android;scheme=vkontakte;end',
+    andrUrl: 'intent://vk.com/hansanglab#Intent;package=com.vkontakte.android;scheme=vkontakte;end',
     image: require('../assets/images/social/vk.png'),
     url: 'https://vk.com/hansanglab'
   },
   {
     name: 'yt',
     iosUrl: 'vnd.youtube://www.youtube.com/channel/UC5BDXrYkDYDb-ENhEzUtWEQ',
-    anrdUrl: 'intent://www.youtube.com/channel/UC5BDXrYkDYDb-ENhEzUtWEQ#Intent;package=com.google.android.youtube;scheme=https;end',
+    andrUrl: 'intent://www.youtube.com/channel/UC5BDXrYkDYDb-ENhEzUtWEQ#Intent;package=com.google.android.youtube;scheme=https;end',
     image: require('../assets/images/social/yt.png'),
     url: 'https://www.youtube.com/channel/UC5BDXrYkDYDb-ENhEzUtWEQ',
   }

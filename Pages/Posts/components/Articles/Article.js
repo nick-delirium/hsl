@@ -75,7 +75,7 @@ class Article extends React.Component {
     const { title, content: { rendered: content }, mediaUrl, categories } = article
     const videoContent = content.replace(/<span data-mce-type="bookmark" style="display: inline-block; width: 0px; overflow: hidden; line-height: 0;" class="mce_SELRES_start">.*<\/span>/g, '')
     const noText = videoContent.replace(/<p><iframe/g, '<div><br /><iframe').replace(/frame><\/p>/g, 'frame></div>')
-
+console.log(videoContent)
     return (
       <ScrollView ref='_scrollRef' contentContainerStyle={styles.scrollView}>
         <View style={{ ...styles.card }}>

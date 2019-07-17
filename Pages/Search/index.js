@@ -1,11 +1,11 @@
 import React from 'react'
 import {
   View,
+  FlatList,
 } from 'react-native'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { OptimizedFlatList } from 'react-native-optimized-flatlist'
 import { getCategories } from '@/Navigation/reducer'
 import CardArticle from '@/Pages/Posts/components/Articles/CardArticle'
 import CardEvent from '@/Pages/Posts/components/Events/CardEvent'
@@ -71,7 +71,7 @@ class AllPosts extends React.Component {
     })
     return (
       <View style={{ marginTop: 15 }}>
-        <OptimizedFlatList
+        <FlatList
           data={dataWithMedia}
           renderItem={this.renderCardItem}
           onRefresh={this.refreshData}

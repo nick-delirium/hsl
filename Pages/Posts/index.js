@@ -9,13 +9,10 @@ import {
 import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { OptimizedFlatList } from 'react-native-optimized-flatlist'
 import CardArticle from './components/Articles/CardArticle.js'
 import CardEvent from './components/Events/CardEvent'
 import { getPosts, getPostsByCategory, getEvents } from './reducer'
 import { getCategories } from '@/Navigation/reducer'
-import pages from '@/constants/pages'
-
 
 class AllPosts extends React.PureComponent {
   constructor(props) {
