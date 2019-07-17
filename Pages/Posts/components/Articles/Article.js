@@ -5,19 +5,22 @@ import {
   View,
   Text,
   ScrollView,
-  Linking,
   Image,
+  Linking,
+  Dimensions,
 } from 'react-native'
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import get from 'lodash/get'
-import Dimensions from 'Dimensions'
-import HTMLView from 'react-native-htmlview'
+import HTML from 'react-native-render-html'
 import { createStructuredSelector } from 'reselect'
 import { changeLocation } from '@/Navigation/reducer'
 import CachedImage from '@/components/CachedImage'
 import { setData } from './articleReducer'
+
+const width = Dimensions.get('window').width;
+
 
 class Article extends React.Component {
   constructor(props) {
@@ -47,22 +50,7 @@ class Article extends React.Component {
       history.push(newPath)
       changeLoc(newPath)
     } else {
-      if (!/hansanglab/.test(url)) Linking.openURL(url)
-    }
-  }
-
-  renderNode = (node, index, siblings, parent, defaultRenderer) => {
-    if (node.name == 'iframe') {
-      const a = node.attribs;
-      return (
-        <Text
-          key={a.src} 
-          style={{color: 'blue'}}
-          onPress={() => Linking.openURL(a.src)}
-        >
-          {a.src}
-        </Text>
-      )
+      Linking.openURL(url)
     }
   }
 
@@ -74,22 +62,10 @@ class Article extends React.Component {
 
     const { title, content: { rendered: content }, mediaUrl, categories } = article
     const videoContent = content.replace(/<span data-mce-type="bookmark" style="display: inline-block; width: 0px; overflow: hidden; line-height: 0;" class="mce_SELRES_start">.*<\/span>/g, '')
-    const noText = videoContent.replace(/<p><iframe/g, '<div><br /><iframe').replace(/frame><\/p>/g, 'frame></div>')
 
     return (
       <ScrollView ref='_scrollRef' contentContainerStyle={styles.scrollView}>
         <View style={{ ...styles.card }}>
-          <Text 
-            style={{
-              fontWeight: 'bold', 
-              paddingRight: 20, 
-              paddingLeft: 20, 
-              fontSize: 22,
-              marginBottom: 15,
-            }}
-          >
-            {title}
-          </Text>
           {mediaUrl && (
             <CachedImage
               source={mediaUrl}
@@ -98,12 +74,31 @@ class Article extends React.Component {
               style={{ flex: 1, height: 200, borderBottomWidth: 1, borderColor: '#000' }}
             />
           )}
-          <HTMLView
-            style={{ flex: 1, paddingTop: 10 }}
-            value={`<div>${videoContent.replace(/(\r\n|\n|\r)/gm, "")}</div>`}
-            stylesheet={HTMLStyles}
-            onLinkPress={(url) => {this.onLinkPress(url)}}
-            renderNode={this.renderNode}
+          <Text 
+            style={{
+              fontWeight: 'bold', 
+              paddingRight: 20, 
+              paddingLeft: 20, 
+              fontSize: 22,
+              marginBottom: 15,
+              marginTop: 15,
+            }}
+          >
+            {title}
+          </Text>
+          <HTML 
+            html={`<div>${videoContent}</div>`}
+            imagesMaxWidth={Dimensions.get('window').width - 50}
+            onLinkPress={(e, url) => this.onLinkPress(url)}
+            containerStyles={{ flex: 1, maxWidth: width - 50}}
+            tagsStyles={HTMLStyles}
+            alterChildren={node => {
+              if (node.name === 'iframe') {
+                delete node.attribs.width
+                delete node.attribs.height
+              }
+            }}
+            ignoredStyles={['fontFamily', 'font-family', 'width', 'height']}
           />
         </View>
       </ScrollView>
@@ -120,11 +115,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginLeft: 0,
     backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    shadowOffset: {width: 0, height: 4},
-    paddingTop: 18,
     paddingBottom: 30,
   }
 })
@@ -134,6 +124,16 @@ const HTMLStyles = StyleSheet.create({
     paddingLeft: 20,
     marginTop: 0,
     marginBottom: 0,
+  },
+  blockquote: {
+    backgroundColor: '#f8f8f8',
+    borderLeftColor: '#fa5742',
+    borderLeftWidth: 2,
+    padding: 10,
+    marginBottom: 10,
+  },
+  iframe: {
+    width: width - 40
   },
   li: {
     marginTop: 0,

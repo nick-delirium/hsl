@@ -5,13 +5,14 @@ import {
   Text,
   ScrollView,
   Image,
+  Linking,
 } from 'react-native'
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
-import HTMLView from 'react-native-htmlview';
+import HTML from 'react-native-render-html'
 import Dimensions from 'Dimensions'
 import { changeLocation } from '@/Navigation/reducer'
 import CachedImage from '@/components/CachedImage'
@@ -44,7 +45,7 @@ class Event extends React.Component {
       history.push(newPath)
       changeLoc(newPath)
     } else {
-      if (!/hansanglab/.test(url)) Linking.openURL(url)
+      Linking.openURL(url)
     }
   }
 
@@ -72,11 +73,19 @@ class Event extends React.Component {
             />
           )}
           <Text style={styles.title}>{title}</Text>
-          <HTMLView
-            value={`<div>${description.replace(/(\r\n|\n|\r)/gm, "")}</div>`}
-            stylesheet={HTMLStyles}
-
-            onLinkPress={(url) => {this.onLinkPress(url)}}
+          <HTML
+            html={`<div>${description}</div>`}
+            tagsStyles={HTMLStyles}
+            containerStyles={{ flex: 1, maxWidth: width - 50}}
+            imagesMaxWidth={Dimensions.get('window').width - 50}
+            onLinkPress={(e, url) => {this.onLinkPress(url)}}
+            alterChildren={node => {
+              if (node.name === 'iframe') {
+                delete node.attribs.width
+                delete node.attribs.height
+              }
+            }}
+            ignoredStyles={['fontFamily', 'font-family', 'width', 'height']}
           />
         </View>
         <View style={styles.card}>
@@ -94,7 +103,7 @@ class Event extends React.Component {
           {!!url && url.length &&(
             <View style={styles.row}>
               <Image source={require('@/assets/images/desktop-icon.png')} style={styles.icon}/>
-              <Text style={{ flex: 0.9 }}>{url}</Text>
+              <Text onPress={() => this.onLinkPress(url)} style={{ flex: 0.9, color: 'blue' }}>{url}</Text>
             </View>
           )}
 
@@ -108,6 +117,7 @@ class Event extends React.Component {
                 </View>
             </View>
           )}
+
           {organizer[0] && (
             <View style={styles.row}>
               <Image source={require('@/assets/images/human-icon.png')} style={styles.icon}/>

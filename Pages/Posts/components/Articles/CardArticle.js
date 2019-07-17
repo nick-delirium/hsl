@@ -21,10 +21,10 @@ class CardArticle extends React.PureComponent {
   }
 
   onItemPress = () => {
-    const { 
-      setPost, 
-      changeLoc, 
-      history, 
+    const {
+      setPost,
+      changeLoc,
+      history,
       path,
       title,
       data,
@@ -33,7 +33,7 @@ class CardArticle extends React.PureComponent {
       mediaUrl,
       id,
     } = this.props
-    
+
     const newPath = 'post/' + id
     const article = {
       title,
@@ -60,16 +60,23 @@ class CardArticle extends React.PureComponent {
                 source={mediaUrl}
                 title={id}
                 categories={!type && categories[0] ? categories[0] : undefined}
-                style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}}
+                style={{
+                  flex: 1,
+                  height: 190,
+                  borderBottomWidth: 1,
+                  borderColor: '#000',
+                  borderTopLeftRadius: 4,
+                  borderTopRightRadius: 4,
+                }}
               />
             )}
             <View style={styles.cardText}>
-              <Text 
+              <Text
                 style={{fontWeight: 'bold', fontSize: fonts.big, paddingBottom: 4}}
               >
                 {title}
               </Text>
-              <Text 
+              <Text
                 style={{fontSize: fonts.normal}}
               >
                 {renderDescr}...
@@ -84,7 +91,7 @@ class CardArticle extends React.PureComponent {
 
 const styles = StyleSheet.create({
   card: {
-    marginBottom: 15,
+    marginTop: 15,
     marginRight: 15,
     marginLeft: 15,
     borderRadius: 4,
