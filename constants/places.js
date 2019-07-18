@@ -381,11 +381,17 @@ export const loc = locations.map((item, i) => [...item, ...infoWindowContent[i]]
 
 export const categories = () =>  {
   const cats = []
-  console.log(loc[0])
   loc.forEach((item) => {
     if (!cats.find(i => i === item[3]) && item[3] !== '') {
       cats.push(item[3])
     }
   })
   return cats
+}
+
+export const rusCats = {
+  organization: 'Организации',
+  food: 'Рестораны',
+  church: 'Церкви',
+  store: 'Магазины',
 }

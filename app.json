@@ -19,11 +19,13 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "com.hansang.hansanglab",
       "config": {
         "googleMapsApiKey": "AIzaSyDI9W5lINuZRbJqEHRylW8_pGqxohc0gxs"
       }
     },
     "android": {
+      "package": "com.hansang.hansanglab",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyDI9W5lINuZRbJqEHRylW8_pGqxohc0gxs"
