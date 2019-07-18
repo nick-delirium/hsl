@@ -1,21 +1,20 @@
 import React, { PureComponent } from 'react'
-import { 
+import {
   StyleSheet,
   View,
-  Text, 
-  Image, 
-  ActivityIndicator, 
-  Dimensions, 
-  Platform 
+  Text,
+  Image,
+  ActivityIndicator,
+  Platform
 } from 'react-native'
 import * as FileSystem from 'expo-file-system'
 
 class CachedImage extends PureComponent {
   _isMounted = false;
-  state = { 
-    loading: true, 
+  state = {
+    loading: true,
     failed: false,
-    imguri: '', 
+    imguri: '',
   }
 
   componentWillUnmount() {
@@ -95,16 +94,26 @@ class CachedImage extends PureComponent {
 
     return (
       <View
-        style={{ ...style, backgroundColor: '#525252' }}
+        style={{ ...style, overflow: 'hidden', backgroundColor: '#525252' }}
       >
         <Image
           source={{ uri: this.state.imguri }}
           resizeMethod="scale"
-          style={{ height: style.height}}
+          style={{
+            height: style.height,
+            overflow: 'hidden',
+        }}
         />
         {categories && (
           <View style={styles.category}>
-            <Text style={{color: '#000', fontWeight: 'bold'}}>{categories.name}</Text>
+            <Text
+              style={{
+                color: '#000',
+                fontWeight: 'bold'
+              }}
+            >
+              {categories.name}
+            </Text>
           </View>
         )}
       </View>
@@ -117,7 +126,7 @@ const styles = StyleSheet.create({
     padding: 7,
     marginLeft: 10,
     fontSize: 12,
-    opacity: 0.7, 
+    opacity: 0.7,
     borderRadius: 2,
     backgroundColor: '#fff',
     alignSelf: 'flex-start',

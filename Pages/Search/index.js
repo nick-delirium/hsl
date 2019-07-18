@@ -72,6 +72,7 @@ class AllPosts extends React.Component {
     return (
       <View style={{ marginTop: 15 }}>
         <FlatList
+          style={{ flex: 1 }}
           data={dataWithMedia}
           renderItem={this.renderCardItem}
           onRefresh={this.refreshData}

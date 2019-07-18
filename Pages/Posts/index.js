@@ -140,7 +140,8 @@ class AllPosts extends React.PureComponent {
         <CardEvent
           key={item.id}
           id={item.id}
-          description={descrItem.slice(0, 100).split('').join('')}
+          description={descrItem}
+          smallDescription={descrItem.slice(0, 100).split('').join('')}
           title={item.title}
           dateStart={item.start_date} //utc_start_date
           dateEnd={item.end_date}
@@ -194,7 +195,7 @@ class AllPosts extends React.PureComponent {
     return (
       <FlatList
         data={dataWithMedia}
-        style={{ paddingTop: 15 }}
+        style={{ flex: 1 }}
         renderItem={this.renderCardItem}
         onRefresh={this.refreshData}
         refreshing={isLoading}
