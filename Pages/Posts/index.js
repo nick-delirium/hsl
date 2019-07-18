@@ -9,13 +9,11 @@ import {
 import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { OptimizedFlatList } from 'react-native-optimized-flatlist'
 import CardArticle from './components/Articles/CardArticle.js'
 import CardEvent from './components/Events/CardEvent'
 import { getPosts, getPostsByCategory, getEvents } from './reducer'
 import { getCategories } from '@/Navigation/reducer'
 import pages from '@/constants/pages'
-
 
 class AllPosts extends React.PureComponent {
   constructor(props) {
@@ -143,7 +141,8 @@ class AllPosts extends React.PureComponent {
         <CardEvent
           key={item.id}
           id={item.id}
-          description={descrItem.slice(0, 100).split('').join('')}
+          description={descrItem}
+          smallDescription={descrItem.slice(0, 100).split('').join('')}
           title={item.title}
           dateStart={item.start_date} //utc_start_date
           dateEnd={item.end_date}
@@ -197,7 +196,7 @@ class AllPosts extends React.PureComponent {
     return (
       <FlatList
         data={dataWithMedia}
-        style={{ paddingTop: 15 }}
+        style={{ flex: 1 }}
         renderItem={this.renderCardItem}
         onRefresh={this.refreshData}
         refreshing={isLoading}

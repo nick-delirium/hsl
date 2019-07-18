@@ -38,7 +38,7 @@ constructor(props) {
   }
 
   render () {
-    const { id, title, description, dateStart, dateEnd, image, allDay } = this.props
+    const { id, title, smallDescription, description, dateStart, dateEnd, image, allDay } = this.props
     //TODO receive slug
     const startDate = formatDate(dateStart) 
     const endDate = formatDate(dateEnd)
@@ -57,7 +57,7 @@ constructor(props) {
       )}
       <View style={styles.cardText} >
         <Text style={{fontWeight: 'bold', fontSize: 18, paddingBottom: 4}}>{title}</Text>
-        <Text style={{fontSize: 14}}>{formatText(description)}</Text>
+        <Text style={{fontSize: 14}}>{formatText(smallDescription)}</Text>
         
         <View style={{ ...styles.row, justifyContent: 'space-between', paddingTop: 10, paddingBottom: 20 }}>
           <View style={{...styles.row, flex: 1}}>
@@ -91,7 +91,7 @@ constructor(props) {
 
 const styles = StyleSheet.create({
   card: {
-    marginBottom: 15,
+    marginTop: 15,
     marginRight: 15,
     marginLeft: 15,
     backgroundColor: '#fff',

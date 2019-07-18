@@ -16,7 +16,6 @@ export const formatDate = (date) => {
 
 export const formatText = (text) => {
   let newText = text.replace(/(<p>)/gm, "")
-  // console.log(newText.split('<'))
   newText = newText.split('<')[0] + '...'
   return(newText)
 }
