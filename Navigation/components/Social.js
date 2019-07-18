@@ -9,8 +9,8 @@ import {
 } from 'react-native'
 import { social } from '@/constants/contacts'
 
-const onLinkPress = ({ url, iosUrl, anrdUrl, isEmail }) => {
-  const appUrl = Platform.OS === 'ios' ? iosUrl : anrdUrl
+const onLinkPress = ({ url, iosUrl, andrUrl, isEmail }) => {
+  const appUrl = Platform.OS === 'ios' ? iosUrl : andrUrl
   Linking.canOpenURL(appUrl).then(supported => {
     if (supported) {
       return Linking.openURL(appUrl)

@@ -12,6 +12,7 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import get from 'lodash/get'
 import { Route } from 'react-router-native'
+import Places from './Pages/Places'
 
 import pages, { pageTitles, } from './constants/pages'
 import Posts from './Pages/Posts'
@@ -132,6 +133,7 @@ const RouterView = (props) => (
     <Route path={pages.search.path} render={() => (<Search query />)} />
     <Route path={pages.post.path} render={() => (<Article id />)} />
     <Route path={pages.event.path} render={() => (<Event slug />)} />
+    <Route path={pages.places.path} component={Places} />
   </View>
 )
   

@@ -23,7 +23,10 @@ const pages = {
     name: 'Медиа',
     path: '/media',
   },
-  //map here 
+  places: {
+    name: 'Карта',
+    path: '/places'
+  },
 
   // invite: {
   //   name: 'Пригласить друга',
@@ -50,5 +53,6 @@ export const pageTitles = {
   [pages.blogs.path]: pages.blogs.name,
   [pages.programs.path]: pages.programs.name,
   [pages.media.path]: pages.media.name,
+  [pages.places.path]: pages.places.name,
 }
 export default pages
