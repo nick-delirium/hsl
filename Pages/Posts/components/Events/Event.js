@@ -69,7 +69,7 @@ class Event extends React.Component {
               streight
               title={id}
               categories={undefined}
-              style={{ width, height: 200, borderBottomWidth: 1, borderColor: '#000'}}
+              style={{ width, height: 200 }}
             />
           )}
           <Text style={styles.title}>{title}</Text>

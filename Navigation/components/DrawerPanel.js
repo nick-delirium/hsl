@@ -23,7 +23,7 @@ class DrawerPanel extends React.Component {
     return (
         <View style={{
           flexDirection: 'column',
-          paddingTop: 10,
+          paddingTop: 30,
           backgroundColor: "#fff",
           flex: 1,
           height: screenHeight,

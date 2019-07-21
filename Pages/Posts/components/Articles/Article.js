@@ -71,7 +71,7 @@ class Article extends React.Component {
               source={mediaUrl}
               title={id}
               categories={categories[0] ? categories[0] : undefined}
-              style={{ flex: 1, height: 200, borderBottomWidth: 1, borderColor: '#000' }}
+              style={{ flex: 1, height: 200 }}
             />
           )}
           <Text 

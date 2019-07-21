@@ -52,7 +52,7 @@ constructor(props) {
           streight
           title={id}
           categories={undefined}
-          style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}}
+          style={{ flex: 1, height: 190 }}
         />
       )}
       <View style={styles.cardText} >
