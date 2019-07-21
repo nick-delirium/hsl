@@ -390,8 +390,8 @@ export const categories = () =>  {
 }
 
 export const rusCats = {
-  organization: 'Организации',
-  food: 'Рестораны',
-  church: 'Церкви',
-  store: 'Магазины',
+  organization: {title: 'Организации', color: '#72BE44'},
+  food: {title: 'Рестораны', color: '#B62655'},
+  church: {title: 'Церкви', color: '#00AADB'},
+  store: {title: 'Магазины', color: '#FBAE17'},
 }

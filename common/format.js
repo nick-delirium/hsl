@@ -14,8 +14,17 @@ export const formatDate = (date) => {
   })
 }
 
-export const formatText = (text) => {
+export const formatText = (text, noDots) => {
   let newText = text.replace(/(<p>)/gm, "")
-  newText = newText.split('<')[0] + '...'
+  newText = newText.split('<')[0] + `${!noDots ? '...' : ''}`
   return(newText)
+}
+
+export const formatEventDate = () => {
+  let now = new Date()
+  let year = now.getFullYear()
+  let month = now.getMonth() + 1
+  month = month < 10 ? month = '0' + month : month
+  let date = now.getDate()
+  return(`${year}-${month}-${date}%2000:00:00`)
 }

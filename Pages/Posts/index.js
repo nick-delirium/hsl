@@ -1,10 +1,6 @@
 import React from 'react'
 import {
-  StyleSheet,
-  View,
   FlatList,
-  Text,
-  ActivityIndicator,
 } from 'react-native'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
@@ -13,6 +9,7 @@ import CardArticle from './components/Articles/CardArticle.js'
 import CardEvent from './components/Events/CardEvent'
 import { getPosts, getPostsByCategory, getEvents } from './reducer'
 import { getCategories } from '@/Navigation/reducer'
+import { formatEventDate } from '@/common/format'
 
 class AllPosts extends React.PureComponent {
   constructor(props) {
@@ -51,7 +48,8 @@ class AllPosts extends React.PureComponent {
     fetchCategories()
 
     if (type === 'events') {
-      fetchEvents('2019-06-17%2000:00:00', undefined, treshold) //TODO: get and format current
+      let startDate = formatEventDate()
+      fetchEvents(startDate, undefined, treshold)
     } else {
       let category = categories.find(cat => (cat.slug === type))
       if (type && category) {
@@ -81,7 +79,8 @@ class AllPosts extends React.PureComponent {
     }
 
     if (type === 'events' && !data || !data[`00`] || !data[`00`].length === 0) {
-      fetchEvents('2019-06-17%2000:00:00', undefined) //TODO: get and format current
+      let startDate = formatEventDate()
+      fetchEvents(startDate, undefined)
     } else {
       let category = categories.find(cat => (cat.slug === type))
       if (type && category && (!data[`${category.id}`] || data[`${category.id}`].length === 0)) {
@@ -105,7 +104,8 @@ class AllPosts extends React.PureComponent {
       categories,
     } = this.props
     if (type === 'events') {
-      fetchEvents('2019-06-17%2000:00:00') //TODO: get and format current
+      let startDate = formatEventDate()
+      fetchEvents(startDate)
     } else {
       let category = categories.find(cat => (cat.slug === type))
       if (type && category) {
