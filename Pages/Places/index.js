@@ -155,16 +155,16 @@ class Places extends PureComponent {
         <View>
           <ScrollView 
             horizontal={true} 
-            contentContainerStyle={{ height: 60, padding: 10, flexDirection: 'row', alignItems: 'center'}}
+            contentContainerStyle={{  padding: 10, flexDirection: 'row', alignItems: 'center'}}
             showsHorizontalScrollIndicator={false}
           >
             {categories().map((cat, i) => (
               <TouchableOpacity key={i}
-                style={{ flex: 1, borderWidth: 1, padding: 10, borderColor: '#333376', borderRadius: 3, marginRight: 10, 
-                backgroundColor: activeFilters.includes(cat) ? '#333376' : 'transparent' }}
+                style={{ flex: 1, borderWidth: 1, padding: 10, borderColor: rusCats[cat].color, borderRadius: 3, marginRight: 10, 
+                backgroundColor: activeFilters.includes(cat) ? rusCats[cat].color : 'transparent' }}
                 onPress={this.onCatPress.bind(this, cat)}
               >
-                <Text style={{ color: activeFilters.includes(cat) ? '#fff' : '#333376', fontSize: fonts.heading }}>
+                <Text style={{ color: activeFilters.includes(cat) ? '#fff' : rusCats[cat].color, fontSize: fonts.heading }}>
                   {rusCats[cat].title}
                 </Text>
               </TouchableOpacity>)
@@ -176,7 +176,8 @@ class Places extends PureComponent {
             <Text>Получаем координаты </Text>
           )}
         </View>
-        {selectedMarker &&
+        
+        { this.state.locationState === 2 &&
           <View style={{
             backgroundColor: '#fff',
             shadowColor: '#000',
@@ -188,20 +189,29 @@ class Places extends PureComponent {
             paddingBottom: 40,
             margin: 15,
           }}>
+          {selectedMarker ? (<View>
             <Text style={{color: '#333376', fontSize: fonts.big, fontWeight: "bold", paddingBottom: 10}}>{selectedMarker.venue}</Text>
 
             {selectedMarker.description && <Text>{formatText(selectedMarker.description, true)}</Text>}
             {selectedMarker.address && 
               <Text>Адрес: {selectedMarker.address}</Text> }
-            {selectedMarker.phone && <Text onPress={() => Linking.openURL('tel:' + selectedMarker.phone)}>{selectedMarker.phone}</Text>}
+            {selectedMarker.phone && 
+            <Text style={{color: '#00aadb', textDecorationLine: 'underline'}}
+              onPress={() => Linking.openURL('tel:' + selectedMarker.phone)}>
+              {selectedMarker.phone}
+            </Text>}
             {selectedMarker.website && 
             <Text style={{color: '#00aadb', textDecorationLine: 'underline', paddingTop: 5}}
               onPress={() => {
                 let url = !selectedMarker.website.startsWith('http') ? 'http://' + selectedMarker.website : selectedMarker.website
                 return Linking.openURL(url)}}>
               Перейти на сайт</Text>}
+          </View>)
+              : <Text style={{textAlign: 'center'}}>Пожалуйста, выберите точку на карте</Text>
+              }
           </View>
         }
+        
       </ScrollView>
     );
   }
