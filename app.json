@@ -8,9 +8,9 @@
       "ios",
       "android"
     ],
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/appIcons/app_store_icon_HSL.png",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -21,14 +21,14 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.hansang.hansanglab",
       "config": {
-        "googleMapsApiKey": "AIzaSyDI9W5lINuZRbJqEHRylW8_pGqxohc0gxs"
+        "googleMapsApiKey": "AIzaSyAw297jOd7UAKJ2ZRSvC-nBYWcAWmQajtg"
       }
     },
     "android": {
       "package": "com.hansang.hansanglab",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyDI9W5lINuZRbJqEHRylW8_pGqxohc0gxs"
+          "apiKey": "AIzaSyAw297jOd7UAKJ2ZRSvC-nBYWcAWmQajtg"
           }
         }
       }

@@ -63,8 +63,6 @@ class CardArticle extends React.PureComponent {
                 style={{
                   flex: 1,
                   height: 190,
-                  borderBottomWidth: 1,
-                  borderColor: '#000',
                   borderTopLeftRadius: 4,
                   borderTopRightRadius: 4,
                 }}

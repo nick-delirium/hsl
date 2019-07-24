@@ -52,7 +52,12 @@ constructor(props) {
           streight
           title={id}
           categories={undefined}
-          style={{flex: 1, height: 190, borderBottomWidth: 1, borderColor: '#000'}}
+          style={{
+            flex: 1,
+            height: 190,
+            borderTopLeftRadius: 4,
+            borderTopRightRadius: 4,
+          }}
         />
       )}
       <View style={styles.cardText} >
@@ -94,6 +99,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
     marginRight: 15,
     marginLeft: 15,
+    borderRadius: 4,
     backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOpacity: 0.25,
@@ -101,21 +107,11 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 4},
   },
   cardText: {
-    paddingTop: 15,
     paddingLeft: 15,
     paddingBottom: 15,
     paddingRight: 15,
+    paddingTop: 15,
     fontSize: 18,
-  },
-  category: {
-    padding: 7,
-    marginLeft: 10,
-    fontSize: 12,
-    backgroundColor: '#000',
-    borderRadius: 2,
-    color: '#fff',
-    alignSelf: 'flex-start',
-    top: -180,
   },
   row: {
     flex: 1,
