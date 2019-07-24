@@ -22,7 +22,7 @@ const Contacts = () => (
         style={styles.contacts}
         onPress={() => onLinkPress(item)}
       >
-        <Text 
+        <Text
           style={styles.anchor}
         >
           {item.path}
@@ -64,4 +64,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Contacts
+export default React.memo(Contacts)

@@ -13,7 +13,7 @@ import { withRouter } from 'react-router-native'
 import { changeLocation } from '../reducer'
 import { fonts } from '../../constants/Styles'
 
-class DrawerItem extends React.Component {
+class DrawerItem extends React.PureComponent {
   constructor(props) {
     super(props)
   }
@@ -28,6 +28,7 @@ class DrawerItem extends React.Component {
         alert(error.message);
       }
     }
+    this.props.closePost()
     this.props.history.push(path)
     this.props.changeLoc(path)
     this.props.closeDrawer()
@@ -47,7 +48,7 @@ class DrawerItem extends React.Component {
         onPress={() => this.onItemPress(href)}
         style={styles.button}
       >
-        <Text 
+        <Text
           style={[
             styles.text,
             isActive && styles.activeButton

@@ -15,6 +15,7 @@ const initialState = {
   path: '/',
   categories: [],
   isPostOpen: false,
+  type: '',
 }
 
 const fetchCategoriesReq = () => ({
@@ -30,9 +31,12 @@ const fetchFail = (reason) => ({
   type: FETCH_CATEGORIES_FAIL,
   payload: reason,
 })
-export const togglePost = (isOpen) => ({
+export const togglePost = (isPostOpen, type = '') => ({
   type: TOGGLE_POST,
-  payload: isOpen,
+  payload: {
+    isPostOpen,
+    type,
+  }
 })
 
 export const getCategories = () => {
@@ -68,7 +72,8 @@ export default function(state = initialState, action) {
       case TOGGLE_POST:
         return {
           ...state,
-          isPostOpen: action.payload,
+          isPostOpen: action.payload.isPostOpen,
+          type: action.payload.type,
         }
     case FETCH_CATEGORIES_START:
       return {

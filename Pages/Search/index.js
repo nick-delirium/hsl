@@ -2,6 +2,8 @@ import React from 'react'
 import {
   View,
   FlatList,
+  Dimensions,
+  StyleSheet,
 } from 'react-native'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
@@ -9,8 +11,11 @@ import { createStructuredSelector } from 'reselect'
 import { getCategories } from '@/Navigation/reducer'
 import CardArticle from '@/Pages/Posts/components/Articles/CardArticle'
 import CardEvent from '@/Pages/Posts/components/Events/CardEvent'
+import Article from '@/Pages/Posts/components/Articles/Article'
+import Event from '@/Pages/Posts/components/Events/Event'
+const height = Dimensions.get('window').height
 
-class AllPosts extends React.Component {
+class AllPosts extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
@@ -58,11 +63,28 @@ class AllPosts extends React.Component {
 
   _keyExtractor = (item) => `_${item.id}`
 
+  renderPost = (type) => {
+    switch (type) {
+      case 'event':
+        return (
+          <View style={styles.postWrapper}>
+            <Event slug />
+          </View>
+        )
+      default:
+        return (
+          <View style={styles.postWrapper}>
+            <Article id />
+          </View>
+        )
+    }
+  }
+
   render() {
-    const { posts, isLoading } = this.props
-    
+    const { posts, isLoading, isPostOpen, postType } = this.props
+
     const dataWithMedia = posts && posts.map((item) => {
-      const mediaUrl = get(item, '_links.wp:featuredmedia.href', null) 
+      const mediaUrl = get(item, '_links.wp:featuredmedia.href', null)
         || `https://hansanglab.com/wp-json/wp/v2/media/${get(item, 'featured_media')}`
       return {
         ...item,
@@ -70,26 +92,44 @@ class AllPosts extends React.Component {
       }
     })
     return (
-      <FlatList
-        style={{ flex: 1 }}
-        data={dataWithMedia}
-        renderItem={this.renderCardItem}
-        onRefresh={this.refreshData}
-        refreshing={isLoading}
-        keyExtractor={this._keyExtractor}
-        onEndReached={this.loadMoreData}
-        removeClippedSubviews
-        onEndReachedThreshold={5}
-      />
+      <View style={{ position: 'relative', flex: 1 }}>
+        {isPostOpen && this.renderPost(postType)}
+        <FlatList
+          style={{ flex: 1 }}
+          data={dataWithMedia}
+          renderItem={this.renderCardItem}
+          onRefresh={this.refreshData}
+          refreshing={isLoading}
+          keyExtractor={this._keyExtractor}
+          onEndReached={this.loadMoreData}
+          removeClippedSubviews
+          onEndReachedThreshold={5}
+        />
+      </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  postWrapper: {
+    position: 'absolute',
+    top: 0,
+    paddingBottom: 100,
+    left: 0,
+    zIndex: 9,
+    height,
+    backgroundColor: '#EEEEEE',
+    flex: 1,
+  }
+})
 
 const mapStateFromProps = createStructuredSelector({
   isLoading: (state) => get(state, 'search.isLoading'),
   isError: (state) => get(state, 'search.isError'),
   posts: (state) => get(state, 'search.searchResult'),
   categories: (state) => get(state, 'url.categories'),
+  isPostOpen: (state) => get(state, 'url.isPostOpen'),
+  postType: (state) => get(state, 'url.type'),
 })
 
 export default connect(

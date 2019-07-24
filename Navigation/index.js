@@ -3,13 +3,13 @@ import { BackHandler, Keyboard } from 'react-native'
 import Drawer from 'react-native-drawer'
 import DrawerPanel from './components/DrawerPanel'
 import RouterView from '../router.js'
-import { getCategories } from './reducer'
+import { getCategories, togglePost } from './reducer'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router-native'
 
-class RouterWithDrawer extends React.Component {
+class RouterWithDrawer extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -23,7 +23,11 @@ class RouterWithDrawer extends React.Component {
   }
 
   handleBackPress = () => {
-    const { history, location } = this.props
+    const { history, location, isPostOpen, actions } = this.props
+    if (isPostOpen) {
+      actions.togglePost(false)
+      return false
+    }
     if (location.pathname === '/') return false
     Keyboard.dismiss()
     history.goBack()
@@ -86,7 +90,9 @@ const mapStateFromProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchCategories: () => dispatch(getCategories()),
+  actions: {
+    togglePost: (isOpen) => dispatch(togglePost(isOpen)),
+  }
 })
 
 const RouterWithRouter = withRouter(RouterWithDrawer)

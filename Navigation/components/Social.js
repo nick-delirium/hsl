@@ -55,4 +55,5 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Social
+export default React.memo(Social)
+

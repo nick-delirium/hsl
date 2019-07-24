@@ -14,6 +14,7 @@ import { changeLocation } from '@/Navigation/reducer'
 import CachedImage from '@/components/CachedImage'
 import { setData } from './articleReducer'
 import { fonts } from '@/constants/Styles'
+import { togglePost } from '@/Navigation/reducer'
 
 class CardArticle extends React.PureComponent {
   constructor(props) {
@@ -32,6 +33,7 @@ class CardArticle extends React.PureComponent {
       categories,
       mediaUrl,
       id,
+      openPost,
     } = this.props
 
     const newPath = 'post/' + id
@@ -44,8 +46,9 @@ class CardArticle extends React.PureComponent {
       content: data.content,
     }
     setPost(article)
-    history.push(newPath)
-    changeLoc(newPath)
+    // history.push(newPath)
+    openPost(true, 'article')
+    // changeLoc(newPath)
   }
 
   render () {
@@ -58,7 +61,7 @@ class CardArticle extends React.PureComponent {
             {mediaUrl && (
               <CachedImage
                 source={mediaUrl}
-                title={id}
+                title={mediaUrl.slice(-4)}
                 categories={!type && categories[0] ? categories[0] : undefined}
                 style={{
                   flex: 1,
@@ -111,6 +114,7 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch) => ({
   changeLoc: (path) => dispatch(changeLocation(path)),
   setPost: (article) => dispatch(setData(article)),
+  openPost: (isOpen, type) => dispatch(togglePost(isOpen, type)),
 })
 const mapStateToProps = createStructuredSelector({
   path: (state) => get(state, 'url.path'),

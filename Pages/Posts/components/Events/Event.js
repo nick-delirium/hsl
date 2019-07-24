@@ -18,7 +18,7 @@ import { changeLocation } from '@/Navigation/reducer'
 import CachedImage from '@/components/CachedImage'
 import { formatText, formatDate } from '@/common/format'
 
-class Event extends React.Component {
+class Event extends React.PureComponent {
   constructor(props) {
     super(props)
   }
@@ -42,19 +42,19 @@ class Event extends React.Component {
 
       const newPath = `post/${found.id}`
       setPost(article)
-      history.push(newPath)
-      changeLoc(newPath)
+      // history.push(newPath)
+      // changeLoc(newPath)
     } else {
       Linking.openURL(url)
     }
   }
 
   render () {
-    const { 
+    const {
       match: { params: { slug } }, // todo use slug
       event,
     } = this.props
-  
+
     const { id, title, description, dateStart, dateEnd, image, organizer, url, place, allDay } = event
     const { width } = Dimensions.get('window')
     const startDate = formatDate(dateStart)
@@ -89,7 +89,7 @@ class Event extends React.Component {
           />
         </View>
         <View style={styles.card}>
-        
+
           <View style={{...styles.row, paddingtop: 16,}}>
               <Image source={require('@/assets/images/calendar-icon.png')} style={styles.icon}/>
               <Text style={{ flex: 0.9 }}>{`${startDate.date} - ${endDate.date}`}</Text>
@@ -134,6 +134,7 @@ class Event extends React.Component {
 const styles = StyleSheet.create({
   scrollview: {
     padding: 0,
+    flexGrow: 1,
   },
   card: {
     flex: 1,
@@ -164,7 +165,7 @@ const styles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 20,
   },
-  description: { 
+  description: {
     paddingBottom: 30,
   },
   row: {

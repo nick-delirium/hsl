@@ -10,9 +10,10 @@ import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import CachedImage from '@/components/CachedImage'
-import { changeLocation } from '@/Navigation/reducer' 
+import { changeLocation } from '@/Navigation/reducer'
 import { setEvent } from './eventReducer'
 import { formatText, formatDate } from '@/common/format'
+import { togglePost } from '@/Navigation/reducer'
 
 class CardEvent extends React.Component {
 constructor(props) {
@@ -25,25 +26,27 @@ constructor(props) {
   }
 
   onItemPress = (event) => {
-    const { 
-      setEvent, 
-      changeLoc, 
-      history, 
+    const {
+      setEvent,
+      changeLoc,
+      history,
       path,
+      openPost,
     } = this.props
     const newPath = 'event/' + event.slug
     setEvent(event)
-    history.push(newPath)
-    changeLoc(path)
+    // history.push(newPath)
+    // changeLoc(path)
+    openPost(true, 'event')
   }
 
   render () {
     const { id, title, smallDescription, description, dateStart, dateEnd, image, allDay } = this.props
     //TODO receive slug
-    const startDate = formatDate(dateStart) 
+    const startDate = formatDate(dateStart)
     const endDate = formatDate(dateEnd)
     return (
-    <TouchableOpacity onPress={() => this.onItemPress(this.props)}> 
+    <TouchableOpacity onPress={() => this.onItemPress(this.props)}>
       <View style={styles.card}>
 
       {image && (
@@ -63,10 +66,10 @@ constructor(props) {
       <View style={styles.cardText} >
         <Text style={{fontWeight: 'bold', fontSize: 18, paddingBottom: 4}}>{title}</Text>
         <Text style={{fontSize: 14}}>{formatText(smallDescription)}</Text>
-        
+
         <View style={{ ...styles.row, justifyContent: 'space-between', paddingTop: 10, paddingBottom: 20 }}>
           <View style={{...styles.row, flex: 1}}>
-            <Image source={require('@/assets/images/calendar-circle-icon.png')} 
+            <Image source={require('@/assets/images/calendar-circle-icon.png')}
               style={{ height: 30, width: 30, marginRight: 10 }}/>
             <View>
               <Text style={{color: '#525252'}}>
@@ -76,7 +79,7 @@ constructor(props) {
           </View>
           {allDay && (
             <View style={{...styles.row, flex: 1.5}}>
-              <Image source={require('@/assets/images/time-circle-icon.png')} 
+              <Image source={require('@/assets/images/time-circle-icon.png')}
                 style={{ height: 30, width: 30, marginRight: 5 }}
               />
               <View>
@@ -123,6 +126,7 @@ const styles = StyleSheet.create({
 const mapDispatchToProps = (dispatch) => ({
   changeLoc: (path) => dispatch(changeLocation(path)),
   setEvent: (event) => dispatch(setEvent(event)),
+  openPost: (isOpen, type) => dispatch(togglePost(isOpen, type)),
 })
 
 const withConnect = connect(()=>({}), mapDispatchToProps)
