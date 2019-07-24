@@ -17,8 +17,8 @@ class RouterWithDrawer extends React.Component {
       drawerDisabled: false,
     }
   }
-  
-  componentDidMount() { 
+
+  componentDidMount() {
     this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
   }
 
@@ -69,7 +69,7 @@ class RouterWithDrawer extends React.Component {
         captureGestures
         negotiatePan
       >
-        <RouterView 
+        <RouterView
           openDrawer={this.openDrawer.bind(this)}
           location={location.pathname}
           goBack={this.goBack}
@@ -82,6 +82,7 @@ class RouterWithDrawer extends React.Component {
 
 const mapStateFromProps = createStructuredSelector({
   categories: (state) => get(state, 'url.categories'),
+  isPostOpen: (state) => get(state, 'url.isPostOpen'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -92,5 +93,5 @@ const RouterWithRouter = withRouter(RouterWithDrawer)
 
 export default connect(
   mapStateFromProps,
-  mapDispatchToProps, 
+  mapDispatchToProps,
 )(RouterWithRouter)
