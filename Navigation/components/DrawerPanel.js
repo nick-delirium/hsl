@@ -5,11 +5,18 @@ import {
   ScrollView,
   View,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native'
 import pages from '@/constants/pages'
 import DrawerItem from './DrawerItem'
 import Contacts from './Contacts'
 import Social from './Social'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+import get from 'lodash/get'
+import { createStructuredSelector } from 'reselect'
+import { withRouter } from 'react-router-native'
+import { changeLocation } from '../reducer'
 
 class DrawerPanel extends React.Component {
   constructor(props) {
@@ -28,11 +35,17 @@ class DrawerPanel extends React.Component {
           flex: 1,
           height: screenHeight,
         }}>
+        <TouchableOpacity onPress={()=>{
+          this.props.history.push('/')
+          this.props.changeLoc('/')
+          this.props.closeDrawer()
+        }}>
           <Image 
             source={require('../../assets/images/HSL-logo.png')}
             style={styles.image}
-            resizeMode="contain"
+            resizeMode='contain'
           />
+          </TouchableOpacity>
           <ScrollView contentContainerStyle={{flexGrow: 1, justifyContent: 'space-between'}}>
             <View style={{ flex: 1, flexDirection: "column", justifyContent: "space-between" }}>
               <View style={{ flex: 1 }}>
@@ -83,4 +96,16 @@ const styles = StyleSheet.create({
   }
 })
 
-export default DrawerPanel
+const mapStateToProps = createStructuredSelector({
+  path: (state) => get(state, 'url.path'),
+})
+const mapDispatchToProps = (dispatch) => ({
+  changeLoc: (path) => dispatch(changeLocation(path))
+})
+
+const withConnect = connect(mapStateToProps, mapDispatchToProps)
+
+export default compose(
+  withConnect,
+  withRouter,
+)(DrawerPanel)

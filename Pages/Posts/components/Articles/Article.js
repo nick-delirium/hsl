@@ -33,7 +33,16 @@ class Article extends React.Component {
 
   onLinkPress = (url) => {
     const { history, changeLoc, setPost } = this.props
+    // TODO: fetch exact post instead of search by allPosts
     let found = this.props.allPosts.find(post => (post.link === url))
+
+    // TODO: load events
+    // if (url.startsWith('https://hansanglab.com')) {
+    //   urlParts = url.split('/')
+    //   if (urlParts[3] === 'event') {
+    //     let newPath = `${urlParts[3]}/${urlParts[4]}`
+    //   }
+    // }
 
     if (found) {
       const article = {
@@ -61,7 +70,8 @@ class Article extends React.Component {
     } = this.props
 
     const { title, content: { rendered: content }, mediaUrl, categories } = article
-    const videoContent = content.replace(/<span data-mce-type="bookmark" style="display: inline-block; width: 0px; overflow: hidden; line-height: 0;" class="mce_SELRES_start">.*<\/span>/g, '')
+    const contentWithSpaces = content.replace(/<span class="symbols">.?<\/span>/g, ' ')
+    const videoContent = contentWithSpaces.replace(/<span data-mce-type="bookmark" style="display: inline-block; width: 0px; overflow: hidden; line-height: 0;" class="mce_SELRES_start">.*<\/span>/g, '')
 
     return (
       <ScrollView ref='_scrollRef' contentContainerStyle={styles.scrollView}>
