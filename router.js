@@ -13,7 +13,7 @@ import { createStructuredSelector } from 'reselect'
 import get from 'lodash/get'
 import { Route } from 'react-router-native'
 import Places from './Pages/Places'
-
+import { togglePost } from './Navigation/reducer'
 import pages, { pageTitles, } from './constants/pages'
 import Posts from './Pages/Posts'
 import Article from './Pages/Posts/components/Articles/Article'
@@ -24,19 +24,17 @@ import SearchPanel from './Pages/Search/SearchPanel'
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const NavBar = ({ navTitle, openDrawer, goBack, url, location }) => {
-  const isArticle = /post\//.test(location)
-  const isEvent = /event\//.test(location)
+const NavBar = ({ navTitle, openDrawer, goBack, url, location, type, isPostOpen }) => {
   const isSearch = /search/.test(location)
-  const isInsidePost = isArticle || isEvent
+  const isInsidePost = isPostOpen
+  const isArticle = type === 'article'
+  const isEvent = type === 'event'
   const shouldRenderSpecificTitle = isInsidePost || isSearch
-  const specificTitle = isArticle ? navTitle.articleTitle 
-  : isEvent ? navTitle.eventTitle : ''
+  const specificTitle = isArticle ? navTitle.articleTitle : navTitle.eventTitle
   const specificUrl = isArticle ? url.articleUrl : url.eventUrl
   const title = shouldRenderSpecificTitle ? specificTitle : pageTitles[location].toUpperCase()
-  
   const shouldRenderBackButton = shouldRenderSpecificTitle
-  const shouldRenderSearch = /news|blogs|programs|media|search/i.test(location) || location === '/'
+  const shouldRenderSearch = (/news|blogs|programs|media|search/i.test(location) || location === '/') && !isPostOpen
 
   const onIconPress = shouldRenderBackButton ? goBack : openDrawer
   const icon = shouldRenderBackButton ? 'back' : 'menu_icon'
@@ -51,7 +49,7 @@ const NavBar = ({ navTitle, openDrawer, goBack, url, location }) => {
   }
   return (
     <View style={styles.nav}>
-        <View 
+        <View
           style={{
             flexDirection: 'row',
             alignItems: 'center',
@@ -59,7 +57,7 @@ const NavBar = ({ navTitle, openDrawer, goBack, url, location }) => {
             paddingRight: 5,
           }}
         >
-          <TouchableOpacity 
+          <TouchableOpacity
             onPress={onIconPress}
             style={{
               flexDirection: 'row',
@@ -75,28 +73,28 @@ const NavBar = ({ navTitle, openDrawer, goBack, url, location }) => {
                   paddingBottom: 9,
                 }}
               >
-                <Image 
+                <Image
                   source={require(`./assets/images/back.png`)}
-                  style={{ width: 19, height: 19 }}  
+                  style={{ width: 19, height: 19 }}
                 />
               </View>
             ) : (
-              <Image 
+              <Image
                 source={require(`./assets/images/menu_icon.png`)}
-                style={{ width: 38, height: 38 }}  
+                style={{ width: 38, height: 38 }}
               />
             )}
-          <Text 
+          <Text
             style={shouldRenderSpecificTitle ? styles.articleTitle : styles.navTitle}
           >
-            {title.slice(0, 20)}
-            {title.length > 20 && '...'}
+            {title && title.slice(0, 20)}
+            {title && title.length > 20 && '...'}
           </Text>
         </TouchableOpacity>
         </View>
         {isInsidePost && (
           <View style={{ marginLeft: 'auto' }}>
-            <TouchableOpacity 
+            <TouchableOpacity
               onPress={share}
               style={{ paddingLeft: 3, paddingRight: 3, paddingTop: 9, paddingBottom: 9 }}
             >
@@ -111,7 +109,7 @@ const NavBar = ({ navTitle, openDrawer, goBack, url, location }) => {
         {shouldRenderSearch && <SearchPanel isSearch={isSearch} />}
     </View>
   )
-} 
+}
 
 const RouterView = (props) => (
   <View style={styles.container}>
@@ -119,9 +117,11 @@ const RouterView = (props) => (
     <NavBar
       openDrawer={props.openDrawer}
       location={props.location}
-      goBack={props.goBack}
+      goBack={props.closePost}
       navTitle={props.title}
       url={props.url}
+      type={props.type}
+      isPostOpen={props.isPostOpen}
     />
 
     <Route exact path={pages.all.path} component={Posts} />
@@ -136,7 +136,7 @@ const RouterView = (props) => (
     <Route path={pages.places.path} component={Places} />
   </View>
 )
-  
+
 
 const styles = StyleSheet.create({
   container: {
@@ -168,7 +168,9 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = createStructuredSelector({
-  title: (state) => { 
+  isPostOpen: (state) => get(state, 'url.isPostOpen'),
+  type: (state) => get(state, 'url.type'),
+  title: (state) => {
     const articleTitle = get(state, 'article.title')
     const eventTitle = get(state, 'event.title')
 
@@ -181,5 +183,8 @@ const mapStateToProps = createStructuredSelector({
     return { articleUrl, eventUrl }
   }
 })
-
-export default connect(mapStateToProps)(RouterView)
+const mapDispatchToProps = dispatch => ({
+  closePost: () => dispatch(togglePost(false, ''))
+})
+const RouterWithMemo = React.memo(RouterView)
+export default connect(mapStateToProps, mapDispatchToProps)(RouterWithMemo)

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import {
   StyleSheet,
   View,
@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import * as FileSystem from 'expo-file-system'
 
-class CachedImage extends PureComponent {
+class CachedImage extends Component {
   _isMounted = false;
   state = {
     loading: true,
@@ -94,7 +94,7 @@ class CachedImage extends PureComponent {
 
     return (
       <View
-        style={{ ...style, overflow: 'hidden', backgroundColor: '#525252' }}
+        style={{ ...style, overflow: 'hidden', height: style.height, backgroundColor: '#525252' }}
       >
         <Image
           source={{ uri: this.state.imguri }}

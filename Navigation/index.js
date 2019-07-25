@@ -3,13 +3,13 @@ import { BackHandler, Keyboard } from 'react-native'
 import Drawer from 'react-native-drawer'
 import DrawerPanel from './components/DrawerPanel'
 import RouterView from '../router.js'
-import { getCategories } from './reducer'
+import { getCategories, togglePost } from './reducer'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router-native'
 
-class RouterWithDrawer extends React.Component {
+class RouterWithDrawer extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -17,13 +17,17 @@ class RouterWithDrawer extends React.Component {
       drawerDisabled: false,
     }
   }
-  
-  componentDidMount() { 
+
+  componentDidMount() {
     this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
   }
 
   handleBackPress = () => {
-    const { history, location } = this.props
+    const { history, location, isPostOpen, actions } = this.props
+    if (isPostOpen) {
+      actions.togglePost(false)
+      return false
+    }
     if (location.pathname === '/') return false
     Keyboard.dismiss()
     history.goBack()
@@ -69,7 +73,7 @@ class RouterWithDrawer extends React.Component {
         captureGestures
         negotiatePan
       >
-        <RouterView 
+        <RouterView
           openDrawer={this.openDrawer.bind(this)}
           location={location.pathname}
           goBack={this.goBack}
@@ -82,15 +86,18 @@ class RouterWithDrawer extends React.Component {
 
 const mapStateFromProps = createStructuredSelector({
   categories: (state) => get(state, 'url.categories'),
+  isPostOpen: (state) => get(state, 'url.isPostOpen'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchCategories: () => dispatch(getCategories()),
+  actions: {
+    togglePost: (isOpen) => dispatch(togglePost(isOpen)),
+  }
 })
 
 const RouterWithRouter = withRouter(RouterWithDrawer)
 
 export default connect(
   mapStateFromProps,
-  mapDispatchToProps, 
+  mapDispatchToProps,
 )(RouterWithRouter)

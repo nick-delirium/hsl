@@ -4,6 +4,7 @@ const CHANGE_LOCATION = 'app.location.change'
 const FETCH_CATEGORIES_START = 'app.categories.fetch.start'
 const FETCH_CATEGORIES_SUCCESS = 'app.categories.fetch.succes'
 const FETCH_CATEGORIES_FAIL = 'app.categories.fetch.fail'
+const TOGGLE_POST = 'app.categories.fetch.fail'
 
 export const changeLocation = (href) => ({
   type: CHANGE_LOCATION,
@@ -13,6 +14,8 @@ export const changeLocation = (href) => ({
 const initialState = {
   path: '/',
   categories: [],
+  isPostOpen: false,
+  type: '',
 }
 
 const fetchCategoriesReq = () => ({
@@ -27,6 +30,13 @@ const fetchSuccess = (data) => ({
 const fetchFail = (reason) => ({
   type: FETCH_CATEGORIES_FAIL,
   payload: reason,
+})
+export const togglePost = (isPostOpen, type = '') => ({
+  type: TOGGLE_POST,
+  payload: {
+    isPostOpen,
+    type,
+  }
 })
 
 export const getCategories = () => {
@@ -59,6 +69,12 @@ export default function(state = initialState, action) {
         ...state,
         path: action.payload
       }
+      case TOGGLE_POST:
+        return {
+          ...state,
+          isPostOpen: action.payload.isPostOpen,
+          type: action.payload.type,
+        }
     case FETCH_CATEGORIES_START:
       return {
         ...state,

@@ -16,9 +16,9 @@ import { compose } from 'redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router-native'
-import { changeLocation } from '../reducer'
+import { changeLocation, togglePost } from '../reducer'
 
-class DrawerPanel extends React.Component {
+class DrawerPanel extends React.PureComponent {
   constructor(props) {
     super(props)
   }
@@ -37,10 +37,11 @@ class DrawerPanel extends React.Component {
         }}>
         <TouchableOpacity onPress={()=>{
           this.props.history.push('/')
+          this.props.closePost()
           this.props.changeLoc('/')
           this.props.closeDrawer()
         }}>
-          <Image 
+          <Image
             source={require('../../assets/images/HSL-logo.png')}
             style={styles.image}
             resizeMode='contain'
@@ -55,6 +56,7 @@ class DrawerPanel extends React.Component {
                     href={pages[item].path}
                     text={pages[item].name}
                     key={pages[item].name}
+                    closePost={this.props.closePost}
                   />
                 ))}
                 <DrawerItem
@@ -100,7 +102,8 @@ const mapStateToProps = createStructuredSelector({
   path: (state) => get(state, 'url.path'),
 })
 const mapDispatchToProps = (dispatch) => ({
-  changeLoc: (path) => dispatch(changeLocation(path))
+  changeLoc: (path) => dispatch(changeLocation(path)),
+  closePost: () => dispatch(togglePost(false, ''))
 })
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps)

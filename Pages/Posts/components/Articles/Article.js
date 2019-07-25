@@ -19,10 +19,10 @@ import { changeLocation } from '@/Navigation/reducer'
 import CachedImage from '@/components/CachedImage'
 import { setData } from './articleReducer'
 
+
 const width = Dimensions.get('window').width;
 
-
-class Article extends React.Component {
+class Article extends React.PureComponent {
   constructor(props) {
     super(props)
   }
@@ -56,39 +56,41 @@ class Article extends React.Component {
 
       const newPath = `post/${found.id}`
       setPost(article)
-      history.push(newPath)
-      changeLoc(newPath)
+      // history.push(newPath)
+      // changeLoc(newPath)
     } else {
       Linking.openURL(url)
     }
   }
 
   render () {
-    const { 
-      match: { params: { id } }, 
+    const {
+      match: { params: { id } },
       article,
     } = this.props
 
     const { title, content: { rendered: content }, mediaUrl, categories } = article
     const contentWithSpaces = content.replace(/<span class="symbols">.?<\/span>/g, ' ')
     const videoContent = contentWithSpaces.replace(/<span data-mce-type="bookmark" style="display: inline-block; width: 0px; overflow: hidden; line-height: 0;" class="mce_SELRES_start">.*<\/span>/g, '')
-
     return (
-      <ScrollView ref='_scrollRef' contentContainerStyle={styles.scrollView}>
+      <ScrollView
+        ref='_scrollRef'
+        contentContainerStyle={styles.scrollView}
+      >
         <View style={{ ...styles.card }}>
           {mediaUrl && (
             <CachedImage
               source={mediaUrl}
-              title={id}
+              title={mediaUrl.slice(-4)}
               categories={categories[0] ? categories[0] : undefined}
-              style={{ flex: 1, height: 200 }}
+              style={{ height: 200 }}
             />
           )}
-          <Text 
+          <Text
             style={{
-              fontWeight: 'bold', 
-              paddingRight: 20, 
-              paddingLeft: 20, 
+              fontWeight: 'bold',
+              paddingRight: 20,
+              paddingLeft: 20,
               fontSize: 22,
               marginBottom: 15,
               marginTop: 15,
@@ -96,7 +98,7 @@ class Article extends React.Component {
           >
             {title}
           </Text>
-          <HTML 
+          <HTML
             html={`<div>${videoContent}</div>`}
             imagesMaxWidth={Dimensions.get('window').width - 50}
             onLinkPress={(e, url) => this.onLinkPress(url)}
@@ -119,6 +121,7 @@ class Article extends React.Component {
 const styles = StyleSheet.create({
   scrollView: {
     padding: 0,
+    flexGrow: 1,
   },
   card: {
     marginRight: 0,
