@@ -26,7 +26,7 @@ class RouterWithDrawer extends React.PureComponent {
     const { history, location, isPostOpen, actions } = this.props
     if (isPostOpen) {
       actions.togglePost(false)
-      return false
+      return true
     }
     if (location.pathname === '/') return false
     Keyboard.dismiss()
