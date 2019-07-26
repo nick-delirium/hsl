@@ -23,6 +23,11 @@ class AllPosts extends React.PureComponent {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.posts.length !== this.props.posts.length) {
+      this.refs._scrollRef.scrollToOffset({ offset: 0, animated: false })
+    }
+  }
   renderCardItem = ({ item }) => {
     const { categories, type } = this.props
     if (type === 'events') {
@@ -95,6 +100,7 @@ class AllPosts extends React.PureComponent {
       <View style={{ position: 'relative', flex: 1 }}>
         {isPostOpen && this.renderPost(postType)}
         <FlatList
+          ref='_scrollRef'
           style={{ flex: 1 }}
           data={dataWithMedia}
           renderItem={this.renderCardItem}

@@ -130,9 +130,9 @@ const RouterView = (props) => (
     <Route path={pages.blogs.path} render={() => (<Posts type='blogs'/>)} />
     <Route path={pages.programs.path} render={() => (<Posts type='programs'/>)} />
     <Route path={pages.media.path} render={() => (<Posts type='media'/>)} />
-    <Route path={pages.search.path} render={() => (<Search query />)} />
-    <Route path={pages.post.path} render={() => (<Article id />)} />
-    <Route path={pages.event.path} render={() => (<Event slug />)} />
+    <Route path={pages.search.path} render={() => (<Search />)} />
+    <Route path={pages.post.path} render={() => (<Article />)} />
+    <Route path={pages.event.path} render={() => (<Event />)} />
     <Route path={pages.places.path} component={Places} />
   </View>
 )

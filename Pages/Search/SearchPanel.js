@@ -10,6 +10,7 @@ import { searchPosts } from './reducer'
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import { togglePost } from '@/Navigation/reducer'
 
 class SearchPanel extends React.Component {
   constructor(props) {
@@ -23,6 +24,7 @@ class SearchPanel extends React.Component {
 
   onSearchPress = (e) => { 
     if (!this.props.isSearch) {
+      this.props.closePost()
       this.props.history.push('/search')
       this.inputRef && this.inputRef.current && this.inputRef.current.focus()
     } else {
@@ -96,6 +98,7 @@ class SearchPanel extends React.Component {
 
 const mapDispatchToProps = (dispatch) => ({
   searchPostsAction: (query, limit = 20) => dispatch(searchPosts(query, limit)),
+  closePost: () => dispatch(togglePost(false, '')),
 })
 const withConnect = connect(() => ({}), mapDispatchToProps)
 
