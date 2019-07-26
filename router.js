@@ -24,7 +24,7 @@ import SearchPanel from './Pages/Search/SearchPanel'
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const NavBar = ({ navTitle, openDrawer, goBack, url, location, type, isPostOpen }) => {
+const NavBar = ({ navTitle, openDrawer, closePost, url, location, type, isPostOpen }) => {
   const isSearch = /search/.test(location)
   const isInsidePost = isPostOpen
   const isArticle = type === 'article'
@@ -36,7 +36,7 @@ const NavBar = ({ navTitle, openDrawer, goBack, url, location, type, isPostOpen 
   const shouldRenderBackButton = shouldRenderSpecificTitle
   const shouldRenderSearch = (/news|blogs|programs|media|search/i.test(location) || location === '/') && !isPostOpen
 
-  const onIconPress = shouldRenderBackButton ? goBack : openDrawer
+  const onIconPress = shouldRenderBackButton ? closePost : openDrawer
   const icon = shouldRenderBackButton ? 'back' : 'menu_icon'
   const share = async () => {
     try {
@@ -117,7 +117,7 @@ const RouterView = (props) => (
     <NavBar
       openDrawer={props.openDrawer}
       location={props.location}
-      goBack={props.closePost}
+      closePost={props.closePost}
       navTitle={props.title}
       url={props.url}
       type={props.type}
