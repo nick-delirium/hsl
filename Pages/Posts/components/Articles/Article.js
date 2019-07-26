@@ -82,7 +82,7 @@ class Article extends React.PureComponent {
             <CachedImage
               source={mediaUrl}
               title={mediaUrl.slice(-4)}
-              categories={categories[0] ? categories[0] : undefined}
+              categories={undefined}
               style={{ height: 200 }}
             />
           )}

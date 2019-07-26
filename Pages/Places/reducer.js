@@ -46,7 +46,7 @@ export const getPlaces = (city) => {
         return resultArray
       })
       .then((resultArray) => {
-        const res = resultArray.filter(place => place.city === city)
+        const res = city ? resultArray.filter(place => place.city === city) : resultArray
         let transformedMarkers = []
         res.forEach((item, i) => {
           if (!transformedMarkers.find(OC => OC.geo_lat == item.geo_lat && (OC.id != item.id))) {

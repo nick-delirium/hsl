@@ -25,9 +25,9 @@ class Places extends PureComponent {
       displayingMarkers: this.props.places,
       locationState: 0,
       activeFilters: [],
-      city: 'Санкт-Петербург',
+      city: null,
       initialMapRegion: {
-        latitude: 59.9483,  
+        latitude: 59.9483,
         longitude: 30.2531,
       }
     }
@@ -87,7 +87,7 @@ class Places extends PureComponent {
   
     return (
       <MapView.Marker pinColor='#000' coordinate={coordinate} onPress={onPress}>
-        <View style={{ width:30, height: 30, borderRadius: 50, backgroundColor: '#eee', borderColor: '#333376', borderWidth: 1}}>
+        <View style={{ width:30, height: 30, borderRadius: 50, backgroundColor: '#D1D0D0', borderColor: '#333376', borderWidth: 1}}>
           <Text style={{color: '#000', textAlign: 'center', paddingTop: 5}}>
             {pointCount}
           </Text>
@@ -112,6 +112,7 @@ class Places extends PureComponent {
       case 2:
         return (
           <ClusteredMapView
+            style={ styles.map }
             ref={map => this._map = map}
             width={width}
             height={width}
@@ -225,7 +226,9 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#000',
-
+  },
+  map: {
+    position: 'absolute',
   }
 });
 

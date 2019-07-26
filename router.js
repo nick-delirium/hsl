@@ -140,7 +140,7 @@ const RouterView = (props) => (
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#EEEEEE',
+    backgroundColor: '#D1D0D0',
     flex: 1,
   },
   nav: {

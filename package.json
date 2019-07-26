@@ -26,7 +26,7 @@
     "react-native-render-html": "^4.1.2",
     "react-redux": "^5.1.1",
     "react-router-native": "^5.0.0",
-    "redux": "^3.7.2",
+    "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0"
   },

@@ -8,6 +8,7 @@ import {
   Platform
 } from 'react-native'
 import * as FileSystem from 'expo-file-system'
+import get from 'lodash/get'
 
 class CachedImage extends Component {
   _isMounted = false;
@@ -31,7 +32,7 @@ class CachedImage extends Component {
         fetch(this.props.source)
           .then(response => response.json())
           .then(result => {
-            const url = result.source_url || '.err'
+            const url = get(result, 'media_details.sizes.large.source_url') || result.source_url || '.err'
             const extension = url.slice((url.lastIndexOf(".") - 1 >>> 0) + 2)
             // if not jpg/png/gif => error
             if ((extension.toLowerCase() !== 'jpg') && (extension.toLowerCase() !== 'png') && (extension.toLowerCase() !== 'gif')) {
@@ -108,7 +109,7 @@ class CachedImage extends Component {
           <View style={styles.category}>
             <Text
               style={{
-                color: '#000',
+                color: '#fff',
                 fontWeight: 'bold'
               }}
             >
@@ -126,9 +127,7 @@ const styles = StyleSheet.create({
     padding: 7,
     marginLeft: 10,
     fontSize: 12,
-    opacity: 0.7,
     borderRadius: 2,
-    backgroundColor: '#fff',
     alignSelf: 'flex-start',
     top: -180,
   }
