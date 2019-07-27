@@ -72,7 +72,6 @@ class Article extends React.PureComponent {
     const { title, content: { rendered: content }, mediaUrl, categories } = article
     const contentWithSpaces = content.replace(/<span class="symbols">.?<\/span>/g, ' ').replace(/<br.?\/>/, '')
     const videoContent = contentWithSpaces.replace(/<span data-mce-type="bookmark" style="display: inline-block; width: 0px; overflow: hidden; line-height: 0;" class="mce_SELRES_start">.*<\/span>/g, '')
-    console.log(videoContent)
     return (
       <ScrollView
         ref='_scrollRef'
