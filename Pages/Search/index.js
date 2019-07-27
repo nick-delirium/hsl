@@ -8,7 +8,6 @@ import {
 import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { getCategories } from '@/Navigation/reducer'
 import CardArticle from '@/Pages/Posts/components/Articles/CardArticle'
 import CardEvent from '@/Pages/Posts/components/Events/CardEvent'
 import Article from '@/Pages/Posts/components/Articles/Article'
@@ -133,6 +132,7 @@ const mapStateFromProps = createStructuredSelector({
   isLoading: (state) => get(state, 'search.isLoading'),
   isError: (state) => get(state, 'search.isError'),
   posts: (state) => get(state, 'search.searchResult'),
+  searchQuery: (state) => get(state, 'search.searchQuery'),
   categories: (state) => get(state, 'url.categories'),
   isPostOpen: (state) => get(state, 'url.isPostOpen'),
   postType: (state) => get(state, 'url.type'),

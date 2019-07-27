@@ -75,7 +75,7 @@ class Places extends PureComponent {
     }
 
     let filteredLocations = places.filter(place => {
-      if (place.city === city)
+      // if (place.city === city)
         return activeFilters.find(filtr => place.type === filtr)
     })
     this.setState({activeFilters: activeFilters, displayingMarkers: filteredLocations})

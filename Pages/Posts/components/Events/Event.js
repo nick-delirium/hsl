@@ -190,8 +190,8 @@ const HTMLStyles = StyleSheet.create({
     marginBottom: 0,
   },
   p: {
-    marginBottom: 10,
-    paddingBottom: 10,
+    paddingBottom: 20,
+    lineHeight: 20,
   },
 })
 

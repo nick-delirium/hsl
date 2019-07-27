@@ -36,6 +36,7 @@ class RouterWithDrawer extends React.PureComponent {
 
   goBack = () => {
     const { history } = this.props
+    console.log(this.props.location)
     Keyboard.dismiss()
     history.goBack()
   }

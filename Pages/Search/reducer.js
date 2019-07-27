@@ -6,8 +6,9 @@ const SEARCH_FAIL = 'app.allposts.search.fail'
 
 const DEFAULT_LIMIT = 20
 
-const searchAllPostsReq = () => ({
+const searchAllPostsReq = (query) => ({
   type: SEARCH_START,
+  payload: query,
 })
 
 const searchAllSuccess = (data) => ({
@@ -22,7 +23,7 @@ const searchAllFail = (reason) => ({
 
 export const searchPosts = (query, limit = DEFAULT_LIMIT) => {
   return dispatch => {
-    dispatch(searchAllPostsReq())
+    dispatch(searchAllPostsReq(query))
     const result = fetch(api.search(query, limit))
       .then((response) => response.json())
       .then((res) => {
@@ -37,6 +38,7 @@ const initialState = {
   isLoading: false,
   isError: false,
   errorMessage: '',
+  searchQuery: '',
 }
 
 export default function(state = initialState, action) {
@@ -45,6 +47,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         isLoading: true,
+        searchQuery: action.payload,
       }
     case SEARCH_SUCCESS:
     return {

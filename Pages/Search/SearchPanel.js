@@ -11,6 +11,8 @@ import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { togglePost } from '@/Navigation/reducer'
+import { createStructuredSelector } from 'reselect'
+import get from 'lodash/get'
 
 class SearchPanel extends React.Component {
   constructor(props) {
@@ -18,7 +20,7 @@ class SearchPanel extends React.Component {
 
     this.inputRef = React.createRef()
     this.state = {
-      inputValue: '',
+      inputValue: this.props.searchQuery || '',
     }
   }
 
@@ -100,7 +102,11 @@ const mapDispatchToProps = (dispatch) => ({
   searchPostsAction: (query, limit = 20) => dispatch(searchPosts(query, limit)),
   closePost: () => dispatch(togglePost(false, '')),
 })
-const withConnect = connect(() => ({}), mapDispatchToProps)
+const mapStateFromProps = createStructuredSelector({
+  searchQuery: (state) => get(state, 'search.searchQuery'),
+})
+
+const withConnect = connect(() => mapStateFromProps, mapDispatchToProps)
 
 export default compose(
   withRouter,

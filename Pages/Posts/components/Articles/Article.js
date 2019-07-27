@@ -70,8 +70,9 @@ class Article extends React.PureComponent {
     } = this.props
 
     const { title, content: { rendered: content }, mediaUrl, categories } = article
-    const contentWithSpaces = content.replace(/<span class="symbols">.?<\/span>/g, ' ')
+    const contentWithSpaces = content.replace(/<span class="symbols">.?<\/span>/g, ' ').replace(/<br.?\/>/, '')
     const videoContent = contentWithSpaces.replace(/<span data-mce-type="bookmark" style="display: inline-block; width: 0px; overflow: hidden; line-height: 0;" class="mce_SELRES_start">.*<\/span>/g, '')
+    console.log(videoContent)
     return (
       <ScrollView
         ref='_scrollRef'
@@ -137,7 +138,7 @@ const HTMLStyles = StyleSheet.create({
     paddingRight: 20,
     paddingLeft: 20,
     marginTop: 0,
-    marginBottom: 0,
+    marginBottom: 5,
   },
   blockquote: {
     backgroundColor: '#f8f8f8',
@@ -154,11 +155,11 @@ const HTMLStyles = StyleSheet.create({
   },
   ul: {
     marginTop: 0,
-    marginBottom: 0,
+    marginBottom: 10,
   },
   p: {
-    marginBottom: 10,
-    paddingBottom: 10,
+    marginBottom: 20,
+    lineHeight: 20,
   },
 })
 
