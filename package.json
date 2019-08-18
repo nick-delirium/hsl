@@ -13,18 +13,18 @@
   "dependencies": {
     "@expo/samples": "2.1.1",
     "babel-plugin-module-resolver": "^3.2.0",
-    "expo": "^33.0.0",
-    "expo-asset": "^5.0.1",
-    "expo-file-system": "~5.0.1",
-    "expo-location": "~5.0.1",
-    "expo-permissions": "~5.0.1",
+    "expo": "^34.0.3",
+    "expo-asset": "^6.0.0",
+    "expo-file-system": "~6.0.0",
+    "expo-location": "~6.0.0",
+    "expo-permissions": "~6.0.0",
     "react": "16.8.3",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
     "react-native-drawer": "^2.5.1",
-    "react-native-maps": "^0.25.0",
+    "react-native-maps": "^0.24.0",
     "react-native-maps-super-cluster": "^1.5.0",
     "react-native-render-html": "^4.1.2",
-    "react-redux": "^5.1.1",
+    "react-redux": "^7.1.0",
     "react-router-native": "^5.0.0",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "babel-preset-expo": "5.0.0",
-    "jest-expo": "32.0.0"
+    "jest-expo": "34.0.0"
   },
   "private": true
 }

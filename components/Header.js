@@ -7,8 +7,8 @@ import {
   Share,
   TouchableOpacity,
 } from 'react-native'
-import { pageTitles, } from './constants/pages'
-import SearchPanel from './Pages/Search/SearchPanel'
+import { pageTitles, } from '@/constants/pages'
+import SearchPanel from '@/Pages/Search/SearchPanel'
 
 const Header = ({ navTitle, openDrawer, closePost, goBack, url, location, type, isPostOpen }) => {
   const isSearch = /search/.test(location)
@@ -45,13 +45,13 @@ const Header = ({ navTitle, openDrawer, closePost, goBack, url, location, type, 
                 style={styles.backIcon}
               >
                 <Image
-                  source={require(`./assets/images/back.png`)}
+                  source={require(`../assets/images/back.png`)}
                   style={{ width: 19, height: 19 }}
                 />
               </View>
             ) : (
               <Image
-                source={require(`./assets/images/menu_icon.png`)}
+                source={require(`../assets/images/menu_icon.png`)}
                 style={{ width: 38, height: 38 }}
               />
             )}
@@ -70,7 +70,7 @@ const Header = ({ navTitle, openDrawer, closePost, goBack, url, location, type, 
               style={{ paddingLeft: 3, paddingRight: 3, paddingTop: 9, paddingBottom: 9 }}
             >
               <Image
-                source={require('./assets/images/share.png')}
+                source={require('../assets/images/share.png')}
                 style={{ height: 16, width: 16}}
                 resizeMode="contain"
               />
