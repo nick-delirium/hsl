@@ -55,6 +55,7 @@ class AllPosts extends React.PureComponent {
         key={item.id}
         id={item.id}
         data={item}
+        link={item.link}
         title={item.title.rendered}
         descr={item.excerpt.rendered || item.description}
         mediaUrl={item.mediaUrl ? item.mediaUrl : null}

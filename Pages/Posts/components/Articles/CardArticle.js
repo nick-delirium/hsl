@@ -36,7 +36,7 @@ class CardArticle extends React.PureComponent {
       openPost,
     } = this.props
 
-    const newPath = 'post/' + id
+    // const newPath = 'post/' + id
     const article = {
       title,
       mediaUrl,
