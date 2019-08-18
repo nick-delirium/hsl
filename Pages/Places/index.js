@@ -43,20 +43,19 @@ class Places extends PureComponent {
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
-      this.setState({
-        locationState: 1,
-      });
+      // locationState === 1, no permission
     } else {
       const location = await Location.getCurrentPositionAsync()
-      this.setState({ 
-        locationState: 2,
-        initialMapRegion: {
-          latitude: location.coords.latitude, longitude: location.coords.longitude,
-        }, 
-      })
+      const region = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      }
+      console.log(this.mapRef)
+      this.mapRef.getMapRef().animateToRegion(region, 200)
+      // locationState === 2, permission
     }
 
-   
+
   };
 
   onMarkerPress(location) {
@@ -65,7 +64,7 @@ class Places extends PureComponent {
 
   onCatPress(cat) {
     const { places } = this.props
-    const { city } = this.state
+    // const { city } = this.state
     let activeFilters = [...this.state.activeFilters]
     const index = activeFilters.indexOf(cat)
     if (index > -1) {
@@ -84,10 +83,10 @@ class Places extends PureComponent {
   renderCluster = (cluster, onPress) => {
     const pointCount = cluster.pointCount,
           coordinate = cluster.coordinate
-  
+
     return (
       <MapView.Marker pinColor='#000' coordinate={coordinate} onPress={onPress}>
-        <View style={{ width:30, height: 30, borderRadius: 50, backgroundColor: '#D1D0D0', borderColor: '#333376', borderWidth: 1}}>
+        <View style={styles.marker}>
           <Text style={{color: '#000', textAlign: 'center', paddingTop: 5}}>
             {pointCount}
           </Text>
@@ -96,24 +95,24 @@ class Places extends PureComponent {
     )
   }
 
+  onCardSitePress = () => {
+    const url = !selectedMarker.website.startsWith('http')
+      ? 'https://' + selectedMarker.website : selectedMarker.website
+    return Linking.openURL(url)
+  }
+
   renderMapState = (displayingMarkers) => {
     const { locationState } = this.state
     const width = Dimensions.get('window').width
 
     switch(locationState) {
-      case 0:
-        return (
-          <Text>Ищем ваше местоположение...</Text>
-        )
-      case 1:
-        return (
-          <Text>Нет разрешения на получение вашего местоположения.</Text>
-        )
+      case 0: // Ищем ваше местоположение...
+      case 1: // Нет разрешения на получение вашего местоположения
       case 2:
         return (
           <ClusteredMapView
-            style={ styles.map }
-            ref={map => this._map = map}
+            style={styles.map}
+            ref={(r) => this.mapRef = r}
             width={width}
             height={width}
             style={{ width, height: width, zIndex: 1000 }}
@@ -154,15 +153,19 @@ class Places extends PureComponent {
     return (
       <ScrollView contentContainerStyle={styles.container}>
         <View>
-          <ScrollView 
-            horizontal={true} 
-            contentContainerStyle={{  padding: 10, flexDirection: 'row', alignItems: 'center'}}
+          <ScrollView
+            horizontal={true}
+            contentContainerStyle={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}
             showsHorizontalScrollIndicator={false}
           >
             {categories().map((cat, i) => (
-              <TouchableOpacity key={i}
-                style={{ flex: 1, borderWidth: 1, padding: 10, borderColor: rusCats[cat].color, borderRadius: 3, marginRight: 10, 
-                backgroundColor: activeFilters.includes(cat) ? rusCats[cat].color : 'transparent' }}
+              <TouchableOpacity
+                key={`${cat}${i}`}
+                style={{
+                  ...styles.category,
+                  backgroundColor: activeFilters.includes(cat) ? rusCats[cat].color : 'transparent',
+                  borderColor: rusCats[cat].color,
+                }}
                 onPress={this.onCatPress.bind(this, cat)}
               >
                 <Text style={{ color: activeFilters.includes(cat) ? '#fff' : rusCats[cat].color, fontSize: fonts.heading }}>
@@ -177,42 +180,44 @@ class Places extends PureComponent {
             <Text>Получаем координаты </Text>
           )}
         </View>
-        
-        { this.state.locationState === 2 &&
-          <View style={{
-            backgroundColor: '#fff',
-            shadowColor: '#000',
-            shadowOpacity: 0.25,
-            shadowRadius: 4,
-            shadowOffset: {width: 0, height: 4},
-            paddingTop: 10,
-            paddingLeft: 20,
-            paddingBottom: 40,
-            margin: 15,
-          }}>
-          {selectedMarker ? (<View>
-            <Text style={{color: '#333376', fontSize: fonts.big, fontWeight: "bold", paddingBottom: 10}}>{selectedMarker.venue}</Text>
 
-            {selectedMarker.description && <Text>{formatText(selectedMarker.description, true)}</Text>}
-            {selectedMarker.address && 
-              <Text>Адрес: {selectedMarker.address}</Text> }
-            {selectedMarker.phone && 
-            <Text style={{color: '#00aadb', textDecorationLine: 'underline'}}
-              onPress={() => Linking.openURL('tel:' + selectedMarker.phone)}>
-              {selectedMarker.phone}
-            </Text>}
-            {selectedMarker.website && 
-            <Text style={{color: '#00aadb', textDecorationLine: 'underline', paddingTop: 5}}
-              onPress={() => {
-                let url = !selectedMarker.website.startsWith('http') ? 'http://' + selectedMarker.website : selectedMarker.website
-                return Linking.openURL(url)}}>
-              Перейти на сайт</Text>}
-          </View>)
-              : <Text style={{textAlign: 'center'}}>Пожалуйста, выберите точку на карте</Text>
-              }
-          </View>
-        }
-        
+        <View style={styles.markerCard}>
+          {selectedMarker ? (
+            <View>
+              <Text
+                style={{color: '#333376', fontSize: fonts.big, fontWeight: "bold", paddingBottom: 10}}>
+                {selectedMarker.venue}
+              </Text>
+
+              {selectedMarker.description && (
+                <Text>{formatText(selectedMarker.description, true)}</Text>
+              )}
+              {selectedMarker.address && (
+                <Text>Адрес: {selectedMarker.address}</Text>
+              )}
+              {selectedMarker.phone && (
+                <Text
+                  style={{color: '#00aadb', textDecorationLine: 'underline'}}
+                  onPress={() => Linking.openURL('tel:' + selectedMarker.phone)}>
+                  {selectedMarker.phone}
+                </Text>
+              )}
+              {selectedMarker.website && (
+                <Text
+                  style={{color: '#00aadb', textDecorationLine: 'underline', paddingTop: 5}}
+                  onPress={this.onCardSitePress}
+                >
+                  Перейти на сайт
+                </Text>
+              )}
+            </View>
+          ) : (
+              <Text style={{textAlign: 'center'}}>
+                Пожалуйста, выберите точку на карте
+              </Text>
+          )}
+        </View>
+
       </ScrollView>
     );
   }
@@ -229,7 +234,33 @@ const styles = StyleSheet.create({
   },
   map: {
     position: 'absolute',
-  }
+  },
+  category: {
+    flex: 1,
+    borderWidth: 1,
+    padding: 10,
+    borderRadius: 3,
+    marginRight: 10,
+  },
+  marker: {
+    width: 30,
+    height: 30,
+    borderRadius: 50,
+    backgroundColor: '#D1D0D0',
+    borderColor: '#333376',
+    borderWidth: 1,
+  },
+  markerCard: {
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    shadowOffset: {width: 0, height: 4},
+    paddingTop: 10,
+    paddingLeft: 20,
+    paddingBottom: 40,
+    margin: 15,
+  },
 });
 
 const mapDispatchToProps = (dispatch) => ({

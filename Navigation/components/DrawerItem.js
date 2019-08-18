@@ -21,14 +21,14 @@ class DrawerItem extends React.PureComponent {
   onItemPress = async (path) => {
     if (this.props.share) {
       try {
-        const result = await Share.share({
+        await Share.share({
           message: `Рекомендую мобильное приложение Hansang Lab\nhttps://hansanglab.com/get_app`,
         });
       } catch (error) {
         alert(error.message);
       }
     }
-    this.props.closePost()
+    if (this.props.closePost) this.props.closePost()
     this.props.history.push(path)
     this.props.changeLoc(path)
     this.props.closeDrawer()

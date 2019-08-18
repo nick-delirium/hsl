@@ -12,11 +12,13 @@ const FETCH_EVENTS_START = 'app.events.fetch.start'
 const FETCH_EVENTS_SUCCESS = 'app.events.fetch.succes'
 const FETCH_EVENTS_FAIL = 'app.events.fetch.fail'
 
+const REMOVE_REFRESH_FLAG = 'app.rm_flag'
+
 const DEFAULT_LIMIT = 20
 
-const fetchAllPostsReq = (limit) => ({
+const fetchAllPostsReq = (limit, isRefresh) => ({
   type: FETCH_ALLPOSTS_START,
-  payload: limit,
+  payload: { limit, isRefresh },
 })
 
 export const fetchAllSuccess = (data) => ({
@@ -29,9 +31,13 @@ const fetchAllFail = (reason) => ({
   payload: reason,
 })
 
-export const getPosts = (limit = DEFAULT_LIMIT) => {
+export const rmRefreshFlag = () => ({
+  type: REMOVE_REFRESH_FLAG,
+})
+
+export const getPosts = (limit = DEFAULT_LIMIT, isRefresh = false) => {
   return dispatch => {
-    dispatch(fetchAllPostsReq())
+    dispatch(fetchAllPostsReq(limit, isRefresh))
     const result = fetch(api.getPosts(limit))
       .then((response) => response.json())
       .then((result) => dispatch(fetchAllSuccess(result)))
@@ -39,14 +45,14 @@ export const getPosts = (limit = DEFAULT_LIMIT) => {
   }
 }
 
-const fetchPostsReq = (category, limit) => ({
+const fetchPostsReq = (category, limit, isRefresh) => ({
   type: FETCH_POSTS_START,
-  payload: {limit, category},
+  payload: { limit, category, isRefresh },
 })
 
-const fetchSuccess = (data, category) => ({
+const fetchSuccess = (data, category, isRefresh = false) => ({
   type: FETCH_POSTS_SUCCESS,
-  payload: {category: category, data: data}
+  payload: { category, data, isRefresh }
 })
 
 const fetchFail = (reason) => ({
@@ -54,24 +60,24 @@ const fetchFail = (reason) => ({
   payload: reason,
 })
 
-export const getPostsByCategory = (category, limit = DEFAULT_LIMIT) => {
+export const getPostsByCategory = (category, limit = DEFAULT_LIMIT, isRefresh = false) => {
   return dispatch => {
-    dispatch(fetchPostsReq(category))
+    dispatch(fetchPostsReq(limit, category, isRefresh))
     const result = fetch(api.getPostsByCategory(category, limit))
       .then((response) => response.json())
-      .then((result) => dispatch(fetchSuccess(result, category)))
+      .then((result) => dispatch(fetchSuccess(result, category, isRefresh)))
       .catch(e => dispatch(fetchFail(e)))
   }
 }
 
-const fetchEventsReq = (startDate, endDate, limit) => ({
+const fetchEventsReq = (startDate, endDate, limit, isRefresh) => ({
   type: FETCH_EVENTS_START,
-  payload: {startDate, endDate, limit},
+  payload: { startDate, endDate, limit, isRefresh },
 })
 
-const fetchEventsSuccess = (data) => ({
+const fetchEventsSuccess = (data, isRefresh) => ({
   type: FETCH_EVENTS_SUCCESS,
-  payload: data
+  payload: { data, isRefresh }
 })
 
 const fetchEventsFail = (reason) => ({
@@ -79,9 +85,9 @@ const fetchEventsFail = (reason) => ({
   payload: reason,
 })
 
-export const getEvents = (startDate, endDate = undefined, limit = DEFAULT_LIMIT) => {
+export const getEvents = (startDate, endDate = undefined, limit = DEFAULT_LIMIT, isRefresh = false) => {
   return dispatch => {
-    dispatch(fetchEventsReq(startDate, endDate, limit))
+    dispatch(fetchEventsReq(startDate, endDate, limit, isRefresh))
     const result = fetch(api.getEvents(startDate, endDate, limit))
       .then((response) => response.json())
       .then((result) => dispatch(fetchEventsSuccess(result.events)))
@@ -100,10 +106,16 @@ const initialState = {
 
 export default function(state = initialState, action) {
   switch (action.type) {
+    case REMOVE_REFRESH_FLAG:
+      return {
+        ...state,
+        isRefresh: false,
+      }
     case FETCH_ALLPOSTS_START:
       return {
         ...state,
         isLoading: true,
+        isRefresh: action.payload.isRefresh,
       }
     case FETCH_ALLPOSTS_SUCCESS:
       return {
@@ -123,6 +135,7 @@ export default function(state = initialState, action) {
         ...state,
         category: action.payload.category,
         isLoading: true,
+        isRefresh: action.payload.isRefresh,
       }
     case FETCH_POSTS_SUCCESS:
       return {
@@ -141,11 +154,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         isLoading: true,
+        isRefresh: action.payload.isRefresh,
       }
     case FETCH_EVENTS_SUCCESS:
       return {
         ...state,
-        data: {...state.data, [`00`]: [...action.payload]}, //00 is our id for events
+        data: {...state.data, [`00`]: [...action.payload.data]}, //00 is our id for events
         isLoading: false,
       }
     case FETCH_EVENTS_FAIL:

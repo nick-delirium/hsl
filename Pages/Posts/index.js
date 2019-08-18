@@ -10,8 +10,8 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import CardArticle from './components/Articles/CardArticle.js'
 import CardEvent from './components/Events/CardEvent'
-import { getPosts, getPostsByCategory, getEvents } from './reducer'
-import { getCategories } from '@/Navigation/reducer'
+import { getPosts, getPostsByCategory, getEvents, rmRefreshFlag } from './reducer'
+import { getCategories, setFeedType } from '@/Navigation/reducer'
 import { formatEventDate } from '@/common/format'
 import Article from './components/Articles/Article'
 import Event from './components/Events/Event'
@@ -25,8 +25,17 @@ class AllPosts extends React.PureComponent {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.isRefresh && !prevProps.isRefresh) {
+      this._FlatList.scrollToOffset({ offset: 0, animated: true })
+      this.props.removeRefreshFlag()
+    }
+  }
+
   componentDidMount() {
     this.getInitialData()
+    if (this.props.type) this.props.setFeedTypeFromRender(this.props.type)
+    else this.props.setFeedTypeFromRender('')
   }
 
   loadMoreData = () => {
@@ -46,9 +55,7 @@ class AllPosts extends React.PureComponent {
       fetchByCategory,
       fetchCategories,
       fetchEvents,
-      posts,
       type,
-      data,
       categories
     } = this.props
     fetchCategories()
@@ -117,9 +124,6 @@ class AllPosts extends React.PureComponent {
       if (type && category) {
         if (category && category.id) {
           fetchByCategory(category.id)
-          this.setState({
-            refreshing: false,
-          })
         } else {
           console.log(`Error: category ${type} not found`)
         }
@@ -222,13 +226,14 @@ class AllPosts extends React.PureComponent {
         <FlatList
           data={dataWithMedia}
           style={{ flex: 1 }}
+          ref={(r) => this._FlatList = r}
           renderItem={this.renderCardItem}
           onRefresh={this.refreshData}
           refreshing={isLoading}
           keyExtractor={this._keyExtractor}
           onEndReached={this.loadMoreData}
           removeClippedSubviews
-          onEndReachedThreshold={5}
+          onEndReachedThreshold={6}
         />
       </View>
     )
@@ -256,6 +261,7 @@ const mapStateFromProps = createStructuredSelector({
   categories: (state) => get(state, 'url.categories'),
   isPostOpen: (state) => get(state, 'url.isPostOpen'),
   postType: (state) => get(state, 'url.type'),
+  isRefresh: (state) => get(state, 'posts.isRefresh'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -263,6 +269,8 @@ const mapDispatchToProps = (dispatch) => ({
   fetchByCategory: (cat, limit) => dispatch(getPostsByCategory(cat, limit)),
   fetchEvents: (startDate, endDate, limit) => dispatch(getEvents(startDate, endDate, limit)),
   fetchCategories: () => dispatch(getCategories()),
+  setFeedTypeFromRender: (value) => dispatch(setFeedType(value)),
+  removeRefreshFlag: () => dispatch(rmRefreshFlag())
 })
 
 export default connect(

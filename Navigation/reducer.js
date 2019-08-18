@@ -5,6 +5,7 @@ const FETCH_CATEGORIES_START = 'app.categories.fetch.start'
 const FETCH_CATEGORIES_SUCCESS = 'app.categories.fetch.succes'
 const FETCH_CATEGORIES_FAIL = 'app.categories.fetch.fail'
 const TOGGLE_POST = 'app.categories.fetch.fail'
+const SET_FEED_TYPE = 'app.set_feed_type'
 
 export const changeLocation = (href) => ({
   type: CHANGE_LOCATION,
@@ -16,7 +17,13 @@ const initialState = {
   categories: [],
   isPostOpen: false,
   type: '',
+  feedType: '',
 }
+
+export const setFeedType = (type) => ({
+  type: SET_FEED_TYPE,
+  payload: type,
+})
 
 const fetchCategoriesReq = () => ({
   type: FETCH_CATEGORIES_START,
@@ -64,6 +71,11 @@ export const getCategories = () => {
 
 export default function(state = initialState, action) {
   switch (action.type) {
+    case SET_FEED_TYPE:
+      return {
+        ...state,
+        feedType: action.payload,
+      }
     case CHANGE_LOCATION:
       return {
         ...state,
