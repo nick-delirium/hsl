@@ -16,7 +16,7 @@ import HTML from 'react-native-render-html'
 import Dimensions from 'Dimensions'
 import { changeLocation } from '@/Navigation/reducer'
 import CachedImage from '@/components/CachedImage'
-import { formatText, formatDate } from '@/common/format'
+import { formatDate } from '@/common/format'
 
 class Event extends React.PureComponent {
   constructor(props) {
@@ -59,7 +59,6 @@ class Event extends React.PureComponent {
     const { width } = Dimensions.get('window')
     const startDate = formatDate(dateStart)
     const endDate = formatDate(dateEnd)
-
     return (
       <ScrollView ref='_scrollRef' contentContainerStyle={styles.scrollview}>
         <View style={styles.description}>
