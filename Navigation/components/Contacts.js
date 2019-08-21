@@ -10,7 +10,7 @@ import { contacts } from '@/constants/contacts'
 import { fonts } from '@/constants/Styles'
 
 const onLinkPress = ({ path, isEmail }) => {
-  Linking.openURL(`${isEmail ? 'mailto://' : 'https://'}${path}`)
+  Linking.openURL(`${isEmail ? 'mailto:' : 'https://'}${path}`)
 }
 
 const Contacts = () => (

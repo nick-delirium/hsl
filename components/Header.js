@@ -7,10 +7,29 @@ import {
   Share,
   TouchableOpacity,
 } from 'react-native'
+import get from 'lodash/get'
+import { connect } from 'react-redux'
+import { formatEventDate } from '@/common/format'
+import { createStructuredSelector } from 'reselect'
 import { pageTitles, } from '@/constants/pages'
+import { getPosts, getPostsByCategory, getEvents } from '@/Pages/Posts/reducer'
 import SearchPanel from '@/Pages/Search/SearchPanel'
 
-const Header = ({ navTitle, openDrawer, closePost, goBack, url, location, type, isPostOpen }) => {
+const Header = ({
+  navTitle,
+  openDrawer,
+  closePost,
+  goBack,
+  url,
+  location,
+  type,
+  isPostOpen,
+  fetchPosts,
+  fetchByCategory,
+  fetchEvents,
+  categories,
+  feedType,
+}) => {
   const isSearch = /search/.test(location)
   const isInsidePost = isPostOpen
   const isArticle = type === 'article'
@@ -22,6 +41,7 @@ const Header = ({ navTitle, openDrawer, closePost, goBack, url, location, type, 
   const shouldRenderSearch = (/news|blogs|programs|media|search/i.test(location) || location === '/') && !isPostOpen
 
   const onIconPress = shouldRenderBackButton ? (isInsidePost ? closePost : goBack) : openDrawer
+
   const share = async () => {
     try {
       await Share.share({
@@ -31,6 +51,29 @@ const Header = ({ navTitle, openDrawer, closePost, goBack, url, location, type, 
       alert(error.message);
     }
   }
+
+  refreshData = () => {
+    if (feedType === 'events') {
+      const startDate = formatEventDate()
+      // startDate, endDate, limit, isRefresh
+      fetchEvents(startDate, undefined, undefined, true)
+    } else {
+      const category = categories.find(cat => (cat.slug === feedType))
+      if (feedType && category) {
+        if (category && category.id) {
+          // category, limit, isRefresh
+          fetchByCategory(category.id, undefined, true)
+        } else {
+          console.log(`Error: category ${feedType} not found`)
+        }
+      }
+    }
+    if (!feedType) {
+      // limit, isRefresh
+      fetchPosts(undefined, true)
+    }
+  }
+
   return (
     <View style={styles.nav}>
         <View
@@ -55,13 +98,18 @@ const Header = ({ navTitle, openDrawer, closePost, goBack, url, location, type, 
                 style={{ width: 38, height: 38 }}
               />
             )}
-          <Text
-            style={shouldRenderSpecificTitle ? styles.articleTitle : styles.navTitle}
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => shouldRenderSpecificTitle ? null : refreshData()}
+            activeOpacity={shouldRenderSpecificTitle ? 1 : 0.2}
           >
-            {title && title.slice(0, 20)}
-            {title && title.length > 20 && '...'}
-          </Text>
-        </TouchableOpacity>
+            <Text
+              style={shouldRenderSpecificTitle ? styles.articleTitle : styles.navTitle}
+            >
+              {title && title.slice(0, 20)}
+              {title && title.length > 20 && '...'}
+            </Text>
+          </TouchableOpacity>
         </View>
         {isInsidePost && (
           <View style={{ marginLeft: 'auto' }}>
@@ -123,5 +171,23 @@ const styles = StyleSheet.create({
   },
 })
 
+const mapStateFromProps = createStructuredSelector({
+  isLoading: (state) => get(state, 'posts.isLoading'),
+  isError: (state) => get(state, 'posts.isError'),
+  posts: (state) => get(state, 'posts.posts'),
+  data: (state) => get(state, 'posts.data'),
+  categories: (state) => get(state, 'url.categories'),
+  postType: (state) => get(state, 'url.type'),
+  feedType: (state) => get(state, 'url.feedType'),
+})
 
-export default Header
+const mapDispatchToProps = (dispatch) => ({
+  fetchPosts: (limit, isRefresh) => dispatch(getPosts(limit, isRefresh)),
+  fetchByCategory: (cat, limit, isRefresh) => dispatch(getPostsByCategory(cat, limit, isRefresh)),
+  fetchEvents: (startDate, endDate, limit, isRefresh) => dispatch(getEvents(startDate, endDate, limit, isRefresh)),
+})
+
+export default connect(
+  mapStateFromProps,
+  mapDispatchToProps
+)(Header)

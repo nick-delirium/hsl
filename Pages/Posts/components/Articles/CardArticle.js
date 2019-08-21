@@ -24,9 +24,9 @@ class CardArticle extends React.PureComponent {
   onItemPress = () => {
     const {
       setPost,
-      changeLoc,
-      history,
-      path,
+      // changeLoc,
+      // history,
+      // path,
       title,
       data,
       link,
@@ -56,7 +56,10 @@ class CardArticle extends React.PureComponent {
     const renderDescr = this.props.htmlView ? descr : descr.split('\n<')[0]
       return (
         <View>
-          <TouchableOpacity onPress={this.onItemPress}>
+          <TouchableOpacity
+            delayPressIn={50}
+            onPress={this.onItemPress}
+          >
             <View style={styles.card}>
             {mediaUrl && (
               <CachedImage
