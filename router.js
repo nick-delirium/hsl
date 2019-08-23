@@ -3,10 +3,6 @@ import {
   StyleSheet,
   Dimensions,
   View,
-  Text,
-  Image,
-  Share,
-  TouchableOpacity,
 } from 'react-native'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -14,7 +10,7 @@ import get from 'lodash/get'
 import { Route } from 'react-router-native'
 import Places from './Pages/Places'
 import { togglePost } from './Navigation/reducer'
-import pages, { pageTitles, } from './constants/pages'
+import pages from './constants/pages'
 import Posts from './Pages/Posts'
 import Article from './Pages/Posts/components/Articles/Article'
 import Event from './Pages/Posts/components/Events/Event'
