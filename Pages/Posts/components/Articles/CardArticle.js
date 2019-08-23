@@ -57,7 +57,8 @@ class CardArticle extends React.PureComponent {
       return (
         <View>
           <TouchableOpacity
-            delayPressIn={50}
+            delayPressIn={200}
+            activeOpacity={0.6}
             onPress={this.onItemPress}
           >
             <View style={styles.card}>

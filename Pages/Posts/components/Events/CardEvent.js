@@ -47,7 +47,10 @@ constructor(props) {
     const startDate = formatDate(dateStart)
     const endDate = formatDate(dateEnd)
     return (
-    <TouchableOpacity onPress={() => this.onItemPress(this.props)}>
+    <TouchableOpacity 
+      delayPressIn={200}
+      activeOpacity={0.6}
+      onPress={() => this.onItemPress(this.props)}>
       <View style={styles.card}>
 
       {image && (
