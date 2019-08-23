@@ -1,14 +1,9 @@
 import React from 'react'
-import { 
-  StyleSheet, 
-  View, 
+import {
+  StyleSheet,
+  View,
   StatusBar,
-  Image,
-  Platform,
-  Text,
   Animated,
-  Easing,
-  Dimensions
 } from 'react-native'
 import { AppLoading, SplashScreen } from 'expo'
 import { Asset } from 'expo-asset'
@@ -21,13 +16,11 @@ import RouterWithDrawer from './Navigation'
 import api from './api'
 import { fetchAllSuccess } from './Pages/Posts/reducer'
 
-//https://docs.expo.io/versions/latest/sdk/splash-screen/
-//https://docs.expo.io/versions/latest/react-native/animations/
 class AppIndex extends React.Component {
   constructor(props) {
     super(props);
     SplashScreen.preventAutoHide();
-  
+
     this.state = {
       fadeAnim: new Animated.Value(0),  // Initial value for opacity: 0
       isSplashReady: false,
@@ -37,22 +30,20 @@ class AppIndex extends React.Component {
   }
 
   render() {
-    const { width, height } = Dimensions.get("window");
-
     if (!this.state.isSplashReady) {
       return (
         <AppLoading
           startAsync={this._cacheSplashResourcesAsync}
           onFinish={() => this.setState({ isSplashReady: true })}
           onError={console.warn}
-          autoHideSplash={false} 
+          autoHideSplash={false}
         />
       )
     }
-  
+
     if (this.state.isSplashReady && !this.state.isAppReady) {
       return (
-        <Animated.View 
+        <Animated.View
           style={{
             opacity: this.state.fadeAnim,
             justifyContent: 'center',
@@ -75,7 +66,7 @@ class AppIndex extends React.Component {
     return (
       <NativeRouter>
         <View style={styles.container}>
-          <StatusBar 
+          <StatusBar
             style={{ zIndex: 10 }}
             barStyle='light-content'
             backgroundColor="#333376"
@@ -85,7 +76,7 @@ class AppIndex extends React.Component {
       </NativeRouter>
     )
   }
-  
+
   _cacheSplashResourcesAsync = async () => {
     const gif = require('./assets/images/HSL-logo.png');
     return Asset.fromModule(gif).downloadAsync()
@@ -108,7 +99,7 @@ class AppIndex extends React.Component {
               duration: 500,
             }
           ).start(() => {
-            this.setState({ isAppReady: true }) 
+            this.setState({ isAppReady: true })
           })
         })
         .catch(e => console.error(e))

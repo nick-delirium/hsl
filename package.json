@@ -5,7 +5,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "eject": "expo eject",
-    "test": "node ./node_modules/jest/bin/jest.js --watchAll"
+    "test": "node_modules/.bin/jest"
   },
   "husky": {
     "hooks": {
@@ -13,7 +13,11 @@
     }
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "timers": "fake",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|react-router-native|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|sentry-expo|native-base)"
+    ]
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
@@ -37,9 +41,18 @@
   },
   "devDependencies": {
     "babel-preset-expo": "5.0.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0",
     "husky": "^3.0.4",
     "install-deps-postmerge": "^1.0.5",
-    "jest-expo": "34.0.0"
+    "jest-enzyme": "^7.1.0",
+    "jest-expo": "34.0.0",
+    "jsdom": "^15.1.1",
+    "react-dom": "16.8.3",
+    "react-native-mock-render": "^0.1.5",
+    "react-native-testing-library": "^1.11.1",
+    "react-test-renderer": "16.8.3",
+    "redux-mock-store": "^1.5.3"
   },
   "private": true
 }
