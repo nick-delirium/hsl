@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     left: 0,
     zIndex: 9,
     height,
-    backgroundColor: '#fff',
+    backgroundColor: '#E1E1E1',
     flex: 1,
   }
 })

@@ -166,6 +166,7 @@ const styles = StyleSheet.create({
   },
   description: {
     paddingBottom: 30,
+    backgroundColor: '#fff',
   },
   row: {
     flex: 1,
