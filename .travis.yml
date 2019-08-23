@@ -12,4 +12,4 @@ before_script:
   - export PATH="$HOME/.yarn/bin:$PATH"
   - yarn global add expo-cli
 script:
-  = yarn run test
+  - yarn run test
