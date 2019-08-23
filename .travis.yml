@@ -1,15 +1,12 @@
 language: node_js
 node_js:
-  - node
   - lts/*
+  - node
 cache:
   directories:
     - ~/.npm
     - .jest
 before_script:
   - npm install -g npm@latest
-  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version $YARN_VERSION
-  - export PATH="$HOME/.yarn/bin:$PATH"
-  - yarn global add expo-cli
 script:
   - yarn run test
