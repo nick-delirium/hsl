@@ -6,7 +6,7 @@ import eventReducer from '@/Pages/Posts/components/Events/eventReducer'
 import searchReducer from '@/Pages/Search/reducer'
 import placesReducer from '@/Pages/Places/reducer'
 
-export const rootReducer = combineReducers({
+const rootReducer = combineReducers({
   posts: postsReducer,
   url: urlReducer,
   article: articleReducer,
@@ -14,3 +14,5 @@ export const rootReducer = combineReducers({
   search: searchReducer,
   locations: placesReducer,
 })
+
+export default rootReducer

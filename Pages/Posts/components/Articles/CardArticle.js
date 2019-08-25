@@ -54,18 +54,20 @@ class CardArticle extends React.PureComponent {
   render () {
     const { title, descr, categories, id, mediaUrl, type } = this.props
     const renderDescr = this.props.htmlView ? descr : descr.split('\n<')[0]
-      return (
-        <View>
-          <TouchableOpacity
-            delayPressIn={50}
-            onPress={this.onItemPress}
-          >
-            <View style={styles.card}>
+    const isPromo = categories.map(c => c.id).includes(617)
+    const categoriesWithoutPromo = categories.filter(c => c.id !== 617)
+    return (
+      <View>
+        <TouchableOpacity
+          delayPressIn={50}
+          onPress={this.onItemPress}
+        >
+          <View style={styles.card}>
             {mediaUrl && (
               <CachedImage
                 source={mediaUrl}
                 title={mediaUrl.slice(-4)}
-                categories={!type && categories[0] ? categories[0] : undefined}
+                categories={!type && categoriesWithoutPromo[0] ? categoriesWithoutPromo[0] : undefined}
                 style={{
                   flex: 1,
                   height: 190,
@@ -74,18 +76,20 @@ class CardArticle extends React.PureComponent {
                 }}
               />
             )}
-            <View style={styles.cardText}>
-              <Text
-                style={{fontWeight: 'bold', fontSize: fonts.big, paddingBottom: 4}}
-              >
-                {title}
-              </Text>
-              <Text
-                style={{fontSize: fonts.normal}}
-              >
-                {renderDescr}...
-              </Text>
-            </View>
+            {!isPromo && (
+              <View style={styles.cardText}>
+                <Text
+                  style={{fontWeight: 'bold', fontSize: fonts.big, paddingBottom: 4}}
+                >
+                  {title}
+                </Text>
+                <Text
+                  style={{fontSize: fonts.normal}}
+                >
+                  {renderDescr}...
+                </Text>
+              </View>
+            )}
           </View>
         </TouchableOpacity>
       </View>

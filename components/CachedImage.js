@@ -9,6 +9,8 @@ import {
 } from 'react-native'
 import * as FileSystem from 'expo-file-system'
 import get from 'lodash/get'
+import cacheFolder from '../constants/cacheFolder'
+
 
 class CachedImage extends Component {
   _isMounted = false;
@@ -24,7 +26,7 @@ class CachedImage extends Component {
 
   componentDidMount() {
     FileSystem.getInfoAsync(
-      `${FileSystem.cacheDirectory + this.props.title}.jpg`
+      `${cacheFolder + this.props.title}.jpg`
     ).then(({ exists, uri }) => {
       if (exists) this.loadLocal(uri)
       else {
@@ -40,12 +42,12 @@ class CachedImage extends Component {
             } else {
               FileSystem.downloadAsync(
                 url,
-                `${FileSystem.cacheDirectory + this.props.title}.${extension}`
+                `${cacheFolder + this.props.title}.${extension}`
               ).then(({ uri }) => {
                 this.loadLocal(Platform.OS === 'ios'? uri : url)
               }).catch(e => {
                 // if the online download fails, load the local version
-                this.loadLocal(`${FileSystem.cacheDirectory + this.props.title}.${extension}`)
+                this.loadLocal(`${cacheFolder + this.props.title}.${extension}`)
               });
             }
           })
@@ -53,13 +55,13 @@ class CachedImage extends Component {
           const extension = this.props.source.slice((this.props.source.lastIndexOf(".") - 1 >>> 0) + 2)
           FileSystem.downloadAsync(
             this.props.source,
-            `${FileSystem.cacheDirectory + this.props.title}.${extension}`
+            `${cacheFolder + this.props.title}.${extension}`
           ).then(({ uri }) => {
             this.loadLocal(Platform.OS === 'ios'? uri : this.props.source)
           }).catch(e => {
             console.log('Image loading error:', e)
             // if the online download fails, load the local version
-            this.loadLocal(`${FileSystem.cacheDirectory + this.props.title}.${extension}`)
+            this.loadLocal(`${cacheFolder + this.props.title}.${extension}`)
           });
         }
       }
