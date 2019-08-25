@@ -19,7 +19,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.hansanglab.hansanglabapp",
+      "bundleIdentifier": "hansanglab.com",
+      "icon": "./assets/images/appIcons/app_store_icon_HSL.png",
       "config": {
         "googleMapsApiKey": "api"
       }
@@ -33,7 +34,9 @@
         "com.google.android.c2dm.permission.RECEIVE",
         "com.google.android.providers.gsf.permission.READ_GSERVICES"
       ],
+      "versionCode": 8,
       "package": "com.hansanglab.hansanglabapp",
+      "icon": "./assets/images/appIcons/playstore_icon_HSL.png",
       "config": {
         "googleMaps": {
           "apiKey": "api"

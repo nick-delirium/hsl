@@ -12,8 +12,9 @@ import { compose } from 'redux'
 import CachedImage from '@/components/CachedImage'
 import { changeLocation } from '@/Navigation/reducer'
 import { setEvent } from './eventReducer'
-import { formatText, formatDate } from '@/common/format'
+import { formatDate } from '@/common/format'
 import { togglePost } from '@/Navigation/reducer'
+import { fonts } from '@/constants/Styles'
 
 class CardEvent extends React.Component {
 constructor(props) {
@@ -46,7 +47,10 @@ constructor(props) {
     const startDate = formatDate(dateStart)
     const endDate = formatDate(dateEnd)
     return (
-    <TouchableOpacity onPress={() => this.onItemPress(this.props)}>
+    <TouchableOpacity 
+      delayPressIn={200}
+      activeOpacity={0.6}
+      onPress={() => this.onItemPress(this.props)}>
       <View style={styles.card}>
 
       {image && (
@@ -64,8 +68,10 @@ constructor(props) {
         />
       )}
       <View style={styles.cardText} >
-        <Text style={{fontWeight: 'bold', fontSize: 18, paddingBottom: 4}}>{title}</Text>
-        <Text style={{fontSize: 14}}>{formatText(smallDescription)}</Text>
+        <Text style={{fontWeight: 'bold', fontSize: fonts.big, paddingBottom: 4}}>{title}</Text>
+        <Text style={{fontSize: fonts.normal, lineHeight: 18}}>
+          {smallDescription}...
+        </Text>
 
         <View style={{ ...styles.row, justifyContent: 'space-between', paddingTop: 10, paddingBottom: 20 }}>
           <View style={{...styles.row, flex: 1}}>
@@ -114,7 +120,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     paddingRight: 15,
     paddingTop: 15,
-    fontSize: 18,
+    fontSize: fonts.big,
   },
   row: {
     flex: 1,

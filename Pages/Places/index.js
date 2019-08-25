@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Linking } from 'react-native'
+import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Linking, Image, Share } from 'react-native'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import MapView from 'react-native-maps'
@@ -50,7 +50,7 @@ class Places extends PureComponent {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       }
-      console.log(this.mapRef)
+      // console.log(this.mapRef)
       this.mapRef.getMapRef().animateToRegion(region, 200)
       // locationState === 2, permission
     }
@@ -101,6 +101,19 @@ class Places extends PureComponent {
     return Linking.openURL(url)
   }
 
+  share = async (place) => {
+    const description = place.description ? `${formatText(place.description, true)}. ` : ''
+    const address = place.address ? `${place.address}. ` : ''
+    const link = `https://www.google.com/maps/search/?api=1&query=${place.geo_lat},${place.geo_lng}`
+    try {
+      await Share.share({
+        message: `${place.venue}. ${description}${address}\n${link}`,
+      });
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   renderMapState = (displayingMarkers) => {
     const { locationState } = this.state
     const width = Dimensions.get('window').width
@@ -149,7 +162,6 @@ class Places extends PureComponent {
   render() {
     const { selectedMarker, activeFilters } = this.state
     const displayingMarkers = this.state.displayingMarkers.length ? this.state.displayingMarkers : this.props.places
-
     return (
       <ScrollView contentContainerStyle={styles.container}>
         <View>
@@ -184,10 +196,24 @@ class Places extends PureComponent {
         <View style={styles.markerCard}>
           {selectedMarker ? (
             <View>
-              <Text
-                style={{color: '#333376', fontSize: fonts.big, fontWeight: "bold", paddingBottom: 10}}>
-                {selectedMarker.venue}
-              </Text>
+              <View style={{flexDirection: 'row', flex: 1}}>
+                <Text
+                  style={{ flex: 0.9, color: '#333376', fontSize: fonts.big, fontWeight: "bold", paddingBottom: 10}}>
+                  {selectedMarker.venue}
+                </Text>
+                <View style={{ marginLeft: 'auto' }}>
+                  <TouchableOpacity
+                    onPress={() => {this.share(selectedMarker)}}
+                    style={{ flex: 0.1, paddingLeft: 5, paddingTop: 9, paddingBottom: 9 }}
+                  >
+                    <Image
+                      source={require('../../assets/images/share-dark.png')}
+                      style={{ height: 20, width: 20}}
+                      resizeMode="contain"
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
 
               {selectedMarker.description && (
                 <Text>{formatText(selectedMarker.description, true)}</Text>
@@ -246,7 +272,7 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 50,
-    backgroundColor: '#D1D0D0',
+    backgroundColor: '#E1E1E1',
     borderColor: '#333376',
     borderWidth: 1,
   },
@@ -258,6 +284,7 @@ const styles = StyleSheet.create({
     shadowOffset: {width: 0, height: 4},
     paddingTop: 10,
     paddingLeft: 20,
+    paddingRight: 20,
     paddingBottom: 40,
     margin: 15,
   },
