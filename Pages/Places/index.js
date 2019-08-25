@@ -50,7 +50,6 @@ class Places extends PureComponent {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       }
-      // console.log(this.mapRef)
       this.mapRef.getMapRef().animateToRegion(region, 200)
       // locationState === 2, permission
     }

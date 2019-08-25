@@ -6,6 +6,7 @@ const FETCH_CATEGORIES_SUCCESS = 'app.categories.fetch.succes'
 const FETCH_CATEGORIES_FAIL = 'app.categories.fetch.fail'
 const TOGGLE_POST = 'app.categories.fetch.fail'
 const SET_FEED_TYPE = 'app.set_feed_type'
+const SET_SUBGETEGORIES = 'app.set_subcategories'
 
 export const changeLocation = (href) => ({
   type: CHANGE_LOCATION,
@@ -15,6 +16,7 @@ export const changeLocation = (href) => ({
 const initialState = {
   path: '/',
   categories: [],
+  subCategories: [],
   isPostOpen: false,
   type: '',
   feedType: '',
@@ -69,6 +71,11 @@ export const getCategories = () => {
   }
 }
 
+export const setSubCategories = (subCategories) => ({
+  type: SET_SUBGETEGORIES,
+  payload: subCategories,
+})
+
 export default function(state = initialState, action) {
   switch (action.type) {
     case SET_FEED_TYPE:
@@ -104,6 +111,11 @@ export default function(state = initialState, action) {
         errorMessage: action.payload,
         isLoading: false,
         isError: true,
+      }
+    case SET_SUBGETEGORIES:
+      return {
+        ...state,
+        subCategories: action.payload
       }
 
     default:

@@ -6,6 +6,7 @@ const FETCH_ALLPOSTS_FAIL = 'app.posts_all.fetch.fail'
 
 const FETCH_POSTS_START = 'app.posts.fetch.start'
 const FETCH_POSTS_SUCCESS = 'app.posts.fetch.succes'
+const FETCH_POSTS_BY_SUBCATEGORY_SUCCESS = 'app.posts.by_subcategory.success'
 const FETCH_POSTS_FAIL = 'app.posts.fetch.fail'
 
 const FETCH_EVENTS_START = 'app.events.fetch.start'
@@ -105,17 +106,28 @@ const fetchSuccess = (data, category, isRefresh = false) => ({
   payload: { category, data, isRefresh }
 })
 
+const fetchSubCategorySuccess = (data, category, isRefresh = false, mainCategory) => ({
+  type: FETCH_POSTS_BY_SUBCATEGORY_SUCCESS,
+  payload: { category, data, isRefresh, mainCategory }
+})
+
 const fetchFail = (reason) => ({
   type: FETCH_POSTS_FAIL,
   payload: reason,
 })
 
-export const getPostsByCategory = (category, limit = DEFAULT_LIMIT, isRefresh = false) => {
+export const getPostsByCategory = (category, limit = DEFAULT_LIMIT, isRefresh = false, mainCategory) => {
   return dispatch => {
+    console.log(api.getPostsByCategory(category, limit, mainCategory))
     dispatch(fetchPostsReq(limit, category, isRefresh))
-    const result = fetch(api.getPostsByCategory(category, limit))
+    const result = fetch(api.getPostsByCategory(category, limit, mainCategory))
       .then((response) => response.json())
-      .then((result) => dispatch(fetchSuccess(result, category, isRefresh)))
+      .then((result) => {
+        if (mainCategory) {
+          dispatch(fetchSubCategorySuccess(result, category, isRefresh, mainCategory))
+        } else {
+          dispatch(fetchSuccess(result, category, isRefresh))
+        }})
       .catch(e => dispatch(fetchFail(e)))
   }
 }
@@ -190,7 +202,20 @@ export default function(state = initialState, action) {
     case FETCH_POSTS_SUCCESS:
       return {
         ...state,
-        data: {...state.data, [`${action.payload.category}`]: [...action.payload.data]},
+        data: {
+          ...state.data, 
+          [`${action.payload.category}`]: [...action.payload.data]
+        },
+        isLoading: false,
+      }
+    case FETCH_POSTS_BY_SUBCATEGORY_SUCCESS:
+      const { category, mainCategory, data } = action.payload
+      const withSubcategory = Boolean(mainCategory)
+      return {
+        ...state,
+        data: {
+          [`${withSubcategory ? mainCategory : category}`]: [...data]
+        },
         isLoading: false,
       }
     case FETCH_POSTS_FAIL:

@@ -3,7 +3,7 @@ import { BackHandler, Keyboard } from 'react-native'
 import Drawer from 'react-native-drawer'
 import DrawerPanel from './components/DrawerPanel'
 import RouterView from '../router.js'
-import { getCategories, togglePost } from './reducer'
+import { togglePost } from './reducer'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -85,7 +85,6 @@ class RouterWithDrawer extends React.PureComponent {
 }
 
 const mapStateFromProps = createStructuredSelector({
-  categories: (state) => get(state, 'url.categories'),
   isPostOpen: (state) => get(state, 'url.isPostOpen'),
 })
 
