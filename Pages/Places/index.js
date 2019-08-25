@@ -50,7 +50,6 @@ class Places extends PureComponent {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
       }
-      // console.log(this.mapRef)
       this.mapRef.getMapRef().animateToRegion(region, 200)
       // locationState === 2, permission
     }
@@ -282,6 +281,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     shadowOffset: {width: 0, height: 4},
+    elevation: 4,
     paddingTop: 10,
     paddingLeft: 20,
     paddingRight: 20,

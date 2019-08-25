@@ -15,13 +15,15 @@ import { getCategories, setFeedType } from '@/Navigation/reducer'
 import { formatEventDate } from '@/common/format'
 import Article from './components/Articles/Article'
 import Event from './components/Events/Event'
+import BlogCategories from './components/Articles/BlogCategories'
 const height = Dimensions.get('window').height
 
 class AllPosts extends React.PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      treshold: 0
+      treshold: 20,
+      isEndListLoading: false,
     }
   }
 
@@ -43,9 +45,14 @@ class AllPosts extends React.PureComponent {
     const { isLoading } = this.props
     if (isLoading) return null
     else {
-      const newTreshold = treshold + 10
-      this.getData(newTreshold)
-      this.setState({ treshold: newTreshold })
+      if (!this.state.isEndListLoading) {
+        this.setState({ isEndListLoading: true }, () => {
+          setTimeout(() => {
+            const newTreshold = treshold + 10
+            this.getData(newTreshold)
+          }, 0)
+        })
+      }
     }
   }
 
@@ -53,27 +60,36 @@ class AllPosts extends React.PureComponent {
     const {
       fetchPosts,
       fetchByCategory,
-      fetchCategories,
       fetchEvents,
       type,
-      categories
+      categories,
+      subCategories,
     } = this.props
-    fetchCategories()
 
     if (type === 'events') {
       let startDate = formatEventDate()
       fetchEvents(startDate, undefined, treshold)
+      this.setState({ treshold, isEndListLoading: false })
     } else {
       let category = categories.find(cat => (cat.slug === type))
       if (type && category) {
         if (category && category.id) {
-          fetchByCategory(category.id, treshold)
+          if (type === 'blogs' && subCategories.length > 0) {
+            const catIds = subCategories.join(',')
+            fetchByCategory(catIds, treshold, undefined, category.id)
+            this.setState({ treshold, isEndListLoading: false })
+          } else {
+            fetchByCategory(category.id, treshold)
+            this.setState({ treshold, isEndListLoading: false })
+          }
         } else {
           console.log(`Error: category ${type} not found`)
         }
+      } else {
+        fetchPosts(treshold)
+        this.setState({ treshold, isEndListLoading: false })
       }
     }
-    fetchPosts(treshold)
   }
 
   getInitialData = () => {
@@ -85,7 +101,8 @@ class AllPosts extends React.PureComponent {
       posts,
       type,
       data,
-      categories
+      categories,
+      subCategories,
     } = this.props
     if (!categories || categories.length === 0) {
       fetchCategories()
@@ -99,6 +116,10 @@ class AllPosts extends React.PureComponent {
       if (type && category && (!data[`${category.id}`] || data[`${category.id}`].length === 0)) {
         if (category && category.id) {
           console.log(`fetching for ${type}`)
+          if (type === 'blogs' && subCategories.length > 0) {
+            const catIds = subCategories.join(',')
+            fetchByCategory(catIds, treshold, undefined, category.id)
+          } else
           fetchByCategory(category.id)
         } else {
           console.log(`Error: category ${type} not found`)
@@ -115,6 +136,7 @@ class AllPosts extends React.PureComponent {
       fetchEvents,
       type,
       categories,
+      subCategories,
     } = this.props
     if (type === 'events') {
       let startDate = formatEventDate()
@@ -123,6 +145,10 @@ class AllPosts extends React.PureComponent {
       let category = categories.find(cat => (cat.slug === type))
       if (type && category) {
         if (category && category.id) {
+          if (type === 'blogs' && subCategories.length > 0) {
+            const catIds = subCategories.join(',')
+            fetchByCategory(catIds, undefined, undefined, category.id)
+          } else
           fetchByCategory(category.id)
         } else {
           console.log(`Error: category ${type} not found`)
@@ -216,31 +242,33 @@ class AllPosts extends React.PureComponent {
     }
     let category = categories.find(cat => (cat.slug === type))
     let displayingPosts = type ? (category ? data[`${category.id}`] : data[`00`]) : posts
-
-    const dataWithMedia = displayingPosts && displayingPosts.map((item) => {
-      const mediaUrl = get(item, '_links.wp:featuredmedia.href', null)
-        || `https://hansanglab.com/wp-json/wp/v2/media/${get(item, 'featured_media')}`
-      return {
-        ...item,
-        mediaUrl,
-      }
-    })
-
+    const dataWithMedia = displayingPosts ?
+      displayingPosts.map((item) => {
+        const mediaUrl = get(item, '_links.wp:featuredmedia.href', null)
+          || `https://hansanglab.com/wp-json/wp/v2/media/${get(item, 'featured_media')}`
+        return {
+          ...item,
+          mediaUrl,
+        }
+      }) : []
     return (
       <View style={{ position: 'relative', flex: 1 }}>
         {isPostOpen && this.renderPost(postType)}
-        <FlatList
-          data={dataWithMedia}
-          style={{ flex: 1 }}
-          ref={(r) => this._FlatList = r}
-          renderItem={this.renderCardItem}
-          onRefresh={this.refreshData}
-          refreshing={isLoading}
-          keyExtractor={this._keyExtractor}
-          onEndReached={this.loadMoreData}
-          removeClippedSubviews
-          onEndReachedThreshold={6}
-        />
+        {dataWithMedia.length > 0 && (
+          <FlatList
+            data={dataWithMedia}
+            style={{ flex: 1 }}
+            ref={(r) => this._FlatList = r}
+            renderItem={this.renderCardItem}
+            onRefresh={this.refreshData}
+            refreshing={isLoading}
+            keyExtractor={this._keyExtractor}
+            onEndReached={this.loadMoreData}
+            removeClippedSubviews
+            onEndReachedThreshold={1}
+            ListHeaderComponent={ type === 'blogs' ? (<BlogCategories/>) : undefined} 
+          />
+        )}
       </View>
     )
   }
@@ -265,6 +293,7 @@ const mapStateFromProps = createStructuredSelector({
   posts: (state) => get(state, 'posts.posts'),
   data: (state) => get(state, 'posts.data'),
   categories: (state) => get(state, 'url.categories'),
+  subCategories: (state) => get(state, 'url.subCategories'),
   isPostOpen: (state) => get(state, 'url.isPostOpen'),
   postType: (state) => get(state, 'url.type'),
   isRefresh: (state) => get(state, 'posts.isRefresh'),
@@ -272,7 +301,7 @@ const mapStateFromProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   fetchPosts: (limit) => dispatch(getPosts(limit)),
-  fetchByCategory: (cat, limit) => dispatch(getPostsByCategory(cat, limit)),
+  fetchByCategory: (cat, limit, isRefresh = false, mainCategory) => dispatch(getPostsByCategory(cat, limit, isRefresh, mainCategory)),
   fetchEvents: (startDate, endDate, limit) => dispatch(getEvents(startDate, endDate, limit)),
   fetchCategories: () => dispatch(getCategories()),
   setFeedTypeFromRender: (value) => dispatch(setFeedType(value)),
