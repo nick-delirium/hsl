@@ -1,8 +1,8 @@
 import api from '../../api'
 
-const FETCH_ALLPOSTS_START = 'app.allposts.fetch.start'
-const FETCH_ALLPOSTS_SUCCESS = 'app.allposts.fetch.succes'
-const FETCH_ALLPOSTS_FAIL = 'app.allposts.fetch.fail'
+const FETCH_ALLPOSTS_START = 'app.posts_all.fetch.start'
+const FETCH_ALLPOSTS_SUCCESS = 'app.posts_all.fetch.succes'
+const FETCH_ALLPOSTS_FAIL = 'app.posts_all.fetch.fail'
 
 const FETCH_POSTS_START = 'app.posts.fetch.start'
 const FETCH_POSTS_SUCCESS = 'app.posts.fetch.succes'
@@ -12,11 +12,15 @@ const FETCH_EVENTS_START = 'app.events.fetch.start'
 const FETCH_EVENTS_SUCCESS = 'app.events.fetch.succes'
 const FETCH_EVENTS_FAIL = 'app.events.fetch.fail'
 
+const FETCH_ADS_START  = 'app.ads.fetch.start'
+const FETCH_ADS_SUCCESS  = 'app.ads.fetch.success'
+const FETCH_ADS_FAIL = 'app.ads.fetch.fail'
+
 const REMOVE_REFRESH_FLAG = 'app.rm_flag'
 
 const DEFAULT_LIMIT = 20
 
-const fetchAllPostsReq = (limit, isRefresh) => ({
+export const fetchAllPostsReq = (limit, isRefresh) => ({
   type: FETCH_ALLPOSTS_START,
   payload: { limit, isRefresh },
 })
@@ -26,7 +30,7 @@ export const fetchAllSuccess = (data) => ({
   payload: data,
 })
 
-const fetchAllFail = (reason) => ({
+export const fetchAllFail = (reason) => ({
   type: FETCH_ALLPOSTS_FAIL,
   payload: reason,
 })
@@ -35,12 +39,58 @@ export const rmRefreshFlag = () => ({
   type: REMOVE_REFRESH_FLAG,
 })
 
+export const fetchAdsReq = (limit, isRefresh) => ({
+  type: FETCH_ADS_START,
+  payload: { limit, isRefresh }
+})
+export const fetchAdsSuccess = (data) => ({
+  type: FETCH_ADS_SUCCESS,
+  payload: data,
+})
+const fetchAdsFail = (reason) => ({
+  type: FETCH_ADS_FAIL,
+  payload: reason,
+})
+export const getAds = (limit = DEFAULT_LIMIT, isRefresh = false) => {
+  return dispatch => {
+    dispatch(fetchAdsReq(limit, isRefresh))
+    fetch(api.getPromoCards(limit))
+      .then(response => response.json())
+      .then(result => dispatch(fetchAdsSuccess(result)))
+      .catch(e => dispatch(fetchAdsFail(e)))
+  }
+}
+// flatten( [[1,2], 3, [[4]]] ) => [1, 2, 3, 4]
+export const flatten = list => list.reduce(
+  (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []
+);
+
 export const getPosts = (limit = DEFAULT_LIMIT, isRefresh = false) => {
   return dispatch => {
     dispatch(fetchAllPostsReq(limit, isRefresh))
-    const result = fetch(api.getPosts(limit))
+    dispatch(fetchAdsReq(limit, isRefresh))
+    const fetchResult = fetch(api.getPosts(limit))
       .then((response) => response.json())
-      .then((result) => dispatch(fetchAllSuccess(result)))
+      .then(posts => {
+        fetch(api.getPromoCards(limit))
+          .then(r => r.json())
+          .then(ads => {
+            const result = posts.map(
+              (post, index) => {
+                const div = index % 3
+                const pointer = index % 3 - 1
+                const ad = ads[pointer]
+                return index > 0 && div === 0 && ad
+                  ? [post, ad] : post
+              }
+            )
+            const flatResult = flatten(result)
+            // console.log(ads, flatResult.slice(0, 4))
+            dispatch(fetchAdsSuccess(ads))
+            return dispatch(fetchAllSuccess(flatResult))
+          })
+          .catch(e => dispatch(fetchAdsFail(e)))
+      })
       .catch(e => dispatch(fetchAllFail(e)))
   }
 }

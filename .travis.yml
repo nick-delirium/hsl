@@ -1,12 +1,17 @@
+sudo: false
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change
+
 language: node_js
 node_js:
-  - lts/*
-  - node
+  - stable
 cache:
+  yarn: true
   directories:
     - ~/.npm
     - .jest
-before_script:
-  - npm install -g npm@latest
 script:
   - yarn run test

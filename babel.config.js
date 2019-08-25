@@ -3,6 +3,7 @@ module.exports = function(api) {
   return {
     presets: ['babel-preset-expo'],
     plugins: [
+      // ['transform-remove-console'],
       ['module-resolver', {
         cwd: "packagejson",
         src: ['./node_modules'],
