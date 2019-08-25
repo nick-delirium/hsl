@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     left: 0,
     zIndex: 9,
     height,
-    backgroundColor: '#D1D0D0',
+    backgroundColor: '#E1E1E1',
     flex: 1,
   }
 })

@@ -1,3 +1,4 @@
+
 export const formatDate = (date) => {
   if (!date) {
     return
@@ -15,9 +16,7 @@ export const formatDate = (date) => {
 }
 
 export const formatText = (text, noDots) => {
-  let newText = text.replace(/(<p>)/gm, "")
-  newText = newText.split('<')[0] + `${!noDots ? '...' : ''}`
-  return(newText)
+  return text.replace(/<[^>]*>/g, '') + (!noDots ? '...' : '')
 }
 
 export const formatEventDate = () => {

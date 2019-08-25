@@ -57,7 +57,8 @@ class CardArticle extends React.PureComponent {
       return (
         <View>
           <TouchableOpacity
-            delayPressIn={50}
+            delayPressIn={200}
+            activeOpacity={0.6}
             onPress={this.onItemPress}
           >
             <View style={styles.card}>
@@ -81,7 +82,7 @@ class CardArticle extends React.PureComponent {
                 {title}
               </Text>
               <Text
-                style={{fontSize: fonts.normal}}
+                style={{fontSize: fonts.normal, lineHeight: 18}}
               >
                 {renderDescr}...
               </Text>
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     paddingRight: 15,
     paddingTop: 15,
-    fontSize: 18,
+    fontSize: fonts.big,
   },
 })
 

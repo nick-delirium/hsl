@@ -146,12 +146,14 @@ class AllPosts extends React.PureComponent {
     //  //}
     //   ))
       const descrItem = get(item, 'description', '')
+        .replace(/<[^>]*>/g, '')
+        .slice(0, 100).split('').join('')
       return (
         <CardEvent
           key={item.id}
           id={item.id}
-          description={descrItem}
-          smallDescription={descrItem.slice(0, 100).split('').join('')}
+          description={get(item, 'description', '')}
+          smallDescription={descrItem}
           title={item.title}
           dateStart={item.start_date} //utc_start_date
           dateEnd={item.end_date}
@@ -169,7 +171,11 @@ class AllPosts extends React.PureComponent {
       )
     }
     const descrRendered = get(item, 'excerpt.rendered', '')
-    const descrItem = get(item, 'description', '').replace(/<[^>]*>/g, '')
+      .replace(/<[^>]*>/g, '')
+      .slice(0, 100).split('').join('')
+    const descrItem = get(item, 'description', '')
+      .replace(/<[^>]*>/g, '')
+      .slice(0, 100).split('').join('')
     return (
       <CardArticle
         key={item.id}
@@ -177,7 +183,7 @@ class AllPosts extends React.PureComponent {
         data={item}
         link={item.link}
         title={item.title.rendered || item.title}
-        descr={descrRendered.slice(0, 100).split('').join('') || descrItem.slice(0, 100).split('').join('')}
+        descr={descrRendered || descrItem}
         mediaUrl={item.mediaUrl ? item.mediaUrl : null}
         categories={categories.filter(cat => (item.categories.includes(cat.id)))}
         content={get(item, 'content.rendered')}
@@ -244,11 +250,11 @@ const styles = StyleSheet.create({
   postWrapper: {
     position: 'absolute',
     top: 0,
-    paddingBottom: 100,
+    paddingBottom: 92, //height of header
     left: 0,
     zIndex: 9,
     height,
-    backgroundColor: '#D1D0D0',
+    backgroundColor: '#E1E1E1',
     flex: 1,
   }
 })
