@@ -55,12 +55,12 @@ class RouterWithDrawer extends React.PureComponent {
       <Drawer
         ref={(ref) => this._drawer = ref}
         type="overlay"
-        content={<DrawerPanel closeDrawer={this.closeDrawer} />}
+        content={<DrawerPanel isOpen={this.state.drawerOpen} closeDrawer={this.closeDrawer} />}
         onOpen={() => {
-          setTimeout(() => { this.setState({drawerOpen: true}) }, 0)
+          setTimeout(() => { this.setState({ drawerOpen: true }) }, 0)
         }}
         onClose={() => {
-          setTimeout(() => { this.setState({drawerOpen: false}) }, 0)
+          setTimeout(() => { this.setState({ drawerOpen: false }) }, 0)
         }}
         tweenDuration={100}
         panThreshold={0.08}

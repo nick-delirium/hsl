@@ -108,7 +108,7 @@ class AllPosts extends React.PureComponent {
       fetchCategories()
     }
 
-    if (type === 'events' && !data || !data[`00`] || !data[`00`].length === 0) {
+    if (type === 'events' && (!data || !data[`00`] || !data[`00`].length === 0)) {
       let startDate = formatEventDate()
       fetchEvents(startDate, undefined)
     } else {
@@ -263,7 +263,7 @@ class AllPosts extends React.PureComponent {
             onRefresh={this.refreshData}
             refreshing={isLoading}
             keyExtractor={this._keyExtractor}
-            onEndReached={this.loadMoreData}
+            onEndReached={dataWithMedia.length > 5 ? this.loadMoreData : null}
             removeClippedSubviews
             onEndReachedThreshold={1}
             ListHeaderComponent={ type === 'blogs' ? (<BlogCategories/>) : undefined} 

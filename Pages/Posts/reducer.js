@@ -86,7 +86,6 @@ export const getPosts = (limit = DEFAULT_LIMIT, isRefresh = false) => {
               }
             )
             const flatResult = flatten(result)
-            // console.log(ads, flatResult.slice(0, 4))
             dispatch(fetchAdsSuccess(ads))
             return dispatch(fetchAllSuccess(flatResult))
           })

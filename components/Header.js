@@ -40,7 +40,7 @@ const Header = ({
   const shouldRenderBackButton = shouldRenderSpecificTitle
   const shouldRenderSearch = (/news|blogs|programs|media|search/i.test(location) || location === '/') && !isPostOpen
 
-  const onIconPress = shouldRenderBackButton ? (isInsidePost ? closePost : goBack) : openDrawer
+  const onBackIconPress = isSearch && !isPostOpen ? goBack : closePost
 
   const share = async () => {
     try {
@@ -78,12 +78,12 @@ const Header = ({
     <View style={styles.nav}>
         <View
           style={styles.container}
-        >
-          <TouchableOpacity
-            onPress={onIconPress}
-            style={styles.clickableZone}
           >
-            {shouldRenderBackButton ? (
+          {shouldRenderBackButton ? (
+            <TouchableOpacity
+              onPress={onBackIconPress}
+              style={styles.clickableZone}
+            >
               <View
                 style={styles.backIcon}
               >
@@ -92,13 +92,18 @@ const Header = ({
                   style={{ width: 19, height: 19 }}
                 />
               </View>
+            </TouchableOpacity>
             ) : (
-              <Image
-                source={require(`../assets/images/menu_icon.png`)}
-                style={{ width: 38, height: 38 }}
-              />
+              <TouchableOpacity
+                onPress={openDrawer}
+                style={styles.clickableZone}
+              >
+                <Image
+                  source={require(`../assets/images/menu_icon.png`)}
+                  style={{ width: 38, height: 38 }}
+                />
+              </TouchableOpacity>
             )}
-          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => shouldRenderSpecificTitle ? null : refreshData()}
             activeOpacity={shouldRenderSpecificTitle ? 1 : 0.2}
@@ -145,6 +150,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 9,
+    paddingLeft: 6,
+    paddingRight: 6,
+    marginRight: -3,
+    zIndex: 11,
     paddingBottom: 9,
   },
   nav: {

@@ -1,12 +1,14 @@
 import React from 'react'
 import {
   StyleSheet,
-  WebView,
   View,
   Text,
   ScrollView,
+  WebView,
   Image,
+  TouchableOpacity,
   Linking,
+  Platform,
   Dimensions,
 } from 'react-native'
 import { withRouter } from 'react-router-native'
@@ -63,12 +65,15 @@ class Article extends React.PureComponent {
     }
   }
 
+  onRemoteUrlPress = (url) => Linking.openURL(url)
+
   render () {
     const {
       match: { params: { id } },
       article,
     } = this.props
-
+    const { OS } = Platform
+    const is_iOS = OS === 'ios'
     const { title, content: { rendered: content }, mediaUrl, categories } = article
     const contentWithSpaces = content
       .replace(/<span class="symbols">.?<\/span>/g, ' ')
@@ -103,17 +108,29 @@ class Article extends React.PureComponent {
             {title}
           </Text>
           <HTML
+            renderers={{
+              iframe: (atrs) => {
+                const videoId = atrs.src.split("/")[4]
+                const thumbnail = `https://img.youtube.com/vi/${videoId}/0.jpg`
+                if (is_iOS) return (
+                  <WebView 
+                    source={{ uri: atrs.src}} 
+                    style={{flex: 1, width: width - 40, height: width*0.56}}
+                  />
+                )
+                return (
+                  <TouchableOpacity style={{height: width, width: width - 40}} onPress={() => this.onRemoteUrlPress(atrs.src)}>
+                    <Image source={{ uri: thumbnail }} style={{width: width - 40, height: width, position: 'relative'}} />
+                    <Image source={require('@/assets/images/youtube-play-btn.png')} style={{position: 'absolute', top: (width - 56)/2, right: (width-40-80)/2}}/>
+                  </TouchableOpacity>
+                )
+              }
+            }}
             html={`<div>${videoContent}</div>`}
             imagesMaxWidth={Dimensions.get('window').width - 50}
             onLinkPress={(e, url) => this.onLinkPress(url)}
             containerStyles={{ flex: 1, maxWidth: width - 50}}
             tagsStyles={HTMLStyles}
-            alterChildren={node => {
-              if (node.name === 'iframe') {
-                delete node.attribs.width
-                delete node.attribs.height
-              }
-            }}
             ignoredStyles={['fontFamily', 'font-family', 'width', 'height']}
           />
         </View>

@@ -27,6 +27,7 @@ class DrawerPanel extends React.PureComponent {
     const items = Object.keys(pages)
     const validMenuItems = items.filter(item => Boolean(pages[item].name))
     const screenHeight = Dimensions.get('window').height
+    const isOpen = this.props.isOpen
     return (
         <View style={{
           flexDirection: 'column',
@@ -35,12 +36,15 @@ class DrawerPanel extends React.PureComponent {
           flex: 1,
           height: screenHeight,
         }}>
-        <TouchableOpacity onPress={()=>{
-          this.props.history.push('/')
-          this.props.closePost()
-          this.props.changeLoc('/')
-          this.props.closeDrawer()
-        }}>
+        <TouchableOpacity 
+          onPress={() => {
+            if (!isOpen) return
+            this.props.history.push('/')
+            this.props.closePost()
+            this.props.changeLoc('/')
+            this.props.closeDrawer()
+          }}
+        >
           <Image
             source={require('../../assets/images/HSL-logo.png')}
             style={styles.image}
