@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     width,
   },
   videoFrameContainer: {
-    height: width - 40 * 0.56,
+    height: (width - 40) * 0.56,
     width: width - 40,
   },
   card: {
