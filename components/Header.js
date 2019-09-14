@@ -36,8 +36,7 @@ const Header = ({
   const isEventArticle = type === 'event'
   const shouldRenderSpecificTitle = isInsidePost || isSearch
   const specificTitle = isArticle ? navTitle.articleTitle
-        : isEventArticle ? navTitle.eventTitle
-        : undefined
+    : isEventArticle ? navTitle.eventTitle : undefined
   const specificUrl = isArticle ? url.articleUrl : url.eventUrl
   const title = shouldRenderSpecificTitle ? specificTitle : pageTitles[location].toUpperCase()
   const shouldRenderBackButton = shouldRenderSpecificTitle
