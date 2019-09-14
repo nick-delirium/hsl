@@ -29,6 +29,8 @@ class Places extends PureComponent {
       initialMapRegion: {
         latitude: 59.9483,
         longitude: 30.2531,
+        latitudeDelta: 0.3,
+        longitudeDelta: 0.3,
       }
     }
   }
@@ -49,6 +51,8 @@ class Places extends PureComponent {
       const region = {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
+        latitudeDelta: 0.3,
+        longitudeDelta: 0.3,
       }
       this.mapRef.getMapRef().animateToRegion(region, 200)
       // locationState === 2, permission
@@ -147,7 +151,7 @@ class Places extends PureComponent {
               latitude: this.state.initialMapRegion.latitude,
               longitude: this.state.initialMapRegion.longitude,
               latitudeDelta: 0.3,
-              longitudeDelta: 0.3
+              longitudeDelta: 0.3,
             }}
           />
         )

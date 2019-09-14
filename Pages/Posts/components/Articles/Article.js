@@ -113,15 +113,23 @@ class Article extends React.PureComponent {
                 const videoId = atrs.src.split("/")[4]
                 const thumbnail = `https://img.youtube.com/vi/${videoId}/0.jpg`
                 if (is_iOS) return (
-                  <WebView 
-                    source={{ uri: atrs.src}} 
-                    style={{flex: 1, width: width - 40, height: width*0.56}}
+                  <WebView
+                    key={videoId}
+                    source={{ uri: atrs.src}}
+                    style={ styles.videoFrameContainer }
                   />
                 )
                 return (
-                  <TouchableOpacity style={{height: width, width: width - 40}} onPress={() => this.onRemoteUrlPress(atrs.src)}>
-                    <Image source={{ uri: thumbnail }} style={{width: width - 40, height: width, position: 'relative'}} />
-                    <Image source={require('@/assets/images/youtube-play-btn.png')} style={{position: 'absolute', top: (width - 56)/2, right: (width-40-80)/2}}/>
+                  <TouchableOpacity
+                    key={videoId}
+                    style={ styles.videoFrameContainer }
+                    onPress={() => this.onRemoteUrlPress(atrs.src)}
+                  >
+                    <Image source={{ uri: thumbnail }} style={ styles.videoFrameContainer } />
+                    <Image
+                      source={require('@/assets/images/youtube-play-btn.png')}
+                      style={ {position: 'absolute', top: (0.56 * (width - 40) - 56)/2, right: (width-40-80)/2} }
+                    />
                   </TouchableOpacity>
                 )
               }
@@ -144,6 +152,10 @@ const styles = StyleSheet.create({
     padding: 0,
     flexGrow: 1,
     width,
+  },
+  videoFrameContainer: {
+    height: width - 40 * 0.56,
+    width: width - 40,
   },
   card: {
     marginRight: 0,
