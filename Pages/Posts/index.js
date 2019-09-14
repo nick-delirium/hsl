@@ -8,15 +8,21 @@ import {
 import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import CardArticle from './components/Articles/CardArticle.js'
+import CardArticle from './components/Articles/CardArticle'
 import CardEvent from './components/Events/CardEvent'
-import { getPosts, getPostsByCategory, getEvents, rmRefreshFlag } from './reducer'
+import {
+  getPosts,
+  getPostsByCategory,
+  getEvents,
+  rmRefreshFlag,
+} from './reducer'
 import { getCategories, setFeedType } from '@/Navigation/reducer'
 import { formatEventDate } from '@/common/format'
 import Article from './components/Articles/Article'
 import Event from './components/Events/Event'
 import BlogCategories from './components/Articles/BlogCategories'
-const height = Dimensions.get('window').height
+
+const { height } = Dimensions.get('window')
 
 class AllPosts extends React.PureComponent {
   constructor(props) {
@@ -27,32 +33,32 @@ class AllPosts extends React.PureComponent {
     }
   }
 
+  componentDidMount() {
+    this.getInitialData()
+    const { type, setFeedTypeFromRender } = this.props
+    if (type) setFeedTypeFromRender(type)
+    else setFeedTypeFromRender('')
+  }
+
   componentDidUpdate(prevProps) {
-    if (this.props.isRefresh && !prevProps.isRefresh) {
+    const { isRefresh, removeRefreshFlag } = this.props
+    if (isRefresh && !prevProps.isRefresh) {
       this._FlatList.scrollToOffset({ offset: 0, animated: true })
-      this.props.removeRefreshFlag()
+      removeRefreshFlag()
     }
   }
 
-  componentDidMount() {
-    this.getInitialData()
-    if (this.props.type) this.props.setFeedTypeFromRender(this.props.type)
-    else this.props.setFeedTypeFromRender('')
-  }
-
   loadMoreData = () => {
-    const { treshold } = this.state
+    const { treshold, isEndListLoading } = this.state
     const { isLoading } = this.props
     if (isLoading) return null
-    else {
-      if (!this.state.isEndListLoading) {
-        this.setState({ isEndListLoading: true }, () => {
-          setTimeout(() => {
-            const newTreshold = treshold + 10
-            this.getData(newTreshold)
-          }, 0)
-        })
-      }
+    if (!isEndListLoading) {
+      this.setState({ isEndListLoading: true }, () => {
+        setTimeout(() => {
+          const newTreshold = treshold + 10
+          this.getData(newTreshold)
+        }, 0)
+      })
     }
   }
 
@@ -67,11 +73,11 @@ class AllPosts extends React.PureComponent {
     } = this.props
 
     if (type === 'events') {
-      let startDate = formatEventDate()
+      const startDate = formatEventDate()
       fetchEvents(startDate, undefined, treshold)
       this.setState({ treshold, isEndListLoading: false })
     } else {
-      let category = categories.find(cat => (cat.slug === type))
+      const category = categories.find((cat) => (cat.slug === type))
       if (type && category) {
         if (category && category.id) {
           if (type === 'blogs' && subCategories.length > 0) {
@@ -108,19 +114,19 @@ class AllPosts extends React.PureComponent {
       fetchCategories()
     }
 
+    // eslint-disable-next-line quotes
     if (type === 'events' && (!data || !data[`00`] || !data[`00`].length === 0)) {
-      let startDate = formatEventDate()
+      const startDate = formatEventDate()
       fetchEvents(startDate, undefined)
     } else {
-      let category = categories.find(cat => (cat.slug === type))
+      const category = categories.find((cat) => (cat.slug === type))
       if (type && category && (!data[`${category.id}`] || data[`${category.id}`].length === 0)) {
         if (category && category.id) {
           console.log(`fetching for ${type}`)
           if (type === 'blogs' && subCategories.length > 0) {
             const catIds = subCategories.join(',')
-            fetchByCategory(catIds, treshold, undefined, category.id)
-          } else
-          fetchByCategory(category.id)
+            fetchByCategory(catIds, undefined, undefined, category.id)
+          } else fetchByCategory(category.id)
         } else {
           console.log(`Error: category ${type} not found`)
         }
@@ -139,17 +145,16 @@ class AllPosts extends React.PureComponent {
       subCategories,
     } = this.props
     if (type === 'events') {
-      let startDate = formatEventDate()
+      const startDate = formatEventDate()
       fetchEvents(startDate)
     } else {
-      let category = categories.find(cat => (cat.slug === type))
+      const category = categories.find((cat) => (cat.slug === type))
       if (type && category) {
         if (category && category.id) {
           if (type === 'blogs' && subCategories.length > 0) {
             const catIds = subCategories.join(',')
             fetchByCategory(catIds, undefined, undefined, category.id)
-          } else
-          fetchByCategory(category.id)
+          } else fetchByCategory(category.id)
         } else {
           console.log(`Error: category ${type} not found`)
         }
@@ -173,7 +178,9 @@ class AllPosts extends React.PureComponent {
     //   ))
       const descrItem = get(item, 'description', '')
         .replace(/<[^>]*>/g, '')
-        .slice(0, 100).split('').join('')
+        .slice(0, 100)
+        .split('')
+        .join('')
       return (
         <CardEvent
           key={item.id}
@@ -181,27 +188,31 @@ class AllPosts extends React.PureComponent {
           description={get(item, 'description', '')}
           smallDescription={descrItem}
           title={item.title}
-          dateStart={item.start_date} //utc_start_date
+          dateStart={item.start_date} // utc_start_date
           dateEnd={item.end_date}
-          image={get(item, `image.url`)}
-          organizer={item.organizer} //array [0].organizer, url
+          image={get(item, 'image.url')}
+          organizer={item.organizer} // array [0].organizer, url
           url={item.website}
           place={item.venue}
           slug={item.slug}
           allDay={item.allDay}
           categories={item.categories}
           tags={item.tags}
-          cost={item.cost} //cost_details
+          cost={item.cost} // cost_details
           link={item.url}
         />
       )
     }
     const descrRendered = get(item, 'excerpt.rendered', '')
       .replace(/<[^>]*>/g, '')
-      .slice(0, 100).split('').join('')
+      .slice(0, 100)
+      .split('')
+      .join('')
     const descrItem = get(item, 'description', '')
       .replace(/<[^>]*>/g, '')
-      .slice(0, 100).split('').join('')
+      .slice(0, 100)
+      .split('')
+      .join('')
     return (
       <CardArticle
         key={item.id}
@@ -211,13 +222,14 @@ class AllPosts extends React.PureComponent {
         title={item.title.rendered || item.title}
         descr={descrRendered || descrItem}
         mediaUrl={item.mediaUrl ? item.mediaUrl : null}
-        categories={categories.filter(cat => (item.categories.includes(cat.id)))}
+        categories={categories.filter((cat) => (item.categories.includes(cat.id)))}
         content={get(item, 'content.rendered')}
         type={type}
       />
     )
   }
 
+  /* eslint-disable indent */
   renderPost = (type) => {
     switch (type) {
       case 'event':
@@ -234,16 +246,24 @@ class AllPosts extends React.PureComponent {
         )
     }
   }
+  /* eslint-enable indent */
 
   render() {
-    const { posts, isLoading, type, data, categories, isPostOpen, postType } = this.props
-    if (type === 'events') {
+    const {
+      posts,
+      isLoading,
+      type,
+      data,
+      categories,
+      isPostOpen,
+      postType,
+    } = this.props
 
-    }
-    let category = categories.find(cat => (cat.slug === type))
-    let displayingPosts = type ? (category ? data[`${category.id}`] : data[`00`]) : posts
-    const dataWithMedia = displayingPosts ?
-      displayingPosts.map((item) => {
+    const category = categories.find((cat) => (cat.slug === type))
+    // eslint-disable-next-line quotes
+    const displayingPosts = type ? (category ? data[`${category.id}`] : data[`00`]) : posts
+    const dataWithMedia = displayingPosts
+      ? displayingPosts.map((item) => {
         const mediaUrl = get(item, '_links.wp:featuredmedia.href', null)
           || `https://hansanglab.com/wp-json/wp/v2/media/${get(item, 'featured_media')}`
         return {
@@ -266,7 +286,7 @@ class AllPosts extends React.PureComponent {
             onEndReached={dataWithMedia.length > 5 ? this.loadMoreData : null}
             removeClippedSubviews
             onEndReachedThreshold={0}
-            ListHeaderComponent={ type === 'blogs' ? (<BlogCategories/>) : undefined}
+            ListHeaderComponent={type === 'blogs' ? (<BlogCategories />) : undefined}
           />
         )}
       </View>
@@ -278,13 +298,13 @@ const styles = StyleSheet.create({
   postWrapper: {
     position: 'absolute',
     top: 0,
-    paddingBottom: 92, //height of header
+    paddingBottom: 92, // height of header
     left: 0,
     zIndex: 9,
     height,
     backgroundColor: '#E1E1E1',
     flex: 1,
-  }
+  },
 })
 
 const mapStateFromProps = createStructuredSelector({
@@ -301,11 +321,13 @@ const mapStateFromProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   fetchPosts: (limit) => dispatch(getPosts(limit)),
-  fetchByCategory: (cat, limit, isRefresh = false, mainCategory) => dispatch(getPostsByCategory(cat, limit, isRefresh, mainCategory)),
+  fetchByCategory: (cat, limit, isRefresh = false, mainCategory) => {
+    dispatch(getPostsByCategory(cat, limit, isRefresh, mainCategory))
+  },
   fetchEvents: (startDate, endDate, limit) => dispatch(getEvents(startDate, endDate, limit)),
   fetchCategories: () => dispatch(getCategories()),
   setFeedTypeFromRender: (value) => dispatch(setFeedType(value)),
-  removeRefreshFlag: () => dispatch(rmRefreshFlag())
+  removeRefreshFlag: () => dispatch(rmRefreshFlag()),
 })
 
 export default connect(
