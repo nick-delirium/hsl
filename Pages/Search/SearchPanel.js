@@ -24,7 +24,7 @@ class SearchPanel extends React.Component {
     }
   }
 
-  onSearchPress = (e) => { 
+  onSearchPress = (e) => {
     if (!this.props.isSearch) {
       this.props.closePost()
       this.props.history.push('/search')
@@ -48,47 +48,47 @@ class SearchPanel extends React.Component {
   render () {
     const { isSearch } = this.props
     return (
-      <TouchableOpacity 
+      <TouchableOpacity
         onPress={this.onSearchPress}
         style={{
-          flexDirection: 'row', 
+          flexDirection: 'row',
           paddingLeft: 5,
           backgroundColor: 'rgba(255, 255, 255, 0.1)',
-          borderRadius: 3, 
+          borderRadius: 3,
           flex: isSearch ? 1 : null,
           marginLeft: 'auto'
         }}
       >
-        <TextInput 
+        <TextInput
           style={{
-            paddingRight: 8, 
-            paddingLeft: 8, 
-            paddingTop: 5, 
-            paddingBottom: 5, 
-            color: '#fff', 
-            height: 30, 
-            fontSize: 18, 
+            paddingRight: 8,
+            paddingLeft: 8,
+            paddingTop: 5,
+            paddingBottom: 5,
+            color: '#fff',
+            height: 30,
+            fontSize: 18,
             flex: !isSearch ? 0 : 1,
             display: !isSearch ? 'none' : null
           }}
           keyboardType='web-search'
-          onSubmitEditing={this.onSubmitEditing} 
+          onSubmitEditing={this.onSubmitEditing}
           ref={this.inputRef}
           value={this.state.inputValue}
           onChangeText={(inputValue) => this.setState({inputValue})}
-        /> 
-        <View 
+        />
+        <View
           style={{
-            paddingRight: 7, 
-            paddingLeft: !isSearch ? 20 : 5, 
-            paddingTop: 5, 
-            paddingBottom: 5, 
+            paddingRight: 7,
+            paddingLeft: !isSearch ? 20 : 5,
+            paddingTop: 5,
+            paddingBottom: 5,
             height: 30,
             width: 40,
             marginLeft: 'auto',
           }}
           >
-          <Image 
+          <Image
             source={Icon}
             style={{ width: 17, height: 17, alignSelf: 'flex-end'}}
           />

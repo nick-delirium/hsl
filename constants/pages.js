@@ -44,6 +44,10 @@ const pages = {
     name: '',
     path: '/search',
   },
+  okbk: {
+    name: 'ОКБК',
+    path: '/okbk',
+  }
 }
 
 export const pageTitles = {
@@ -54,5 +58,6 @@ export const pageTitles = {
   [pages.programs.path]: pages.programs.name,
   [pages.media.path]: pages.media.name,
   [pages.places.path]: pages.places.name,
+  [pages.okbk.path]: pages.okbk.name,
 }
 export default pages

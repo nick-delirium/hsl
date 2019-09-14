@@ -14,6 +14,8 @@ import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import * as FileSystem from 'expo-file-system'
 
+import initFirebase from './setUpFirebase'
+import registerForPushNotificationsAsync from './setUpNotifications'
 import RouterWithDrawer from './Navigation'
 import api from './api'
 import {

@@ -263,10 +263,10 @@ class AllPosts extends React.PureComponent {
             onRefresh={this.refreshData}
             refreshing={isLoading}
             keyExtractor={this._keyExtractor}
-            onEndReached={dataWithMedia.length > 5 ? this.loadMoreData : null}
+            onEndReached={dataWithMedia.length > 1 ? this.loadMoreData : null}
             removeClippedSubviews
             onEndReachedThreshold={0}
-            ListHeaderComponent={ type === 'blogs' ? (<BlogCategories/>) : undefined} 
+            ListHeaderComponent={ type === 'blogs' ? (<BlogCategories/>) : undefined}
           />
         )}
       </View>

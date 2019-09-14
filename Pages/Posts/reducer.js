@@ -117,7 +117,7 @@ const fetchFail = (reason) => ({
 
 export const getPostsByCategory = (category, limit = DEFAULT_LIMIT, isRefresh = false, mainCategory) => {
   return dispatch => {
-    console.log(api.getPostsByCategory(category, limit, mainCategory))
+    console.log('trying to get', api.getPostsByCategory(category, limit, mainCategory))
     dispatch(fetchPostsReq(limit, category, isRefresh))
     const result = fetch(api.getPostsByCategory(category, limit, mainCategory))
       .then((response) => response.json())
@@ -202,7 +202,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         data: {
-          ...state.data, 
+          ...state.data,
           [`${action.payload.category}`]: [...action.payload.data]
         },
         isLoading: false,
