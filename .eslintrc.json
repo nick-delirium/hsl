@@ -23,12 +23,16 @@
         "no-console": 0,
         "react/jsx-filename-extension": 0,
         "no-use-before-define": 0,
+        "global-require": 0,
         "no-nested-ternary": 0,
         "no-return-assign": 0,
+        "no-mixed-operators": 0,
         "import/no-unresolved": 0,
+        "react/no-string-refs": 0,
         "indent": [
             "error",
-            2
+            2,
+            { "SwitchCase": 1 }
         ],
         "linebreak-style": [
             "error",
