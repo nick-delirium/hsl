@@ -1,3 +1,5 @@
+/* eslint-disable  */
+
 import 'react-native'
 import React from 'react'
 import AppIndex from '../index.js'
