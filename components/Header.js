@@ -9,9 +9,9 @@ import {
 } from 'react-native'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
-import { formatEventDate } from '@/common/format'
 import { createStructuredSelector } from 'reselect'
-import { pageTitles, } from '@/constants/pages'
+import { formatEventDate } from '@/common/format'
+import { pageTitles } from '@/constants/pages'
 import { getPosts, getPostsByCategory, getEvents } from '@/Pages/Posts/reducer'
 import SearchPanel from '@/Pages/Search/SearchPanel'
 
@@ -49,19 +49,19 @@ const Header = ({
     try {
       await Share.share({
         message: `${specificTitle}\n${specificUrl}`,
-      });
+      })
     } catch (error) {
-      alert(error.message);
+      alert(error.message)
     }
   }
 
-  refreshData = () => {
+  const refreshData = () => {
     if (feedType === 'events') {
       const startDate = formatEventDate()
       // startDate, endDate, limit, isRefresh
       fetchEvents(startDate, undefined, undefined, true)
     } else {
-      const category = categories.find(cat => (cat.slug === feedType))
+      const category = categories.find((cat) => (cat.slug === feedType))
       if (feedType && category) {
         if (category && category.id) {
           // category, limit, isRefresh
@@ -79,61 +79,66 @@ const Header = ({
 
   return (
     <View style={styles.nav}>
-        <View
-          style={styles.container}
-          >
-          {shouldRenderBackButton ? (
-            <TouchableOpacity
-              onPress={onBackIconPress}
-              style={styles.clickableZone}
-            >
-              <View
-                style={styles.backIcon}
-              >
-                <Image
-                  source={require(`../assets/images/back.png`)}
-                  style={{ width: 19, height: 19 }}
-                />
-              </View>
-            </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                onPress={openDrawer}
-                style={styles.clickableZone}
-              >
-                <Image
-                  source={require(`../assets/images/menu_icon.png`)}
-                  style={{ width: 38, height: 38 }}
-                />
-              </TouchableOpacity>
-            )}
+      <View
+        style={styles.container}
+      >
+        {shouldRenderBackButton ? (
           <TouchableOpacity
-            onPress={() => shouldRenderSpecificTitle ? null : refreshData()}
-            activeOpacity={shouldRenderSpecificTitle ? 1 : 0.2}
+            onPress={onBackIconPress}
+            style={styles.clickableZone}
           >
-            <Text
-              style={shouldRenderSpecificTitle ? styles.articleTitle : styles.navTitle}
-            >
-              {title && title.slice(0, 20)}
-              {title && title.length > 20 && '...'}
-            </Text>
-          </TouchableOpacity>
-        </View>
-        {isInsidePost && (
-          <View style={{ marginLeft: 'auto' }}>
-            <TouchableOpacity
-              onPress={share}
-              style={{ paddingLeft: 3, paddingRight: 3, paddingTop: 9, paddingBottom: 9 }}
+            <View
+              style={styles.backIcon}
             >
               <Image
-                source={require('../assets/images/share.png')}
-                style={{ height: 16, width: 16}}
-                resizeMode="contain"
+                source={require('../assets/images/back.png')}
+                style={{ width: 19, height: 19 }}
               />
-            </TouchableOpacity>
-        </View>
+            </View>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            onPress={openDrawer}
+            style={styles.clickableZone}
+          >
+            <Image
+              source={require('../assets/images/menu_icon.png')}
+              style={{ width: 38, height: 38 }}
+            />
+          </TouchableOpacity>
         )}
-        {shouldRenderSearch && <SearchPanel isSearch={isSearch} />}
+        <TouchableOpacity
+          onPress={() => (shouldRenderSpecificTitle ? null : refreshData())}
+          activeOpacity={shouldRenderSpecificTitle ? 1 : 0.2}
+        >
+          <Text
+            style={shouldRenderSpecificTitle ? styles.articleTitle : styles.navTitle}
+          >
+            {title && title.slice(0, 20)}
+            {title && title.length > 20 && '...'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+      {isInsidePost && (
+        <View style={{ marginLeft: 'auto' }}>
+          <TouchableOpacity
+            onPress={share}
+            style={{
+              paddingLeft: 3,
+              paddingRight: 3,
+              paddingTop: 9,
+              paddingBottom: 9,
+            }}
+          >
+            <Image
+              source={require('../assets/images/share.png')}
+              style={{ height: 16, width: 16 }}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        </View>
+      )}
+      {shouldRenderSearch && <SearchPanel isSearch={isSearch} />}
     </View>
   )
 }
@@ -196,10 +201,12 @@ const mapStateFromProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   fetchPosts: (limit, isRefresh) => dispatch(getPosts(limit, isRefresh)),
   fetchByCategory: (cat, limit, isRefresh) => dispatch(getPostsByCategory(cat, limit, isRefresh)),
-  fetchEvents: (startDate, endDate, limit, isRefresh) => dispatch(getEvents(startDate, endDate, limit, isRefresh)),
+  fetchEvents: (startDate, endDate, limit, isRefresh) => {
+    dispatch(getEvents(startDate, endDate, limit, isRefresh))
+  },
 })
 
 export default connect(
   mapStateFromProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Header)
