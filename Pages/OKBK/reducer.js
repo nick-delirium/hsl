@@ -18,7 +18,7 @@ export const singOut = () => ({
 
 const initialState = {
   currentTab: 'feed',
-  isLoggedIn: false,
+  isLoggedIn: true,
   account: '',
 }
 
