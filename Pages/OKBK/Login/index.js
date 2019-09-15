@@ -45,11 +45,12 @@ class Login extends PureComponent {
 
     // debug
     const { actions } = this.props
-    actions.singIn(email)
+    actions.singIn({ email, password })
   }
 
   render() {
     const { email, password } = this.state
+    const { error } = this.props
     const isDisabled = email === '' || password === ''
     return (
       <View style={styles.pageWrapper}>
@@ -113,6 +114,9 @@ class Login extends PureComponent {
               </StyledText>
             </TouchableOpacity>
           </View>
+          {error && (
+            <Text>{error}</Text>
+          )}
           <Image
             style={styles.logo}
             resizeMode="contain"
@@ -171,7 +175,8 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   logo: {
-    width: '160%',
+    // width: '160%',
+    height: '40%',
   },
 })
 
