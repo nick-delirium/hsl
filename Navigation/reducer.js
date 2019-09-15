@@ -4,7 +4,7 @@ const CHANGE_LOCATION = 'app.location.change'
 const FETCH_CATEGORIES_START = 'app.categories.fetch.start'
 const FETCH_CATEGORIES_SUCCESS = 'app.categories.fetch.succes'
 const FETCH_CATEGORIES_FAIL = 'app.categories.fetch.fail'
-const TOGGLE_POST = 'app.categories.fetch.fail'
+const TOGGLE_POST = 'app.post.toggle'
 const SET_FEED_TYPE = 'app.set_feed_type'
 const SET_SUBGETEGORIES = 'app.set_subcategories'
 

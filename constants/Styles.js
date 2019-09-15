@@ -1,6 +1,5 @@
 import {
     Platform,
-    StyleSheet,
     PixelRatio,
     Dimensions,
   } from 'react-native';
@@ -13,14 +12,13 @@ const {
 const scale = SCREEN_WIDTH / 320;
 
 function normalize(size) {
-  const newSize = size * scale 
+  const newSize = size * scale
   if (Platform.OS === 'ios') {
     return Math.round(PixelRatio.roundToNearestPixel(newSize))
   } else {
     return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
   }
 }
-  
 
 export const fonts = {
   mini: normalize(12),
@@ -28,8 +26,4 @@ export const fonts = {
   normal: normalize(15),
   heading: normalize(16),
   big: normalize(18),
-}
-
-export const colors = {
-  
 }
