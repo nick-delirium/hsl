@@ -23,7 +23,7 @@ const fetchPlaces = async (page) => {
     if (page === 0) resolve([]);
     const placesResponse = await fetch(api.getPlaces(page+1))
     const places = await placesResponse.json()
-    
+
     resolve(places.venues)
   })
 }
@@ -75,7 +75,7 @@ const initialState = {
   errorMessage: '',
 }
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case FETCH_PLACES_START:
       return {

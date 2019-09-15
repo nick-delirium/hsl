@@ -1,9 +1,18 @@
 import React, { PureComponent } from 'react'
-import { Text, View, StyleSheet, ScrollView, TouchableOpacity, Dimensions, Linking, Image, Share } from 'react-native'
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+  Linking,
+  Image,
+  Share,
+} from 'react-native'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import MapView from 'react-native-maps'
-import { getPlaces } from './reducer'
 import { withRouter } from 'react-router-native'
 import ClusteredMapView from 'react-native-maps-super-cluster'
 import { connect } from 'react-redux'
@@ -13,6 +22,7 @@ import { createStructuredSelector } from 'reselect'
 import { categories, rusCats } from '@/constants/places'
 import { fonts } from '@/constants/Styles'
 import { formatText } from '@/common/format'
+import { getPlaces } from './reducer'
 
 
 class Places extends PureComponent {
