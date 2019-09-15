@@ -16,9 +16,10 @@ import Article from './Pages/Posts/components/Articles/Article'
 import Event from './Pages/Posts/components/Events/Event'
 import Search from './Pages/Search'
 import Header from './components/Header'
-import okbk from './Pages/OKBK/Login'
-const width = Dimensions.get('window').width
-const height = Dimensions.get('window').height
+import okbk from './Pages/OKBK'
+
+const { width } = Dimensions.get('window')
+const { height } = Dimensions.get('window')
 
 
 const RouterView = (props) => (

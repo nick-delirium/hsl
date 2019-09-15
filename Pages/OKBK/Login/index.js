@@ -8,10 +8,13 @@ import {
   Dimensions,
   Text,
 } from 'react-native'
+import { connect } from 'react-redux'
 import colors from '../colors'
 import { fonts } from '@/constants/Styles'
-const height = Dimensions.get('window').height
-const width = Dimensions.get('window').width
+import { singIn } from '../reducer'
+
+const { height } = Dimensions.get('window')
+const { width } = Dimensions.get('window')
 
 const StyledText = ({ children, withMargin }) => (
   <Text style={{ ...styles.text, marginTop: withMargin ? 20 : 0 }}>{children}</Text>
@@ -38,7 +41,11 @@ class Login extends PureComponent {
 
   onSubmit = () => {
     const { email, password } = this.state
-    console.log(email. password )
+    console.log(email, password)
+
+    // debug
+    const { actions } = this.props
+    actions.singIn(email)
   }
 
   render() {
@@ -57,22 +64,22 @@ class Login extends PureComponent {
                 enablesReturnKeyAutomatically
                 blurOnSubmit={false}
                 ref={this.emailRef}
-                autoCompleteType='email'
-                autoCapitalize='none'
+                autoCompleteType="email"
+                autoCapitalize="none"
                 keyboardAppearance="dark"
-                keyboardType='email-address'
+                keyboardType="email-address"
                 onChangeText={(value) => this.setState({ email: value })}
                 placeholder="Почта"
                 placeholderTextColor="rgba(255, 255, 255, 0.3)"
                 returnKeyType="next"
                 textContentType="emailAddress"
                 style={styles.input}
-                value={this.state.email}
+                value={email}
                 onSubmitEditing={this.focusPassword}
               />
             </View>
 
-            <View style={{... styles.inputWrapper, marginTop: 20 }}>
+            <View style={{ ...styles.inputWrapper, marginTop: 20 }}>
               <TextInput
                 enablesReturnKeyAutomatically
                 secureTextEntry
@@ -88,7 +95,7 @@ class Login extends PureComponent {
                 placeholder="Пароль"
                 textContentType="password"
                 style={styles.input}
-                value={this.state.password}
+                value={password}
                 onSubmitEditing={this.onSubmit}
               />
             </View>
@@ -97,7 +104,7 @@ class Login extends PureComponent {
               onPress={this.onSubmit}
               style={{
                 ...styles.button,
-                backgroundColor: isDisabled ? '#e05a86' : '#B62655'
+                backgroundColor: isDisabled ? '#e05a86' : '#B62655',
               }}
               activeOpacity={0.6}
             >
@@ -154,7 +161,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   form: {
     width: '100%',
@@ -165,7 +172,17 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: '160%',
-  }
+  },
 })
 
-export default Login
+const mapStateToProps = () => ({})
+const mapDispatchToProps = (dispatch) => ({
+  actions: {
+    singIn: (account) => dispatch(singIn(account)),
+  },
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Login)
