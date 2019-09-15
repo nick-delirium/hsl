@@ -6,7 +6,25 @@ import {
 import { connect } from 'react-redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
+import { ApolloProvider, Query } from 'react-apollo'
+import ApolloClient, { gql } from 'apollo-boost'
 import Login from './Login'
+
+const client = new ApolloClient({
+  uri: 'https://hansanglab.com/superapi/',
+})
+
+const TEST_QUERY = gql`
+  query auth ($email: String!, $password: String!) {
+    auth (email: $email, password: $password) {
+      result,
+      code,
+      message,
+      sessionId,
+      groups { id, name }
+    }
+  }
+`
 
 class OKBK extends PureComponent {
   render() {
@@ -14,9 +32,22 @@ class OKBK extends PureComponent {
     if (!isLoggedIn) return <Login />
 
     return (
-      <View>
-        <Text> hello </Text>
-      </View>
+      <ApolloProvider client={client}>
+        <Query query={TEST_QUERY} variables={{ email: 'login@mail.com', password: 'abracadabra' }}>
+          {({ data, loading, error }) => {
+            if (loading) return <Text>loading</Text>
+            if (error) return <Text>{JSON.stringify(error)} error</Text>
+            if (data) {
+              console.log(Object.keys(data), data)
+              return (
+                <View>
+                  <Text>123</Text>
+                </View>
+              )
+            }
+          }}
+        </Query>
+      </ApolloProvider>
     )
   }
 }

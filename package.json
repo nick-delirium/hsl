@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
+    "apollo-boost": "^0.4.4",
     "babel-plugin-module-resolver": "^3.2.0",
     "expo": "^34.0.4",
     "expo-asset": "^6.0.0",
@@ -31,6 +32,7 @@
     "firebase": "^6.6.1",
     "lodash": "^4.17.15",
     "react": "16.8.3",
+    "react-apollo": "^3.1.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
     "react-native-drawer": "^2.5.1",
     "react-native-maps": "^0.24.0",
