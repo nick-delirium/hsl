@@ -6,54 +6,40 @@ import {
 import { connect } from 'react-redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
-import { ApolloProvider, Query } from 'react-apollo'
-import ApolloClient, { gql } from 'apollo-boost'
 import Login from './Login'
-
-const client = new ApolloClient({
-  uri: 'https://hansanglab.com/superapi/',
-})
-
-const TEST_QUERY = gql`
-  query auth ($email: String!, $password: String!) {
-    auth (email: $email, password: $password) {
-      result,
-      code,
-      message,
-      sessionId,
-      groups { id, name }
-    }
-  }
-`
+import { authErrors } from './queriesErrors'
 
 class OKBK extends PureComponent {
   render() {
-    const { isLoggedIn } = this.props
-    if (!isLoggedIn) return <Login />
-
+    const {
+      isLoggedIn,
+      isLoading,
+      account,
+      error,
+    } = this.props
+    if (isLoading) return <Text>loading</Text>
+    if ((!isLoggedIn && !isLoading) || error) {
+      return (
+        <Login error={get(authErrors, error)} />
+      )
+    }
     return (
-      <ApolloProvider client={client}>
-        <Query query={TEST_QUERY} variables={{ email: 'login@mail.com', password: 'abracadabra' }}>
-          {({ data, loading, error }) => {
-            if (loading) return <Text>loading</Text>
-            if (error) return <Text>{JSON.stringify(error)} error</Text>
-            if (data) {
-              console.log(Object.keys(data), data)
-              return (
-                <View>
-                  <Text>123</Text>
-                </View>
-              )
-            }
-          }}
-        </Query>
-      </ApolloProvider>
+      <View>
+        {account && (
+          <View>
+            <Text>Succsess logged in!</Text>
+          </View>
+        )}
+      </View>
     )
   }
 }
 
 const mapStateToProps = createStructuredSelector({
   isLoggedIn: (state) => get(state, 'okbk.isLoggedIn'),
+  isLoading: (state) => get(state, 'okbk.isLoading'),
+  account: (state) => get(state, 'okbk.account'),
+  error: (state) => get(state, 'okbk.error'),
   currentTab: (state) => get(state, 'okbk.currentTab'),
 })
 
