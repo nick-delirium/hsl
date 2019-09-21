@@ -2,12 +2,15 @@ import React, { PureComponent } from 'react'
 import {
   View,
   Text,
+  StyleSheet,
 } from 'react-native'
 import { connect } from 'react-redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import Login from './Login'
 import { authErrors } from './queriesErrors'
+import Navbar from './components/NavBar'
+import colors from './colors'
 
 class OKBK extends PureComponent {
   render() {
@@ -24,16 +27,24 @@ class OKBK extends PureComponent {
       )
     }
     return (
-      <View>
+      <View style={styles.main}>
         {account && (
           <View>
             <Text>Succsess logged in!</Text>
           </View>
         )}
+        <Navbar />
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  main: {
+    backgroundColor: colors.bg,
+    flex: 1,
+  },
+})
 
 const mapStateToProps = createStructuredSelector({
   isLoggedIn: (state) => get(state, 'okbk.isLoggedIn'),

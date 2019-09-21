@@ -43,7 +43,6 @@ class Login extends PureComponent {
     const { email, password } = this.state
     console.log(email, password)
 
-    // debug
     const { actions } = this.props
     actions.singIn({ email, password })
   }
