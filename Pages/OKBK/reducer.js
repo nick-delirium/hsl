@@ -10,7 +10,6 @@ export const changeCurrentTab = (newTab) => ({
   type: CHANGE_TAB,
   payload: newTab,
 })
-
 export const singInRequest = () => ({
   type: SING_IN,
 })
@@ -20,6 +19,7 @@ export const singInRequestSuccsess = () => ({
 export const singInRequestFalure = () => ({
   type: SING_IN_FALURE,
 })
+
 export const singIn = (account) => (
   async (dispatch) => {
     dispatch(singInRequest)
@@ -69,7 +69,7 @@ export default function (state = initialState, action) {
         ...state,
         account: action.payload,
         isLoggedIn: true,
-        isLoading: true,
+        isLoading: false,
       }
     case SING_OUT:
       return {
