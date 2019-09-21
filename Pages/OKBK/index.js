@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import Login from './Login'
+import Clubs from './Clubs'
 import { authErrors } from './queriesErrors'
 import Navbar from './components/NavBar'
 import colors from './colors'
@@ -30,7 +31,8 @@ class OKBK extends PureComponent {
       <View style={styles.main}>
         {account && (
           <View>
-            <Text>Succsess logged in!</Text>
+            {/* <Text>Succsess logged in!</Text> */}
+            <Clubs />
           </View>
         )}
         <Navbar />
