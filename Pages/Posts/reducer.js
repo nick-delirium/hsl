@@ -1,5 +1,7 @@
 import api from '../../api'
 
+const FETCH_INITIAL_SUCCESS = 'app.data.fetch.initial.success'
+
 const FETCH_ALLPOSTS_START = 'app.posts_all.fetch.start'
 const FETCH_ALLPOSTS_SUCCESS = 'app.posts_all.fetch.succes'
 const FETCH_ALLPOSTS_FAIL = 'app.posts_all.fetch.fail'
@@ -52,6 +54,11 @@ const fetchAdsFail = (reason) => ({
   type: FETCH_ADS_FAIL,
   payload: reason,
 })
+const fetchInitialSuccess = (data) => ({
+  type: FETCH_INITIAL_SUCCESS,
+  payload: data,
+})
+
 export const getAds = (limit = DEFAULT_LIMIT, isRefresh = false) => (dispatch) => {
   dispatch(fetchAdsReq(limit, isRefresh))
   fetch(api.getPromoCards(limit))
@@ -65,10 +72,16 @@ export const flatten = (list) => list.reduce(
   (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [],
 )
 
-export const getPosts = (limit = DEFAULT_LIMIT, isRefresh = false) => (dispatch) => {
+export const getPosts = (
+  limit = DEFAULT_LIMIT,
+  isRefresh = false,
+  page = 1,
+  isInitial = true,
+) => (dispatch) => {
   dispatch(fetchAllPostsReq(limit, isRefresh))
   dispatch(fetchAdsReq(limit, isRefresh))
-  fetch(api.getPosts(limit))
+  console.log(limit, isRefresh, page)
+  fetch(api.getPosts(limit, page))
     .then((response) => response.json())
     .then((posts) => {
       fetch(api.getPromoCards(limit))
@@ -85,7 +98,8 @@ export const getPosts = (limit = DEFAULT_LIMIT, isRefresh = false) => (dispatch)
           )
           const flatResult = flatten(result)
           dispatch(fetchAdsSuccess(ads))
-          return dispatch(fetchAllSuccess(flatResult))
+          if (isInitial) (fetchInitialSuccess(flatResult))
+          else dispatch(fetchAllSuccess(flatResult))
         })
         .catch((e) => dispatch(fetchAdsFail(e)))
     })
@@ -122,17 +136,19 @@ export const getPostsByCategory = (
   limit = DEFAULT_LIMIT,
   isRefresh = false,
   mainCategory,
+  page = 1,
+  isInitial = true,
 ) => (dispatch) => {
-  console.log('trying to get', api.getPostsByCategory(category, limit, mainCategory))
+  console.log('trying to get', api.getPostsByCategory(category, limit, page))
   dispatch(fetchPostsReq(limit, category, isRefresh))
-  fetch(api.getPostsByCategory(category, limit, mainCategory))
+  fetch(api.getPostsByCategory(category, limit, page))
     .then((response) => response.json())
     .then((result) => {
       if (mainCategory) {
-        dispatch(fetchSubCategorySuccess(result, category, isRefresh, mainCategory))
-      } else {
-        dispatch(fetchSuccess(result, category, isRefresh))
+        return dispatch(fetchSubCategorySuccess(result, category, isRefresh, mainCategory))
       }
+      if (isInitial) return dispatch(fetchInitialSuccess(result))
+      return dispatch(fetchSuccess(result, category, isRefresh))
     })
     .catch((e) => dispatch(fetchFail(e)))
 }
@@ -172,15 +188,22 @@ export const getEvents = (
 
 const initialState = {
   posts: [],
-  data: {},
+  data: [],
   isLoading: false,
   isError: false,
   errorMessage: '',
-  // category: '',
+  subcategory: '0000',
+  mainCategory: '00000',
 }
 
 export default function (state = initialState, action) {
   switch (action.type) {
+    case FETCH_INITIAL_SUCCESS:
+      return {
+        ...state,
+        data: action.payload,
+        isLoading: false,
+      }
     case REMOVE_REFRESH_FLAG:
       return {
         ...state,
@@ -195,7 +218,7 @@ export default function (state = initialState, action) {
     case FETCH_ALLPOSTS_SUCCESS:
       return {
         ...state,
-        posts: [...action.payload],
+        posts: [...state.posts, ...action.payload],
         isLoading: false,
       }
     case FETCH_ALLPOSTS_FAIL:
@@ -212,23 +235,32 @@ export default function (state = initialState, action) {
         isLoading: true,
         isRefresh: action.payload.isRefresh,
       }
-    case FETCH_POSTS_SUCCESS:
+    case FETCH_POSTS_SUCCESS: {
+      const oldPosts = state.data || []
       return {
         ...state,
-        data: {
-          ...state.data,
-          [`${action.payload.category}`]: [...action.payload.data],
-        },
+        data: [
+          ...oldPosts,
+          ...action.payload.data,
+        ],
         isLoading: false,
       }
+    }
     case FETCH_POSTS_BY_SUBCATEGORY_SUCCESS: {
-      const { category, mainCategory, data } = action.payload
-      const withSubcategory = Boolean(mainCategory)
+      const { category, mainCategory, data, isRefresh } = action.payload
+      const subcat = (mainCategory && category) ? category : '0000'
+      const mainCat = (mainCategory && category) ? mainCategory : category
+      const isNewCategory = subcat !== state.subcategory || mainCategory === category
+      const oldPosts = state.data || []
+
+      const newState = isNewCategory || isRefresh ? [...data] : [...oldPosts, ...data]
       return {
         ...state,
-        data: {
-          [`${withSubcategory ? mainCategory : category}`]: [...data],
-        },
+        data: [
+          ...newState,
+        ],
+        subcategory: subcat,
+        mainCategory: mainCat,
         isLoading: false,
       }
     }
@@ -248,8 +280,7 @@ export default function (state = initialState, action) {
     case FETCH_EVENTS_SUCCESS:
       return {
         ...state,
-        // eslint-disable-next-line quotes
-        data: { ...state.data, [`00`]: [...action.payload.data] }, // 00 is our id for events
+        data: [...state.data, ...action.payload.data], // 00 is our id for events
         isLoading: false,
       }
     case FETCH_EVENTS_FAIL:
