@@ -9,6 +9,7 @@ import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import Login from './Login'
 import Clubs from './Clubs'
+import People from './People'
 import { authErrors } from './queriesErrors'
 import Navbar from './components/NavBar'
 import colors from './colors'
@@ -22,17 +23,16 @@ class OKBK extends PureComponent {
       error,
     } = this.props
     if (isLoading) return <Text>loading</Text>
-    if ((!isLoggedIn && !isLoading) || error) {
-      return (
-        <Login error={get(authErrors, error)} />
-      )
-    }
+    // if ((!isLoggedIn && !isLoading) || error) {
+    //   return (
+    //     <Login error={get(authErrors, error)} />
+    //   )
+    // }
     return (
       <View style={styles.main}>
         {account && (
-          <View>
-            {/* <Text>Succsess logged in!</Text> */}
-            <Clubs />
+          <View style={{ flex: 1 }}>
+            <People />
           </View>
         )}
         <Navbar />
@@ -43,7 +43,6 @@ class OKBK extends PureComponent {
 
 const styles = StyleSheet.create({
   main: {
-    backgroundColor: colors.bg,
     flex: 1,
   },
 })

@@ -2,118 +2,98 @@ import React, { PureComponent } from 'react'
 import {
   View,
   Image,
-  TouchableOpacity,
+  // TouchableOpacity,
   StyleSheet,
   Dimensions,
   Text,
+  ScrollView,
 } from 'react-native'
-import { connect } from 'react-redux'
-import colors from '../colors'
 import { fonts } from '@/constants/Styles'
-import { singIn } from '../reducer'
 import Card from '@/components/Card'
+import { NumEnding } from '@/common/format'
 
 const { height } = Dimensions.get('window')
 const { width } = Dimensions.get('window')
 
-const StyledText = ({ children, withMargin }) => (
-  <Text style={{ ...styles.text, marginTop: withMargin ? 20 : 0 }}>{children}</Text>
-)
-
 class Clubs extends PureComponent {
-  constructor(props) {
-    super(props)
-
-    this.passwordRef = React.createRef()
-    this.emailRef = React.createRef()
-    this.state = {
-      email: '',
-      password: '',
-    }
-  }
-
-  focusPassword = () => {
-    const { email } = this.state
-    const isValid = email.length > 5
-      && email.includes('@')
-    if (isValid) this.passwordRef.current.focus()
-  }
-
-  onSubmit = () => {
-    const { email, password } = this.state
-    console.log(email, password)
-
-    // debug
-    const { actions } = this.props
-    actions.singIn({ email, password })
-  }
 
   render() {
+    const cardData = [
+      { name: 'Деловой клуб Ассоциации корейцев Казахстана', number: 256, pic: '../../../assets/images/OKBK/logo_OKBK.png' },
+      { name: 'Kimchi', number: 252, pic: '../../../assets/images/OKBK/logo_OKBK.png' },
+    ]
     return (
-      <View style={styles.pageWrapper}>
-        <Card>
-          <Text>Деловой клубешник</Text>
-          <Image
-            style={styles.logo}
-            source={require('../../../assets/images/OKBK/logo_OKBK.png')}
-          />
-        </Card>
-      </View>
+      <ScrollView contentContainerStyle={styles.pageWrapper}>
+        {cardData.map((item) => (
+          <Card>
+            <View style={styles.cardInner}>
+              <View style={styles.header}>
+                <Text style={styles.clubName}>{item.name}</Text>
+              </View>
+              <View style={styles.clubInfo}>
+                <View style={styles.logoWrapper}>
+                  <Image
+                    style={styles.logo}
+                    resizeMode="contain"
+                    // eslint-disable-next-line import/no-dynamic-require
+                    source={`${item.pic}`}
+                  />
+                </View>
+                <View style={styles.textWrapper}>
+                  <Text style={styles.text}>{item.number + NumEnding(item.number, [' участник', ' участника', ' участников'])}</Text>
+                </View>
+              </View>
+            </View>
+          </Card>
+        ))}
+      </ScrollView>
     )
   }
 }
 
 const styles = StyleSheet.create({
   pageWrapper: {
-    width,
-    height,
+    flexGrow: 1,
+  },
+  cardInner: {
+    padding: 20,
+    height: 200,
+    flexDirection: 'column',
+    backgroundColor: '#ffffff',
+  },
+  header: {
+    flex: 1,
+  },
+  clubName: {
+    fontSize: fonts.big,
+    fontWeight: 'bold',
+  },
+  clubInfo: {
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    flexDirection: 'row',
   },
   text: {
-    color: colors.text,
-    fontSize: fonts.normal,
+    fontSize: fonts.small,
   },
-  inputWrapper: {
-    width: '100%',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 3,
-    marginTop: 5,
+  textWrapper: {
+    flex: 1,
+    alignItems: 'flex-end',
   },
-  input: {
-    width: '100%',
-    padding: 15,
-    textAlign: 'center',
-    color: colors.text,
-    fontSize: fonts.normal,
-  },
-  formWrapper: {
-    width: '70%',
-    marginTop: 20,
-    alignSelf: 'center',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  form: {
-    width: '100%',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 30,
+  logoWrapper: {
+    flex: 1,
+    backgroundColor: 'black',
+    position: 'relative',
   },
   logo: {
-    // width: '160%',
-    height: '40%',
+    position: 'absolute',
+    bottom: 0,
+    left: -10,
+    height: '100%',
+    width: '100%',
   },
 })
 
-const mapStateToProps = () => ({})
-const mapDispatchToProps = (dispatch) => ({
-  actions: {
-    singIn: (account) => dispatch(singIn(account)),
-  },
-})
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Clubs)
+export default Clubs

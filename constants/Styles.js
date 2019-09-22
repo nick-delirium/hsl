@@ -1,23 +1,22 @@
 import {
-    Platform,
-    PixelRatio,
-    Dimensions,
-  } from 'react-native';
+  Platform,
+  PixelRatio,
+  Dimensions,
+} from 'react-native'
 
-const {
+export const {
   width: SCREEN_WIDTH,
   height: SCREEN_HEIGHT,
-} = Dimensions.get('window');
+} = Dimensions.get('window')
 
-const scale = SCREEN_WIDTH / 320;
+const scale = SCREEN_WIDTH / 320
 
 function normalize(size) {
   const newSize = size * scale
   if (Platform.OS === 'ios') {
     return Math.round(PixelRatio.roundToNearestPixel(newSize))
-  } else {
-    return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
   }
+  return Math.round(PixelRatio.roundToNearestPixel(newSize)) - 2
 }
 
 export const fonts = {
@@ -26,4 +25,6 @@ export const fonts = {
   normal: normalize(15),
   heading: normalize(16),
   big: normalize(18),
+  bigger: normalize(20),
+  veryBig: normalize(22),
 }

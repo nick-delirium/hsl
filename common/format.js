@@ -9,9 +9,9 @@ export const formatDate = (date) => {
   date = splitted[0].split('-')
   let month = months[date[1]]
   let time = splitted[1].split(':')
-  return ({ 
+  return ({
     date: `${date[2]}\u00A0${month}`,
-    time: `${time[0]}:${time[1]}`
+    time: `${time[0]}:${time[1]}`,
   })
 }
 
@@ -20,10 +20,34 @@ export const formatText = (text, noDots) => {
 }
 
 export const formatEventDate = () => {
-  let now = new Date()
-  let year = now.getFullYear()
+  const now = new Date()
+  const year = now.getFullYear()
   let month = now.getMonth() + 1
-  month = month < 10 ? month = '0' + month : month
-  let date = now.getDate()
-  return(`${year}-${month}-${date}%2000:00:00`)
+  month = month < 10 ? month = `0${month}` : month
+  const date = now.getDate()
+  return (`${year}-${month}-${date}%2000:00:00`)
+}
+
+export const NumEnding = (number, aEndings) => {
+  /* eslint-disable prefer-destructuring */
+  let sEnding
+  number = number % 100
+  if (number >= 11 && number <= 19) {
+    sEnding = aEndings[2]
+  } else {
+    const i = number % 10
+    switch (i) {
+      case (1):
+        sEnding = aEndings[0]
+        break
+      case (2):
+      case (3):
+      case (4):
+        sEnding = aEndings[1]
+        break
+      default:
+        sEnding = aEndings[2]
+    }
+  }
+  return sEnding
 }
