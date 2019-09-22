@@ -1,6 +1,7 @@
 import { AsyncStorage } from 'react-native'
-import { client, auth } from './gqlQueries'
+import { client, auth, getClubsQuery } from './gqlQueries'
 
+// Auth
 const SING_IN = 'app.okbk.sing_in'
 const SING_IN_SUCCESS = 'app.okbk.sing_in_succsess'
 const ACCOUNT_CONFIRMED = 'app.okbk.account_session_acive'
@@ -56,12 +57,47 @@ export const singOut = () => ({
   type: SING_OUT,
 })
 
+// Getting clubs
+const GET_CLUBS = 'app.okbk.get_clubs'
+const GET_CLUBS_SUCCESS = 'app.okbk.get_clubs_succsess'
+const GET_CLUBS_FALURE = 'app.okbk.get_clubs_falure'
+
+export const getClubsRequest = () => ({
+  type: GET_CLUBS,
+})
+export const getClubsSuccsess = (clubs) => ({
+  type: GET_CLUBS_SUCCESS,
+  payload: clubs,
+})
+export const getClubsFalure = () => ({
+  type: GET_CLUBS_FALURE,
+})
+
+export const getClubs = () => (
+  async (dispatch) => {
+    dispatch({ type: GET_CLUBS })
+    try {
+      const response = await client.query({ query: getClubsQuery })
+      const res = response.data.businessClubList
+      if (res.result) {
+        dispatch(getClubsSuccsess(res.businessClubs))
+      } else {
+        console.error(res.message)
+        dispatch(getClubsFalure())
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+)
+
 const initialState = {
   currentTab: 'feed',
   isLoggedIn: false,
   isLoading: false,
   account: {},
   error: null,
+  clubs: [],
 }
 
 export default function (state = initialState, action) {
@@ -96,6 +132,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         currentTab: action.payload,
+      }
+    case GET_CLUBS_SUCCESS:
+      return {
+        ...state,
+        clubs: action.payload,
       }
     default:
       return state

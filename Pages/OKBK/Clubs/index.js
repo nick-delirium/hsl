@@ -6,20 +6,30 @@ import {
   Text,
   ScrollView,
 } from 'react-native'
+import get from 'lodash/get'
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
 import { fonts } from '@/constants/Styles'
 import Card from '@/components/Card'
 import { NumEnding } from '@/common/format'
+import { getClubs } from '../reducer'
 
-const cardData = [
-  { name: 'Деловой клуб Ассоциации корейцев Казахстана', number: 256, pic: require('../../../assets/images/OKBK/logo_OKBK.png') },
-  { name: 'Kimchi', number: 252, pic: require('../../../assets/images/OKBK/logo_OKBK.png') },
-]
+// const cardData = [
+//   { name: 'Деловой клуб Ассоциации корейцев Казахстана', number: 256, icon: require('../../../assets/images/OKBK/logo_OKBK.png') },
+//   { name: 'Kimchi', number: 252, icon: require('../../../assets/images/OKBK/logo_OKBK.png') },
+// ]
 
 class Clubs extends PureComponent {
+  componentDidMount() {
+    const { actions } = this.props
+    actions.getClubs()
+  }
+
   render() {
+    const { clubs } = this.props
     return (
       <ScrollView contentContainerStyle={styles.pageWrapper}>
-        {cardData.map((item) => (
+        {clubs.map((item) => (
           <Card key={item.name.trim()}>
             <View style={styles.cardInner}>
               <View style={styles.header}>
@@ -30,12 +40,14 @@ class Clubs extends PureComponent {
                   <Image
                     style={styles.logo}
                     resizeMode="contain"
-                    source={item.pic}
+                    source={item.icon}
                   />
                 </View>
-                <View style={styles.textWrapper}>
-                  <Text style={styles.text}>{item.number + NumEnding(item.number, [' участник', ' участника', ' участников'])}</Text>
-                </View>
+                {item.number && (
+                  <View style={styles.textWrapper}>
+                    <Text style={styles.text}>{item.number + NumEnding(item.number, [' участник', ' участника', ' участников'])}</Text>
+                  </View>
+                )}
               </View>
             </View>
           </Card>
@@ -89,5 +101,17 @@ const styles = StyleSheet.create({
   },
 })
 
+const mapStateToProps = createStructuredSelector({
+  clubs: (state) => get(state, 'okbk.clubs'),
+})
 
-export default Clubs
+const mapDispatchToProps = (dispatch) => ({
+  actions: {
+    getClubs: () => dispatch(getClubs()),
+  },
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Clubs)

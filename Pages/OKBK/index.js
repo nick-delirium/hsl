@@ -28,15 +28,17 @@ class OKBK extends PureComponent {
     AsyncStorage.getItem('account', (e, acc) => {
       if (acc !== null) {
         actions.accountConfirmed(JSON.parse(acc))
+        console.log(JSON.parse(acc).sessionId, 'found in local storage')
       }
-      console.log(JSON.parse(acc).sessionId, 'found in local storage')
     })
   }
 
   returnTabView = () => {
     const { currentTab } = this.props
-    switch(currentTab) {
+    switch (currentTab) {
       case 'groups':
+        return <Clubs />
+      case 'people':
         return <People />
       default:
         return <Text>Feed</Text>
