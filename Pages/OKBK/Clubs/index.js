@@ -2,9 +2,7 @@ import React, { PureComponent } from 'react'
 import {
   View,
   Image,
-  // TouchableOpacity,
   StyleSheet,
-  Dimensions,
   Text,
   ScrollView,
 } from 'react-native'
@@ -12,20 +10,17 @@ import { fonts } from '@/constants/Styles'
 import Card from '@/components/Card'
 import { NumEnding } from '@/common/format'
 
-const { height } = Dimensions.get('window')
-const { width } = Dimensions.get('window')
+const cardData = [
+  { name: 'Деловой клуб Ассоциации корейцев Казахстана', number: 256, pic: require('../../../assets/images/OKBK/logo_OKBK.png') },
+  { name: 'Kimchi', number: 252, pic: require('../../../assets/images/OKBK/logo_OKBK.png') },
+]
 
 class Clubs extends PureComponent {
-
   render() {
-    const cardData = [
-      { name: 'Деловой клуб Ассоциации корейцев Казахстана', number: 256, pic: '../../../assets/images/OKBK/logo_OKBK.png' },
-      { name: 'Kimchi', number: 252, pic: '../../../assets/images/OKBK/logo_OKBK.png' },
-    ]
     return (
       <ScrollView contentContainerStyle={styles.pageWrapper}>
         {cardData.map((item) => (
-          <Card>
+          <Card key={item.name.trim()}>
             <View style={styles.cardInner}>
               <View style={styles.header}>
                 <Text style={styles.clubName}>{item.name}</Text>
@@ -35,8 +30,7 @@ class Clubs extends PureComponent {
                   <Image
                     style={styles.logo}
                     resizeMode="contain"
-                    // eslint-disable-next-line import/no-dynamic-require
-                    source={`${item.pic}`}
+                    source={item.pic}
                   />
                 </View>
                 <View style={styles.textWrapper}>

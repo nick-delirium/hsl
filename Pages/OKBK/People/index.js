@@ -3,34 +3,48 @@ import {
   View,
   Image,
   StyleSheet,
-  Dimensions,
   Text,
   ScrollView,
+  Dimensions,
 } from 'react-native'
 import { fonts } from '@/constants/Styles'
 import colors from '../colors'
 import Card from '@/components/Card'
 
-const { height } = Dimensions.get('window')
 const { width } = Dimensions.get('window')
 
-class People extends PureComponent {
+const cardData = [
+  { name: 'Ким Дмитрий Валентинович', work: 'ГК "Лидер Консалт"', photo: require('../../../assets/images/OKBK/logo_OKBK.png') },
+  { name: 'Ким Елена Юрьевна', work: 'ООО "РОСТТОФУ"', photo: require('../../../assets/images/OKBK/logo_OKBK.png') },
+]
 
+class People extends PureComponent {
   render() {
-    const cardData = [
-      { name: 'Ким Дмитрий Валентинович', work: 'ГК "Лидер Консалт"', photo: require('../../../assets/images/OKBK/logo_OKBK.png') },
-      { name: 'Ким Елена Юрьевна', work: 'ООО "РОСТТОФУ"', photo: require('../../../assets/images/OKBK/logo_OKBK.png') },
-    ]
     return (
       <ScrollView contentContainerStyle={styles.pageWrapper}>
+        <View style={{ height: '50%', width, backgroundColor: '#5F4C96', flexDirection: 'column', alignItems: 'center' }}>
+          <View style={styles.topCard}>
+            <View style={styles.photoWrapper}>
+              <Image
+                style={styles.photo}
+                resizeMode="cover"
+                source={cardData[0].photo}
+              />
+            </View>
+            <View style={styles.textWrapper}>
+              <Text style={{ ...styles.textName, color: '#FFFFFF' }}>{cardData[0].name}</Text>
+              <Text style={{ ...styles.text, color: '#FFFFFF' }}>{cardData[0].work}</Text>
+            </View>
+          </View>
+        </View>
         {cardData.map((item) => (
-          <Card>
+          <Card key={item.name.trim()}>
             <View style={styles.cardInner}>
               <View style={styles.photoWrapper}>
                 <Image
                   style={styles.photo}
                   resizeMode="cover"
-                  source={`${item.photo}`}
+                  source={item.photo}
                 />
               </View>
 
@@ -50,6 +64,23 @@ class People extends PureComponent {
 const styles = StyleSheet.create({
   pageWrapper: {
     flexGrow: 1,
+  },
+  topCard: {
+    marginRight: 15,
+    marginLeft: 15,
+    shadowColor: '#000',
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 4,
+    padding: 20,
+    paddingTop: 24,
+    paddingBottom: 24,
+    height: 145,
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#7B7BC7',
   },
   cardInner: {
     padding: 20,
@@ -75,7 +106,6 @@ const styles = StyleSheet.create({
   textWrapper: {
     flex: 3,
     marginLeft: 20,
-    // alignItems: 'flex-end',
   },
   textName: {
     fontSize: fonts.heading,

@@ -1,7 +1,9 @@
+import { AsyncStorage } from 'react-native'
 import { client, auth } from './gqlQueries'
 
 const SING_IN = 'app.okbk.sing_in'
 const SING_IN_SUCCESS = 'app.okbk.sing_in_succsess'
+const ACCOUNT_CONFIRMED = 'app.okbk.account_session_acive'
 const SING_IN_FALURE = 'app.okbk.sing_in_falure'
 const SING_OUT = 'app.okbk.sing_out'
 const CHANGE_TAB = 'app.okbk.change_tab'
@@ -13,8 +15,13 @@ export const changeCurrentTab = (newTab) => ({
 export const singInRequest = () => ({
   type: SING_IN,
 })
-export const singInRequestSuccsess = () => ({
+export const singInRequestSuccsess = (account) => ({
   type: SING_IN_SUCCESS,
+  payload: account,
+})
+export const accountConfirmed = (account) => ({
+  type: ACCOUNT_CONFIRMED,
+  payload: account,
 })
 export const singInRequestFalure = () => ({
   type: SING_IN_FALURE,
@@ -26,7 +33,15 @@ export const singIn = (account) => (
     try {
       const response = await client.query({ query: auth, variables: account })
       if (response.data.auth.result) {
-        dispatch({ type: SING_IN_SUCCESS, payload: response.data })
+        console.log(response.data)
+        const { sessionId, groups, user } = response.data.auth
+        const accountInfo = { sessionId, groups, user }
+        dispatch({ type: SING_IN_SUCCESS, payload: accountInfo })
+        try {
+          await AsyncStorage.setItem('account', JSON.stringify(accountInfo))
+        } catch (error) {
+          console.log(error)
+        }
       } else {
         dispatch({ type: SING_IN_FALURE, payload: response.data.auth.code })
       }
@@ -64,6 +79,7 @@ export default function (state = initialState, action) {
         isLoggedIn: false,
         error: action.payload,
       }
+    case ACCOUNT_CONFIRMED:
     case SING_IN_SUCCESS:
       return {
         ...state,

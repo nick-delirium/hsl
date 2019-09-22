@@ -11,7 +11,24 @@ query auth ($email: String!, $password: String!) {
     code,
     message,
     sessionId,
-    groups { id, name }
+    groups { id, name },
+    user {
+      id,
+      name,
+      photo,
+      career,
+      social_media,
+      contact_email,
+      phone,
+      business_club_id,
+      business_club_name,
+      city_id,
+      city_name,
+      country_id,
+      country_name,
+      business_areas { id, name },
+      groups { id, name }
+    }
   }
 }
 `
