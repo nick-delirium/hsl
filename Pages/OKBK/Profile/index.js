@@ -8,22 +8,49 @@ import {
   Text,
   Image,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   Dimensions,
+  Alert,
+  Linking,
 } from 'react-native'
 import { fonts } from '@/constants/Styles'
 import { singOut } from '../reducer'
 
 const { width } = Dimensions.get('window')
 
-const ProfileActions = ({ singOut }) => (
+const openLink = (link) => Linking.openURL(link)
+
+const sendRequest = () => {
+  Alert.alert(
+    'Изменение профиля',
+    'Сейчас вы будете перенаправлены на запрос изменения профиля',
+    [
+      { text: 'Отменить' },
+      { text: 'Перейти', onPress: () => openLink('mailto:info@hansanglab.com') },
+    ],
+    { cancelable: false },
+  )
+}
+
+const mapSocialNetwork = (link) => {
+  if (link.includes('facebook')) return 'facebook'
+  if (link.includes('twitter')) return 'twitter'
+  if (link.includes('instagram')) return 'instagram'
+  if (link.includes('vk')) return 'vk'
+  return link
+}
+
+
+const ProfileActions = ({ singOutAction }) => (
   <View style={styles.actions}>
-    <TouchableOpacity>
-    {/* info@hansanglab.com */}
+    <TouchableOpacity
+      onPress={sendRequest}
+    >
       <Text style={styles.actionButton}>Изменить профиль</Text>
     </TouchableOpacity>
 
     <TouchableOpacity
-      onPress={singOut}
+      onPress={singOutAction}
     >
       <Text style={styles.actionButton}>Выйти</Text>
     </TouchableOpacity>
@@ -33,10 +60,10 @@ const ProfileActions = ({ singOut }) => (
 class Profile extends React.PureComponent {
   render() {
     const { self = false, account: { user }, actions } = this.props
-
+    console.log(user)
     return (
       <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
-        {self && <ProfileActions singOut={actions.singOut} />}
+        {self && <ProfileActions singOutAction={actions.singOut} />}
         <View style={styles.profileWrapper}>
 
           <View>
@@ -52,8 +79,14 @@ class Profile extends React.PureComponent {
           <Text style={styles.smallText}>
             {user.city_name}
           </Text>
-          <Text style={styles.smallText}> {user.business_club_name} </Text>
-          <Text style={styles.smallText}> Position </Text>
+          <Text style={styles.smallText}>
+            {user.business_club_name}
+          </Text>
+          {user.career && (
+            <Text style={styles.smallText}>
+              {user.career}
+            </Text>
+          )}
 
           {user.business_areas.length > 0 && (
             <>
@@ -75,15 +108,30 @@ class Profile extends React.PureComponent {
               {user.phone}
             </Text>
           )}
+          {user.social_media && (
+            <TouchableWithoutFeedback
+              onPress={() => openLink(`https://${user.social_media}`)}
+            >
+              <Text style={{ ...styles.smallText, color: '#333376' }}>
+                {mapSocialNetwork(user.social_media)}
+              </Text>
+            </TouchableWithoutFeedback>
+          )}
           <View style={styles.contacts}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', height: 21, width: '40%' }}>
-              <Image style={{ width: 20, height: 20, marginRight: 10 }} resizeMode="contain" source={require('../assets/WU.png')} />
-              <Text style={{ ...styles.smallText, marginBottom: 0, color: '#33CC33' }}>whatsapp</Text>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', height: 20 }}>
-              <Image style={{ width: 22, height: 20, marginRight: 10 }} resizeMode="contain" source={require('../assets/T.png')} />
-              <Text style={{ ...styles.smallText, marginBottom: 0, color: '#3FA9F5' }}>telegram</Text>
-            </View>
+            {user.whatsapp && (
+              <TouchableWithoutFeedback onPress={() => openLink(`https://wa.me/${user.phone.replace('+', '')}`)}>
+                <View style={styles.contactsRow}>
+                  <Image style={{ width: 20, height: 20, marginRight: 10 }} resizeMode="contain" source={require('../assets/WU.png')} />
+                  <Text style={{ ...styles.smallText, marginBottom: 0, color: '#33CC33' }}>whatsapp</Text>
+                </View>
+              </TouchableWithoutFeedback>
+            )}
+            {user.telegram && (
+              <View style={styles.contactsRow}>
+                <Image style={{ width: 22, height: 20, marginRight: 10 }} resizeMode="contain" source={require('../assets/T.png')} />
+                <Text style={{ ...styles.smallText, marginBottom: 0, color: '#3FA9F5' }}>telegram</Text>
+              </View>
+            )}
           </View>
 
         </View>
@@ -103,6 +151,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    width: '40%',
+  },
+  contactsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    height: 21,
   },
   profilePhoto: {
     height: 180,
@@ -136,7 +190,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     width: '80%',
-  }
+  },
 })
 
 const mapStateToProps = createStructuredSelector({
@@ -145,6 +199,6 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   actions: {
     singOut: () => dispatch(singOut()),
-  }
+  },
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Profile)
