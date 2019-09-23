@@ -26,7 +26,6 @@ export const accountConfirmed = (account) => ({
 export const singInRequestFalure = () => ({
   type: SING_IN_FALURE,
 })
-
 export const singIn = (account) => (
   async (dispatch) => {
     dispatch(singInRequest)
@@ -52,9 +51,14 @@ export const singIn = (account) => (
   }
 )
 
-export const singOut = () => ({
-  type: SING_OUT,
-})
+export const singOut = () => async (dispatch) => {
+  try {
+    await AsyncStorage.removeItem('account')
+    dispatch({ type: SING_OUT })
+  } catch (e) {
+    console.log(e)
+  }
+}
 
 const initialState = {
   currentTab: 'feed',
@@ -87,16 +91,13 @@ export default function (state = initialState, action) {
         isLoggedIn: true,
         isLoading: false,
       }
-    case SING_OUT:
-      return {
-        ...state,
-        isLoggedIn: false,
-      }
     case CHANGE_TAB:
       return {
         ...state,
         currentTab: action.payload,
       }
+    case SING_OUT:
+      return initialState
     default:
       return state
   }

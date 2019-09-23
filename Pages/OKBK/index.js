@@ -12,6 +12,7 @@ import { createStructuredSelector } from 'reselect'
 import Login from './Login'
 import Clubs from './Clubs'
 import People from './People'
+import Profile from './Profile'
 import { authErrors } from './queriesErrors'
 import Navbar from './components/NavBar'
 import { accountConfirmed } from './reducer'
@@ -28,16 +29,18 @@ class OKBK extends PureComponent {
     AsyncStorage.getItem('account', (e, acc) => {
       if (acc !== null) {
         actions.accountConfirmed(JSON.parse(acc))
+        console.log(JSON.parse(acc).sessionId, 'found in local storage')
       }
-      console.log(JSON.parse(acc).sessionId, 'found in local storage')
     })
   }
 
   returnTabView = () => {
     const { currentTab } = this.props
-    switch(currentTab) {
+    switch (currentTab) {
       case 'groups':
         return <People />
+      case 'profile':
+        return <Profile self />
       default:
         return <Text>Feed</Text>
     }
