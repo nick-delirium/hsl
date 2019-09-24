@@ -44,7 +44,7 @@ class Login extends PureComponent {
     console.log(email, password)
 
     const { actions } = this.props
-    actions.singIn({ email, password })
+    if (email !== '' && password !== '') actions.singIn({ email, password })
   }
 
   render() {

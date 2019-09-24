@@ -27,7 +27,6 @@ const RouterView = (props) => (
     {props.drawerOpen && <View style={{position: 'absolute', zIndex: 10, top: 0, left: 0, height, width, backgroundColor: '#000000', opacity: 0.7}} />}
     <Header
       openDrawer={props.openDrawer}
-      location={props.location}
       closePost={props.closePost}
       goBack={props.goBack}
       navTitle={props.title}
@@ -37,11 +36,11 @@ const RouterView = (props) => (
     />
 
     <Route exact path={pages.all.path} component={Posts} />
-    <Route path={pages.news.path} render={() => (<Posts type='news'/>)} />
-    <Route path={pages.events.path} render={() => (<Posts type='events'/>)} />
-    <Route path={pages.blogs.path} render={() => (<Posts type='blogs'/>)} />
-    <Route path={pages.programs.path} render={() => (<Posts type='programs'/>)} />
-    <Route path={pages.media.path} render={() => (<Posts type='media'/>)} />
+    <Route path={pages.news.path} render={() => (<Posts type="news" />)} />
+    <Route path={pages.events.path} render={() => (<Posts type="events" />)} />
+    <Route path={pages.blogs.path} render={() => (<Posts type="blogs" />)} />
+    <Route path={pages.programs.path} render={() => (<Posts type="programs" />)} />
+    <Route path={pages.media.path} render={() => (<Posts type="media" />)} />
     <Route path={pages.search.path} render={() => (<Search />)} />
     <Route path={pages.post.path} render={() => (<Article />)} />
     <Route path={pages.event.path} render={() => (<Event />)} />
@@ -72,10 +71,12 @@ const mapStateToProps = createStructuredSelector({
     const eventUrl = get(state, 'event.link')
 
     return { articleUrl, eventUrl }
-  }
+  },
 })
-const mapDispatchToProps = dispatch => ({
-  closePost: () => dispatch(togglePost(false, ''))
+
+const mapDispatchToProps = (dispatch) => ({
+  closePost: () => dispatch(togglePost(false, '')),
 })
+
 const RouterWithMemo = React.memo(RouterView)
-export default connect(mapStateToProps, mapDispatchToProps)(RouterWithMemo)
+export default connect(mapStateToProps, mapDispatchToProps)(RouterView)

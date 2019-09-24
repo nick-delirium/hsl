@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import Login from './Login'
-import Clubs from './Clubs'
+// import Clubs from './Clubs'
 import People from './People'
 import Profile from './Profile'
 import { authErrors } from './queriesErrors'
@@ -56,11 +56,11 @@ class OKBK extends PureComponent {
 
     if (isLoading) return <Text>loading</Text>
 
-    if ((!isLoggedIn && !isLoading) || error) {
-      return (
-        <Login error={get(authErrors, error)} />
-      )
-    }
+    // if (!isLoggedIn || error) {
+    //   return (
+    //     <Login error={get(authErrors, error)} />
+    //   )
+    // }
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
         <View style={styles.main}>

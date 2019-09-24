@@ -4,13 +4,20 @@ import { client, auth } from './gqlQueries'
 const SING_IN = 'app.okbk.sing_in'
 const SING_IN_SUCCESS = 'app.okbk.sing_in_succsess'
 const ACCOUNT_CONFIRMED = 'app.okbk.account_session_acive'
-const SING_IN_FALURE = 'app.okbk.sing_in_falure'
+const SING_IN_FALURE = 'app.okbk.sing_in.fail'
 const SING_OUT = 'app.okbk.sing_out'
 const CHANGE_TAB = 'app.okbk.change_tab'
+const GO_BACK = 'app.okbk.go_back'
 
-export const changeCurrentTab = (newTab) => ({
+export const goBack = () => ({
+  type: GO_BACK,
+})
+
+export const changeCurrentTab = (tabName, title) => ({
   type: CHANGE_TAB,
-  payload: newTab,
+  payload: {
+    tabName, title,
+  },
 })
 export const singInRequest = () => ({
   type: SING_IN,
@@ -62,10 +69,12 @@ export const singOut = () => async (dispatch) => {
 
 const initialState = {
   currentTab: 'feed',
+  title: 'ОКБК Новости',
   isLoggedIn: false,
   isLoading: false,
   account: {},
   error: null,
+  tabHistory: ['feed'],
 }
 
 export default function (state = initialState, action) {
@@ -94,8 +103,20 @@ export default function (state = initialState, action) {
     case CHANGE_TAB:
       return {
         ...state,
-        currentTab: action.payload,
+        currentTab: action.payload.tabName,
+        title: action.payload.title,
+        tabHistory: [action.payload.tabName, ...state.tabHistory],
       }
+    case GO_BACK: {
+      const { tabHistory } = state
+      if (tabHistory === 0) return state
+      tabHistory.shift()
+      return {
+        ...state,
+        currentTab: tabHistory[0],
+        tabHistory,
+      }
+    }
     case SING_OUT:
       return initialState
     default:

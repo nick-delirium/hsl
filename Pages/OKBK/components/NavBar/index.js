@@ -13,26 +13,31 @@ import { changeCurrentTab } from '../../reducer'
 const TABS = [
   {
     name: 'feed',
+    title: 'ОКБК: Новости',
     image: require('../../../../assets/images/OKBK/NavBar/news_icon_gray.png'),
     activeImage: require('../../../../assets/images/OKBK/NavBar/news_icon_color.png'),
   },
   {
     name: 'groups',
+    title: 'ОКБК',
     image: require('../../../../assets/images/OKBK/NavBar/okbk_icon_gray.png'),
     activeImage: require('../../../../assets/images/OKBK/NavBar/okbk_icon_color.png'),
   },
   {
-    name: 'search',
+    name: 'okbkSearch',
+    title: 'Поиск по ОКБК',
     image: require('../../../../assets/images/OKBK/NavBar/search_icon_gray.png'),
     activeImage: require('../../../../assets/images/OKBK/NavBar/search_icon_color.png'),
   },
   {
     name: 'profile',
+    title: 'Ваш профиль',
     image: require('../../../../assets/images/OKBK/NavBar/persona_icon_gray.png'),
     activeImage: require('../../../../assets/images/OKBK/NavBar/persona_icon_color.png'),
   },
   {
     name: 'favorites',
+    title: 'Избранное',
     image: require('../../../../assets/images/OKBK/NavBar/like_icon_gray.png'),
     activeImage: require('../../../../assets/images/OKBK/NavBar/like_icon_color.png'),
   },
@@ -54,7 +59,7 @@ class NavBar extends Component {
         {TABS.map((tab) => (
           <TouchableWithoutFeedback
             key={tab.name}
-            onPressIn={() => actions.changeCurrentTab(tab.name)}
+            onPressIn={() => actions.changeCurrentTab(tab.name, tab.title)}
           >
             <View
               style={{
@@ -111,7 +116,7 @@ const mapStateToProps = createStructuredSelector({
 })
 const mapDispatchToProps = (dispatch) => ({
   actions: {
-    changeCurrentTab: (name) => dispatch(changeCurrentTab(name)),
+    changeCurrentTab: (name, title) => dispatch(changeCurrentTab(name, title)),
   },
 })
 

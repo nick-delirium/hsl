@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native'
 import get from 'lodash/get'
+import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { formatEventDate } from '@/common/format'
@@ -29,21 +30,24 @@ const Header = ({
   fetchEvents,
   categories,
   feedType,
+  tabTitle,
 }) => {
-  const isSearch = /search/.test(location)
+  const isSearch = /search/.test(location.pathname)
   const isInsidePost = isPostOpen
   const isArticle = type === 'article'
   const isEventArticle = type === 'event'
+  const isOKBK = /okbk/.test(location.pathname)
   const shouldRenderSpecificTitle = isInsidePost || isSearch
   const specificTitle = isArticle ? navTitle.articleTitle
     : isEventArticle ? navTitle.eventTitle : undefined
   const specificUrl = isArticle ? url.articleUrl : url.eventUrl
-  const title = shouldRenderSpecificTitle ? specificTitle : pageTitles[location].toUpperCase()
+  const title = isOKBK
+    ? tabTitle : shouldRenderSpecificTitle
+      ? specificTitle : pageTitles[location.pathname].toUpperCase()
   const shouldRenderBackButton = shouldRenderSpecificTitle
-  const shouldRenderSearch = (/news|blogs|programs|media|search/i.test(location) || location === '/') && !isPostOpen
+  const shouldRenderSearch = (/news|blogs|programs|media|search/i.test(location.pathname) || location.pathname === '/') && !isPostOpen
 
   const onBackIconPress = isSearch && !isPostOpen ? goBack : closePost
-
   const share = async () => {
     try {
       await Share.share({
@@ -195,6 +199,7 @@ const mapStateFromProps = createStructuredSelector({
   categories: (state) => get(state, 'url.categories'),
   postType: (state) => get(state, 'url.type'),
   feedType: (state) => get(state, 'url.feedType'),
+  tabTitle: (state) => get(state, 'okbk.title'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -205,7 +210,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
 })
 
+const HeaderWithRouter = withRouter(Header)
+
 export default connect(
   mapStateFromProps,
   mapDispatchToProps,
-)(Header)
+)(HeaderWithRouter)

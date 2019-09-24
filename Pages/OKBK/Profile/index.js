@@ -59,8 +59,13 @@ const ProfileActions = ({ singOutAction }) => (
 
 class Profile extends React.PureComponent {
   render() {
-    const { self = false, account: { user }, actions } = this.props
-    console.log(user)
+    const {
+      self = false,
+      personalInfo = {},
+      account: { user },
+      actions,
+    } = this.props
+    const displayedUser = self ? user : personalInfo
     return (
       <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
         {self && <ProfileActions singOutAction={actions.singOut} />}
@@ -68,69 +73,64 @@ class Profile extends React.PureComponent {
 
           <View>
             <Image
-              source={user.photo ? { uri: user.photo } : require('../assets/no_photo.png')}
+              source={displayedUser.photo ? { uri: displayedUser.photo } : require('../assets/no_photo.png')}
               resizeMode="contain"
               style={styles.profilePhoto}
             />
           </View>
           <Text style={styles.nameText}>
-            {user.name}
+            {displayedUser.name}
           </Text>
           <Text style={styles.smallText}>
-            {user.city_name}
+            {displayedUser.city_name}
           </Text>
           <Text style={styles.smallText}>
-            {user.business_club_name}
+            {displayedUser.business_club_name}
           </Text>
-          {user.career && (
+          {displayedUser.career && (
             <Text style={styles.smallText}>
-              {user.career}
+              {displayedUser.career}
             </Text>
           )}
 
-          {user.business_areas.length > 0 && (
+          {displayedUser.business_areas.length > 0 && (
             <>
               <Text style={styles.heading}> Сфера деятельности </Text>
-              {user.business_areas.map((area) => (
+              {displayedUser.business_areas.map((area) => (
                 <Text key={area.id} style={styles.smallText}>{area.name}</Text>
               ))}
             </>
           )}
 
           <Text style={styles.heading}> Контакты </Text>
-          {user.contact_email && (
+          {displayedUser.contact_email && (
             <Text style={styles.smallText}>
-              {user.contact_email}
+              {displayedUser.contact_email}
             </Text>
           )}
-          {user.phone && (
+          {displayedUser.phone && (
             <Text style={styles.smallText}>
-              {user.phone}
+              {displayedUser.phone}
             </Text>
-          )}
-          {user.social_media && (
-            <TouchableWithoutFeedback
-              onPress={() => openLink(`https://${user.social_media}`)}
-            >
-              <Text style={{ ...styles.smallText, color: '#333376' }}>
-                {mapSocialNetwork(user.social_media)}
-              </Text>
-            </TouchableWithoutFeedback>
           )}
           <View style={styles.contacts}>
-            {user.whatsapp && (
-              <TouchableWithoutFeedback onPress={() => openLink(`https://wa.me/${user.phone.replace('+', '')}`)}>
+            {displayedUser.whatsapp && (
+              <TouchableWithoutFeedback onPress={() => openLink(`https://api.whatsapp.com/send?phone=${displayedUser.phone.replace('+', '')}`)}>
                 <View style={styles.contactsRow}>
                   <Image style={{ width: 20, height: 20, marginRight: 10 }} resizeMode="contain" source={require('../assets/WU.png')} />
                   <Text style={{ ...styles.smallText, marginBottom: 0, color: '#33CC33' }}>whatsapp</Text>
                 </View>
               </TouchableWithoutFeedback>
             )}
-            {user.telegram && (
-              <View style={styles.contactsRow}>
-                <Image style={{ width: 22, height: 20, marginRight: 10 }} resizeMode="contain" source={require('../assets/T.png')} />
-                <Text style={{ ...styles.smallText, marginBottom: 0, color: '#3FA9F5' }}>telegram</Text>
-              </View>
+            {displayedUser.social_media && (
+              <TouchableWithoutFeedback
+                onPress={() => openLink(`https://${displayedUser.social_media}`)}
+              >
+                <Image style={{ width: 20, height: 20, marginRight: 10 }} resizeMode="contain" source={require('../assets/facebook.png')} />
+                <Text style={{ ...styles.smallText, marginBottom: 0, color: '#2F80ED' }}>
+                  facebook
+                </Text>
+              </TouchableWithoutFeedback>
             )}
           </View>
 
