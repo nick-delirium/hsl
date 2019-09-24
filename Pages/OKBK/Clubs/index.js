@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   ScrollView,
+  Dimensions,
 } from 'react-native'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
@@ -13,6 +14,8 @@ import { fonts } from '@/constants/Styles'
 import Card from '@/components/Card'
 import { NumEnding } from '@/common/format'
 import { getClubs } from '../reducer'
+
+const { height } = Dimensions.get('window')
 
 // const cardData = [
 //   { name: 'Деловой клуб Ассоциации корейцев Казахстана', number: 256, icon: require('../../../assets/images/OKBK/logo_OKBK.png') },
@@ -25,12 +28,21 @@ class Clubs extends PureComponent {
     actions.getClubs()
   }
 
+  onItemPress = (item) => {
+    console.log(item)
+  }
+
   render() {
     const { clubs } = this.props
+    const photos = [
+      require('../../../assets/images/OKBK/logo_OKBK.png'),
+      require('../../../assets/images/youtube-play-btn.png'),
+      require('../../../assets/images/robot-dev.png'),
+    ]
     return (
       <ScrollView contentContainerStyle={styles.pageWrapper}>
         {clubs.map((item) => (
-          <Card key={item.name.trim()}>
+          <Card key={item.name.trim()} onItemPress={() => this.onItemPress(item)}>
             <View style={styles.cardInner}>
               <View style={styles.header}>
                 <Text style={styles.clubName}>{item.name}</Text>
@@ -40,14 +52,35 @@ class Clubs extends PureComponent {
                   <Image
                     style={styles.logo}
                     resizeMode="contain"
-                    source={item.icon}
+                    // source={item.icon}
+                    source={require('../../../assets/images/OKBK/logo_OKBK.png')}
                   />
                 </View>
-                {item.number && (
+                {/* {item.number && (
                   <View style={styles.textWrapper}>
                     <Text style={styles.text}>{item.number + NumEnding(item.number, [' участник', ' участника', ' участников'])}</Text>
                   </View>
-                )}
+                )} */}
+                <View style={styles.textWrapper}>
+                  <View style={styles.photoWrapper}>
+                    {/* item.photos */}
+                    {photos.map((photo, i) => {
+                      const l = photos.length
+                      return (
+                        <Image
+                          style={{
+                            ...styles.photo,
+                            marginRight: (i === l - 1 ? 0 : -10),
+                            zIndex: l - i,
+                          }}
+                          resizeMode="cover"
+                          source={photo}
+                        />
+                      )
+                    })}
+                  </View>
+                  <Text style={styles.text}>{256 + NumEnding(256, [' участник', ' участника', ' участников'])}</Text>
+                </View>
               </View>
             </View>
           </Card>
@@ -98,6 +131,26 @@ const styles = StyleSheet.create({
     left: -10,
     height: '100%',
     width: '100%',
+  },
+  photoWrapper: {
+    flexDirection: 'row',
+  },
+  photo: {
+    height: 48,
+    width: 48,
+    borderRadius: 24,
+    borderWidth: 2,
+    borderColor: '#fff',
+  },
+  oneClubWrapper: {
+    position: 'absolute',
+    top: 0,
+    paddingBottom: 92, // height of header
+    left: 0,
+    zIndex: 9,
+    height,
+    backgroundColor: '#E1E1E1',
+    flex: 1,
   },
 })
 
