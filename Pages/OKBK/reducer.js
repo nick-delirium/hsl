@@ -5,13 +5,25 @@ import { client, auth, getClubsQuery } from './gqlQueries'
 const SING_IN = 'app.okbk.sing_in'
 const SING_IN_SUCCESS = 'app.okbk.sing_in_succsess'
 const ACCOUNT_CONFIRMED = 'app.okbk.account_session_acive'
-const SING_IN_FALURE = 'app.okbk.sing_in_falure'
+const SING_IN_FALURE = 'app.okbk.sing_in.fail'
 const SING_OUT = 'app.okbk.sing_out'
 const CHANGE_TAB = 'app.okbk.change_tab'
+const CHANGE_TITLE = 'app.okbk.change_title'
+const GO_BACK = 'app.okbk.go_back'
 
-export const changeCurrentTab = (newTab) => ({
+export const goBack = () => ({
+  type: GO_BACK,
+})
+export const changeTitle = (title) => ({
+  type: CHANGE_TITLE,
+  payload: title,
+})
+
+export const changeCurrentTab = (tabName, title) => ({
   type: CHANGE_TAB,
-  payload: newTab,
+  payload: {
+    tabName, title,
+  },
 })
 export const singInRequest = () => ({
   type: SING_IN,
@@ -27,7 +39,6 @@ export const accountConfirmed = (account) => ({
 export const singInRequestFalure = () => ({
   type: SING_IN_FALURE,
 })
-
 export const singIn = (account) => (
   async (dispatch) => {
     dispatch(singInRequest)
@@ -53,9 +64,14 @@ export const singIn = (account) => (
   }
 )
 
-export const singOut = () => ({
-  type: SING_OUT,
-})
+export const singOut = () => async (dispatch) => {
+  try {
+    await AsyncStorage.removeItem('account')
+    dispatch({ type: SING_OUT })
+  } catch (e) {
+    console.log(e)
+  }
+}
 
 // Getting clubs
 const GET_CLUBS = 'app.okbk.get_clubs'
@@ -93,11 +109,13 @@ export const getClubs = () => (
 
 const initialState = {
   currentTab: 'feed',
+  title: 'ОКБК Новости',
   isLoggedIn: false,
   isLoading: false,
   account: {},
   error: null,
   clubs: [],
+  tabHistory: ['feed'],
 }
 
 export default function (state = initialState, action) {
@@ -123,21 +141,35 @@ export default function (state = initialState, action) {
         isLoggedIn: true,
         isLoading: false,
       }
-    case SING_OUT:
-      return {
-        ...state,
-        isLoggedIn: false,
-      }
     case CHANGE_TAB:
       return {
         ...state,
-        currentTab: action.payload,
+        currentTab: action.payload.tabName,
+        title: action.payload.title,
+        tabHistory: [action.payload.tabName, ...state.tabHistory],
       }
+    case CHANGE_TITLE:
+      return {
+        ...state,
+        title: action.payload,
+      }
+    case GO_BACK: {
+      const { tabHistory } = state
+      if (tabHistory === 0) return state
+      tabHistory.shift()
+      return {
+        ...state,
+        currentTab: tabHistory[0],
+        tabHistory,
+      }
+    }
     case GET_CLUBS_SUCCESS:
       return {
         ...state,
         clubs: action.payload,
       }
+    case SING_OUT:
+      return initialState
     default:
       return state
   }
