@@ -7,10 +7,15 @@ const ACCOUNT_CONFIRMED = 'app.okbk.account_session_acive'
 const SING_IN_FALURE = 'app.okbk.sing_in.fail'
 const SING_OUT = 'app.okbk.sing_out'
 const CHANGE_TAB = 'app.okbk.change_tab'
+const CHANGE_TITLE = 'app.okbk.change_title'
 const GO_BACK = 'app.okbk.go_back'
 
 export const goBack = () => ({
   type: GO_BACK,
+})
+export const changeTitle = (title) => ({
+  type: CHANGE_TITLE,
+  payload: title,
 })
 
 export const changeCurrentTab = (tabName, title) => ({
@@ -106,6 +111,11 @@ export default function (state = initialState, action) {
         currentTab: action.payload.tabName,
         title: action.payload.title,
         tabHistory: [action.payload.tabName, ...state.tabHistory],
+      }
+    case CHANGE_TITLE:
+      return {
+        ...state,
+        title: action.payload,
       }
     case GO_BACK: {
       const { tabHistory } = state
