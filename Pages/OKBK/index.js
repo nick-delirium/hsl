@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import Login from './Login'
-// import Clubs from './Clubs'
+import Clubs from './Clubs'
 import People from './People'
 import Profile from './Profile'
 import { authErrors } from './queriesErrors'
@@ -39,8 +39,8 @@ class OKBK extends PureComponent {
     switch (currentTab) {
       case 'groups':
         return <Clubs />
-      case 'people':
-        return <People />
+      // case 'people':
+      //   return <People />
       case 'profile':
         return <Profile self />
       default:

@@ -5,6 +5,7 @@ import get from 'lodash/get'
 import {
   StyleSheet,
   View,
+  ScrollView,
   Text,
   Image,
   TouchableOpacity,
@@ -67,80 +68,90 @@ class Profile extends React.PureComponent {
     } = this.props
     const displayedUser = self ? user : personalInfo
     return (
-      <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
-        {self && <ProfileActions singOutAction={actions.singOut} />}
-        <View style={styles.profileWrapper}>
+      <ScrollView>
+        <View style={styles.mainView}>
+          {self && <ProfileActions singOutAction={actions.singOut} />}
+          <View style={styles.profileWrapper}>
 
-          <View>
-            <Image
-              source={displayedUser.photo ? { uri: displayedUser.photo } : require('../assets/no_photo.png')}
-              resizeMode="contain"
-              style={styles.profilePhoto}
-            />
-          </View>
-          <Text style={styles.nameText}>
-            {displayedUser.name}
-          </Text>
-          <Text style={styles.smallText}>
-            {displayedUser.city_name}
-          </Text>
-          <Text style={styles.smallText}>
-            {displayedUser.business_club_name}
-          </Text>
-          {displayedUser.career && (
-            <Text style={styles.smallText}>
-              {displayedUser.career}
+            <View>
+              <Image
+                source={displayedUser.photo ? { uri: displayedUser.photo } : require('../assets/no_photo.png')}
+                resizeMode="cover"
+                style={styles.profilePhoto}
+              />
+            </View>
+            <Text style={styles.nameText}>
+              {displayedUser.name}
             </Text>
-          )}
-
-          {displayedUser.business_areas.length > 0 && (
-            <>
-              <Text style={styles.heading}> Сфера деятельности </Text>
-              {displayedUser.business_areas.map((area) => (
-                <Text key={area.id} style={styles.smallText}>{area.name}</Text>
-              ))}
-            </>
-          )}
-
-          <Text style={styles.heading}> Контакты </Text>
-          {displayedUser.contact_email && (
             <Text style={styles.smallText}>
-              {displayedUser.contact_email}
+              {displayedUser.city_name}
             </Text>
-          )}
-          {displayedUser.phone && (
             <Text style={styles.smallText}>
-              {displayedUser.phone}
+              {displayedUser.business_club_name}
             </Text>
-          )}
-          <View style={styles.contacts}>
-            {displayedUser.whatsapp && (
-              <TouchableWithoutFeedback onPress={() => openLink(`https://api.whatsapp.com/send?phone=${displayedUser.phone.replace('+', '')}`)}>
-                <View style={styles.contactsRow}>
-                  <Image style={{ width: 20, height: 20, marginRight: 10 }} resizeMode="contain" source={require('../assets/WU.png')} />
-                  <Text style={{ ...styles.smallText, marginBottom: 0, color: '#33CC33' }}>whatsapp</Text>
-                </View>
-              </TouchableWithoutFeedback>
+            {displayedUser.career && (
+              <Text style={styles.smallText}>
+                {displayedUser.career}
+              </Text>
             )}
-            {displayedUser.social_media && (
-              <TouchableWithoutFeedback
-                onPress={() => openLink(`https://${displayedUser.social_media}`)}
-              >
-                <Image style={{ width: 20, height: 20, marginRight: 10 }} resizeMode="contain" source={require('../assets/facebook.png')} />
-                <Text style={{ ...styles.smallText, marginBottom: 0, color: '#2F80ED' }}>
-                  facebook
-                </Text>
-              </TouchableWithoutFeedback>
-            )}
-          </View>
 
+            {displayedUser.business_areas.length > 0 && (
+              <>
+                <Text style={styles.heading}> Сфера деятельности </Text>
+                {displayedUser.business_areas.map((area) => (
+                  <Text key={area.id} style={styles.smallText}>{area.name}</Text>
+                ))}
+              </>
+            )}
+
+            <Text style={styles.heading}> Контакты </Text>
+            {displayedUser.contact_email && (
+              <Text style={styles.smallText}>
+                {displayedUser.contact_email}
+              </Text>
+            )}
+            {displayedUser.phone && (
+              <Text style={styles.smallText}>
+                {displayedUser.phone}
+              </Text>
+            )}
+            <View style={styles.contacts}>
+              {displayedUser.phone && (
+                <TouchableWithoutFeedback onPress={() => openLink(`https://api.whatsapp.com/send?phone=${displayedUser.phone.replace('+', '')}`)}>
+                  <View style={styles.contactsRow}>
+                    <Image style={{ width: 20, height: 20, marginRight: 10 }} resizeMode="contain" source={require('../assets/WU.png')} />
+                    <Text style={{ ...styles.smallText, marginBottom: 0, color: '#33CC33' }}>whatsapp</Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              )}
+              {displayedUser.social_media && (
+                <TouchableWithoutFeedback
+                  onPress={() => openLink(`https://${displayedUser.social_media}`)}
+                >
+                  <View style={styles.contactsRow}>
+                    <Image style={{ width: 20, height: 20, marginRight: 10 }} resizeMode="contain" source={require('../assets/facebook.png')} />
+                    <Text style={{ ...styles.smallText, marginBottom: 0, color: '#2F80ED' }}>
+                      facebook
+                    </Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              )}
+            </View>
+
+          </View>
         </View>
-      </View>
+      </ScrollView>
     )
   }
 }
 
 const styles = StyleSheet.create({
+  mainView: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginBottom: 80,
+  },
   actions: {
     width,
     justifyContent: 'space-between',
@@ -151,7 +162,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: '40%',
+    width: '70%',
   },
   contactsRow: {
     flexDirection: 'row',
@@ -180,6 +191,7 @@ const styles = StyleSheet.create({
   smallText: {
     fontSize: fonts.mini,
     marginBottom: 10,
+    textAlign: 'center',
   },
   nameText: {
     fontSize: fonts.big,
