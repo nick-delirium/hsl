@@ -58,11 +58,11 @@ class OKBK extends PureComponent {
 
     if (isLoading) return <Text>loading</Text>
 
-    // if (!isLoggedIn || error) {
-    //   return (
-    //     <Login error={get(authErrors, error)} />
-    //   )
-    // }
+    if (!isLoggedIn && !error) {
+      return (
+        <Login error={get(authErrors, error)} />
+      )
+    }
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
         <View style={styles.main}>

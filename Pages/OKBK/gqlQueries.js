@@ -14,7 +14,8 @@ query auth ($email: String!, $password: String!) {
     groups { id, name },
     user {
       id,
-      name,
+      first_name,
+      last_name,
       photo,
       career,
       social_media,
@@ -64,7 +65,8 @@ query users(
     message,
     users {
       id,
-      name,
+      first_name,
+      last_name,
       photo,
       career,
       social_media,
