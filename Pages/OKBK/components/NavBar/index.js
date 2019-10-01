@@ -25,7 +25,7 @@ const TABS = [
   },
   {
     name: 'okbkSearch',
-    title: 'Поиск по ОКБК',
+    title: 'Поиск участников ОКБК',
     image: require('../../../../assets/images/OKBK/NavBar/search_icon_gray.png'),
     activeImage: require('../../../../assets/images/OKBK/NavBar/search_icon_color.png'),
   },

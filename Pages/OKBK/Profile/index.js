@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 import React from 'react'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -119,7 +120,7 @@ class Profile extends React.PureComponent {
               {Boolean(displayedUser.phone) && (
                 <TouchableWithoutFeedback
                   onPress={() => {
-                    return openLink(`https://api.whatsapp.com/send?phone=${displayedUser.phone.replace('+', '').replace(/ /g,'')}`)
+                    return openLink(`https://api.whatsapp.com/send?phone=${displayedUser.phone.replace('+', '').replace(/ /g, '')}`)
                   }}
                 >
                   <View style={{ ...styles.contactsRow, marginRight: 20 }}>

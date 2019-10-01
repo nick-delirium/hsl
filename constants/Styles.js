@@ -20,6 +20,7 @@ function normalize(size) {
 }
 
 export const fonts = {
+  ultra: normalize(11),
   mini: normalize(12),
   small: normalize(13),
   normal: normalize(15),
