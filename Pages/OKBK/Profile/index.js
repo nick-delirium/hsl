@@ -33,15 +33,6 @@ const sendRequest = () => {
   )
 }
 
-const mapSocialNetwork = (link) => {
-  if (link.includes('facebook')) return 'facebook'
-  if (link.includes('twitter')) return 'twitter'
-  if (link.includes('instagram')) return 'instagram'
-  if (link.includes('vk')) return 'vk'
-  return link
-}
-
-
 const ProfileActions = ({ singOutAction }) => (
   <View style={styles.actions}>
     <TouchableOpacity
@@ -81,10 +72,9 @@ class Profile extends React.PureComponent {
               />
             </View>
             <Text style={styles.nameText}>
-              {displayedUser.first_name}
-            </Text>
-            <Text style={styles.nameText}>
               {displayedUser.last_name}
+              {'\r\n'}
+              {displayedUser.first_name}
             </Text>
             <Text style={styles.smallText}>
               {displayedUser.city_name}
@@ -120,7 +110,11 @@ class Profile extends React.PureComponent {
             )}
             <View style={styles.contacts}>
               {displayedUser.phone && (
-                <TouchableWithoutFeedback onPress={() => openLink(`https://api.whatsapp.com/send?phone=${displayedUser.phone.replace('+', '')}`)}>
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    return openLink(`https://api.whatsapp.com/send?phone=${displayedUser.phone.replace('+', '').replace(/ /g,'')}`)
+                  }}
+                >
                   <View style={styles.contactsRow}>
                     <Image style={{ width: 20, height: 20, marginRight: 10 }} resizeMode="contain" source={require('../assets/WU.png')} />
                     <Text style={{ ...styles.smallText, marginBottom: 0, color: '#33CC33' }}>whatsapp</Text>
@@ -200,6 +194,7 @@ const styles = StyleSheet.create({
     fontSize: fonts.big,
     fontWeight: 'bold',
     marginBottom: 11,
+    textAlign: 'center',
   },
   profileWrapper: {
     flexDirection: 'column',
