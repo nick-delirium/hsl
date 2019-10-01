@@ -13,7 +13,13 @@ import { createStructuredSelector } from 'reselect'
 import { fonts } from '@/constants/Styles'
 import Card from '@/components/Card'
 import { NumEnding } from '@/common/format'
-import { getClubs } from '../reducer'
+import {
+  getClubs,
+  changeCurrentTab,
+  getUsers,
+  setSelectedClub,
+  changeTitle,
+} from '../reducer'
 
 const { height } = Dimensions.get('window')
 
@@ -29,7 +35,12 @@ class Clubs extends PureComponent {
   }
 
   onItemPress = (item) => {
-    console.log(item)
+    const { actions } = this.props
+    console.log(item.short_name)
+    actions.getUsers({ business_club_id: item.id })
+    actions.setSelectedClub(item)
+    // actions.changeTitle(item.short_name ? item.short_name : item.name)
+    actions.changeCurrentTab('people')
   }
 
   render() {
@@ -161,6 +172,10 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   actions: {
     getClubs: () => dispatch(getClubs()),
+    getUsers: (params) => dispatch(getUsers(params)),
+    changeCurrentTab: (tabName) => dispatch(changeCurrentTab(tabName)),
+    setSelectedClub: (club) => dispatch(setSelectedClub(club)),
+    changeTitle: (title) => dispatch(changeTitle(title)),
   },
 })
 

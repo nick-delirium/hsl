@@ -64,7 +64,8 @@ query users(
     message,
     users {
       id,
-      name,
+      first_name,
+      last_name,
       photo,
       career,
       social_media,
@@ -102,7 +103,8 @@ query businessClubList
         site,
         chief {
           id,
-          name,
+          first_name,
+          last_name,
           photo,
           career,
           social_media,

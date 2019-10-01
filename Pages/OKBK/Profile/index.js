@@ -81,7 +81,10 @@ class Profile extends React.PureComponent {
               />
             </View>
             <Text style={styles.nameText}>
-              {displayedUser.name}
+              {displayedUser.first_name}
+            </Text>
+            <Text style={styles.nameText}>
+              {displayedUser.last_name}
             </Text>
             <Text style={styles.smallText}>
               {displayedUser.city_name}

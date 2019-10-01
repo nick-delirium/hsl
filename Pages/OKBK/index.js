@@ -39,8 +39,8 @@ class OKBK extends PureComponent {
     switch (currentTab) {
       case 'groups':
         return <Clubs />
-      // case 'people':
-      //   return <People />
+      case 'people':
+        return <People />
       case 'profile':
         return <Profile self />
       default:
