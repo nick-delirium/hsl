@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
     height: 145,
     flexDirection: 'row',
     alignItems: 'center',
+    borderRadius: 4,
     backgroundColor: '#ffffff',
   },
   photoWrapper: {

@@ -74,7 +74,9 @@ class Clubs extends PureComponent {
                       )
                     })}
                   </View>
-                  <Text style={styles.text}>{item.usersCount + NumEnding(256, [' участник', ' участника', ' участников'])}</Text>
+                  <Text style={styles.text}>
+                    {item.usersCount + NumEnding(item.usersCount, [' участник', ' участника', ' участников'])}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -95,6 +97,7 @@ const styles = StyleSheet.create({
     padding: 20,
     height: 200,
     flexDirection: 'column',
+    borderRadius: 4,
     backgroundColor: '#ffffff',
   },
   header: {
