@@ -40,7 +40,7 @@ class Clubs extends PureComponent {
   render() {
     const { clubs } = this.props
     return (
-      <ScrollView contentContainerStyle={styles.pageWrapper}>
+      <ScrollView contentContainerStyle={styles.pageWrapper} bounces={false}>
         {clubs.map((item) => (
           <Card key={item.name.trim()} onItemPress={() => this.onItemPress(item)}>
             <View style={styles.cardInner}>
@@ -89,6 +89,7 @@ const styles = StyleSheet.create({
   pageWrapper: {
     flexGrow: 1,
     backgroundColor: Colors.backgroundGray,
+    paddingBottom: 80,
   },
   cardInner: {
     padding: 20,

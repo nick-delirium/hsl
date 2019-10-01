@@ -22,7 +22,7 @@ class People extends PureComponent {
     const { users, selectedClub } = this.props
     // selectedClub.name  / short_name- set to title
     return (
-      <ScrollView contentContainerStyle={styles.pageWrapper}>
+      <ScrollView contentContainerStyle={styles.pageWrapper} bounces={false}>
         { selectedClub && (
           <View style={styles.topWrapper}>
 
