@@ -1,5 +1,10 @@
 import { AsyncStorage } from 'react-native'
-import { client, auth, getClubsQuery } from './gqlQueries'
+import {
+  client,
+  auth,
+  getClubsQuery,
+  getUsersQuery,
+} from './gqlQueries'
 
 // Auth
 const SING_IN = 'app.okbk.sing_in'
@@ -45,7 +50,6 @@ export const singIn = (account) => (
     try {
       const response = await client.query({ query: auth, variables: account })
       if (response.data.auth.result) {
-        console.log(response.data)
         const { sessionId, groups, user } = response.data.auth
         const accountInfo = { sessionId, groups, user }
         dispatch({ type: SING_IN_SUCCESS, payload: accountInfo })
@@ -77,6 +81,7 @@ export const singOut = () => async (dispatch) => {
 const GET_CLUBS = 'app.okbk.get_clubs'
 const GET_CLUBS_SUCCESS = 'app.okbk.get_clubs_succsess'
 const GET_CLUBS_FALURE = 'app.okbk.get_clubs_falure'
+const SET_SELECTED_CLUB = 'app.okbk.set_selected_club'
 
 export const getClubsRequest = () => ({
   type: GET_CLUBS,
@@ -107,15 +112,68 @@ export const getClubs = () => (
   }
 )
 
+export const setSelectedClub = (club) => (
+  (dispatch) => {
+    dispatch({
+      type: SET_SELECTED_CLUB,
+      payload: club,
+    })
+    dispatch(changeTitle(club.short_name || club.name))
+  }
+)
+
+// Getting users
+const GET_USERS = 'app.okbk.get_users'
+const GET_USERS_SUCCESS = 'app.okbk.get_users_succsess'
+const GET_USERS_FALURE = 'app.okbk.get_users_falure'
+
+export const getUsersRequest = () => ({
+  type: GET_USERS,
+})
+export const getUsersSuccsess = (users) => ({
+  type: GET_USERS_SUCCESS,
+  payload: users,
+})
+export const getUsersFalure = () => ({
+  type: GET_USERS_FALURE,
+})
+
+export const getUsers = (params) => (
+  // const {
+  //   business_club_id,
+  //   business_area_id,
+  //   city_id,
+  //   country_id,
+  //   search, } = params
+  async (dispatch) => {
+    dispatch({ type: GET_USERS })
+    try {
+      const response = await client.query({ query: getUsersQuery, variables: params })
+      const res = response.data.users
+      // console.log(res)
+      if (res.result) {
+        dispatch(getUsersSuccsess(res.users))
+      } else {
+        console.error(res.message)
+        dispatch(getUsersFalure())
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+)
+
 const initialState = {
   currentTab: 'feed',
+  tabHistory: ['feed'],
   title: 'ОКБК Новости',
   isLoggedIn: false,
   isLoading: false,
   account: {},
   error: null,
   clubs: [],
-  tabHistory: ['feed'],
+  users: [],
+  selectedClub: null,
 }
 
 export default function (state = initialState, action) {
@@ -167,6 +225,16 @@ export default function (state = initialState, action) {
       return {
         ...state,
         clubs: action.payload,
+      }
+    case GET_USERS_SUCCESS:
+      return {
+        ...state,
+        users: action.payload,
+      }
+    case SET_SELECTED_CLUB:
+      return {
+        ...state,
+        selectedClub: action.payload,
       }
     case SING_OUT:
       return initialState

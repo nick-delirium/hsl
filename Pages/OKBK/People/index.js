@@ -7,50 +7,71 @@ import {
   ScrollView,
   Dimensions,
 } from 'react-native'
+import get from 'lodash/get'
+import { connect } from 'react-redux'
+import { createStructuredSelector } from 'reselect'
 import { fonts } from '@/constants/Styles'
 import colors from '../colors'
 import Card from '@/components/Card'
 
 const { width } = Dimensions.get('window')
 
-const cardData = [
-  { name: 'Ким Дмитрий Валентинович', work: 'ГК "Лидер Консалт"', photo: require('../../../assets/images/OKBK/logo_OKBK.png') },
-  { name: 'Ким Елена Юрьевна', work: 'ООО "РОСТТОФУ"', photo: require('../../../assets/images/OKBK/logo_OKBK.png') },
-]
-
 class People extends PureComponent {
   render() {
+    const { users, selectedClub } = this.props
+    // selectedClub.name  / short_name- set to title
     return (
       <ScrollView contentContainerStyle={styles.pageWrapper}>
-        <View style={{ height: '50%', width, backgroundColor: '#5F4C96', flexDirection: 'column', alignItems: 'center' }}>
-          <View style={styles.topCard}>
-            <View style={styles.photoWrapper}>
-              <Image
-                style={styles.photo}
-                resizeMode="cover"
-                source={cardData[0].photo}
-              />
+        {users.length > 0 && selectedClub && (
+          <View style={styles.topWrapper}>
+
+            <Image
+              style={styles.logo}
+              resizeMode="contain"
+              // source={selectedClub.icon}
+              source={require('../../../assets/images/OKBK/logo_OKBK.png')}
+            />
+            <Text style={styles.сlubText}>{selectedClub.description}</Text>
+
+            <View style={styles.topCard}>
+              <View style={styles.photoWrapper}>
+                <Image
+                  style={styles.photo}
+                  resizeMode="cover"
+                  source={selectedClub.chief.photo}
+                />
+              </View>
+              <View style={styles.textWrapper}>
+                <Text style={{ ...styles.textName, color: '#fff' }}>{selectedClub.chief.last_name}</Text>
+                <Text style={{ ...styles.textName, color: '#fff' }}>{selectedClub.chief.first_name}</Text>
+                {/* <Text style={styles.text}>{selectedClub.chief.career}</Text> */}
+                <Text style={styles.text}>Руководитель клуба</Text>
+              </View>
             </View>
-            <View style={styles.textWrapper}>
-              <Text style={{ ...styles.textName, color: '#FFFFFF' }}>{cardData[0].name}</Text>
-              <Text style={{ ...styles.text, color: '#FFFFFF' }}>{cardData[0].work}</Text>
-            </View>
+
+            {selectedClub.phone && <Text style={styles.сlubText}>{selectedClub.phone}</Text>}
+            {selectedClub.email && <Text style={styles.сlubText}>{selectedClub.email}</Text>}
+            {selectedClub.site && <Text style={styles.сlubText}>{selectedClub.site}</Text>}
+
           </View>
-        </View>
-        {cardData.map((item) => (
-          <Card key={item.name.trim()}>
+        )}
+        {users.map((item) => (
+          <Card key={item.name && item.name.trim()}>
             <View style={styles.cardInner}>
               <View style={styles.photoWrapper}>
                 <Image
                   style={styles.photo}
                   resizeMode="cover"
-                  source={item.photo}
+                  source={item.photo ? { uri: item.photo } : require('../assets/no_photo.png')}
+                  // source={{ uri: 'https://lh4.googleusercontent.com/aqWc7GH02VVi-L8oxhIa1eplS136VCid4XpXTH9B9P8k5zcRvzX5rDGHOEWDz4evQ51YlQSXB5hCGZ5bHWW2=w2880-h1362' }}
                 />
               </View>
 
               <View style={styles.textWrapper}>
-                <Text style={styles.textName}>{item.name}</Text>
-                <Text style={styles.text}>{item.work}</Text>
+                <Text style={styles.textName}>{item.last_name}</Text>
+                <Text style={styles.textName}>{item.first_name}</Text>
+                {/* <Text style={styles.textName}>{item.name ? item.name : 'А нет имени'}</Text> */}
+                <Text style={{ ...styles.text, color: colors.grayText }}>{item.career}</Text>
               </View>
 
             </View>
@@ -65,9 +86,27 @@ const styles = StyleSheet.create({
   pageWrapper: {
     flexGrow: 1,
   },
+  topWrapper: {
+    width,
+    backgroundColor: '#5F4C96',
+    flexDirection: 'column',
+    alignItems: 'center',
+    paddingBottom: 15,
+  },
+  logo: {
+    // position: 'absolute',
+    // bottom: 0,
+    // left: -10,
+    // height: '100%',
+    width: '70%',
+    padding: 10,
+  },
   topCard: {
     marginRight: 15,
     marginLeft: 15,
+    marginTop: 15,
+    marginBottom: 15,
+    borderRadius: 4,
     shadowColor: '#000',
     shadowOpacity: 0.25,
     shadowRadius: 4,
@@ -98,9 +137,9 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   photo: {
-    height: 90,
-    width: 90,
-    borderRadius: 45,
+    height: 80,
+    width: 80,
+    borderRadius: 40,
     borderWidth: 1,
   },
   textWrapper: {
@@ -108,12 +147,33 @@ const styles = StyleSheet.create({
     marginLeft: 20,
   },
   textName: {
-    fontSize: fonts.heading,
+    fontSize: fonts.normal,
   },
   text: {
     fontSize: fonts.small,
-    color: colors.grayText,
+    color: '#ffffff',
+    paddingTop: 10,
+  },
+  сlubText: {
+    fontSize: fonts.small,
+    marginLeft: 15,
+    marginRight: 15,
+    color: '#ffffff',
   },
 })
 
-export default People
+const mapStateToProps = createStructuredSelector({
+  users: (state) => get(state, 'okbk.users'),
+  selectedClub: (state) => get(state, 'okbk.selectedClub'),
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  // actions: {
+  //   getClubs: () => dispatch(getClubs()),
+  // },
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(People)
