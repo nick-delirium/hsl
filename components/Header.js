@@ -37,7 +37,6 @@ const Header = ({
   const isArticle = type === 'article'
   const isEventArticle = type === 'event'
   const isOKBK = /okbk/.test(location.pathname)
-  console.log(isOKBK, tabTitle)
   const shouldRenderSpecificTitle = isInsidePost || isSearch
   const specificTitle = isArticle ? navTitle.articleTitle
     : isEventArticle ? navTitle.eventTitle : undefined

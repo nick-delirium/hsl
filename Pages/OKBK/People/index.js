@@ -12,6 +12,7 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { fonts } from '@/constants/Styles'
 import colors from '../colors'
+import Colors from '@/constants/Colors'
 import Card from '@/components/Card'
 
 const { width } = Dimensions.get('window')
@@ -22,13 +23,13 @@ class People extends PureComponent {
     // selectedClub.name  / short_name- set to title
     return (
       <ScrollView contentContainerStyle={styles.pageWrapper}>
-        {users.length > 0 && selectedClub && (
+        { selectedClub && (
           <View style={styles.topWrapper}>
 
             <Image
               style={styles.logo}
               resizeMode="contain"
-              // source={selectedClub.icon}
+              // source={selectedClub.icon ? { uri: selectedClub.icon } : require('../assets/no_photo.png')}
               source={require('../../../assets/images/OKBK/logo_OKBK.png')}
             />
             <Text style={styles.сlubText}>{selectedClub.description}</Text>
@@ -38,7 +39,7 @@ class People extends PureComponent {
                 <Image
                   style={styles.photo}
                   resizeMode="cover"
-                  source={selectedClub.chief.photo}
+                  source={selectedClub.chief.photo ? { uri: selectedClub.chief.photo } : require('../assets/no_photo.png')}
                 />
               </View>
               <View style={styles.textWrapper}>
@@ -63,15 +64,19 @@ class People extends PureComponent {
                   style={styles.photo}
                   resizeMode="cover"
                   source={item.photo ? { uri: item.photo } : require('../assets/no_photo.png')}
-                  // source={{ uri: 'https://lh4.googleusercontent.com/aqWc7GH02VVi-L8oxhIa1eplS136VCid4XpXTH9B9P8k5zcRvzX5rDGHOEWDz4evQ51YlQSXB5hCGZ5bHWW2=w2880-h1362' }}
                 />
               </View>
 
               <View style={styles.textWrapper}>
                 <Text style={styles.textName}>{item.last_name}</Text>
                 <Text style={styles.textName}>{item.first_name}</Text>
-                {/* <Text style={styles.textName}>{item.name ? item.name : 'А нет имени'}</Text> */}
-                <Text style={{ ...styles.text, color: colors.grayText }}>{item.career}</Text>
+                <Text
+                  style={{ ...styles.text, color: colors.grayText }}
+                  numberOfLines={3}
+                  ellipsizeMode="tail"
+                >
+                  {item.career /* it will be shorter */}
+                </Text>
               </View>
 
             </View>
@@ -85,6 +90,8 @@ class People extends PureComponent {
 const styles = StyleSheet.create({
   pageWrapper: {
     flexGrow: 1,
+    paddingBottom: 80,
+    backgroundColor: Colors.backgroundGray,
   },
   topWrapper: {
     width,

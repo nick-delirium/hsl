@@ -11,6 +11,7 @@ import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { fonts } from '@/constants/Styles'
+import Colors from '@/constants/Colors'
 import Card from '@/components/Card'
 import { NumEnding } from '@/common/format'
 import {
@@ -23,11 +24,6 @@ import {
 
 const { height } = Dimensions.get('window')
 
-// const cardData = [
-//   { name: 'Деловой клуб Ассоциации корейцев Казахстана', number: 256, icon: require('../../../assets/images/OKBK/logo_OKBK.png') },
-//   { name: 'Kimchi', number: 252, icon: require('../../../assets/images/OKBK/logo_OKBK.png') },
-// ]
-
 class Clubs extends PureComponent {
   componentDidMount() {
     const { actions } = this.props
@@ -36,20 +32,13 @@ class Clubs extends PureComponent {
 
   onItemPress = (item) => {
     const { actions } = this.props
-    console.log(item.short_name)
     actions.getUsers({ business_club_id: item.id })
-    actions.setSelectedClub(item)
-    // actions.changeTitle(item.short_name ? item.short_name : item.name)
     actions.changeCurrentTab('people')
+    actions.setSelectedClub(item)
   }
 
   render() {
     const { clubs } = this.props
-    const photos = [
-      require('../../../assets/images/OKBK/logo_OKBK.png'),
-      require('../../../assets/images/youtube-play-btn.png'),
-      require('../../../assets/images/robot-dev.png'),
-    ]
     return (
       <ScrollView contentContainerStyle={styles.pageWrapper}>
         {clubs.map((item) => (
@@ -63,20 +52,14 @@ class Clubs extends PureComponent {
                   <Image
                     style={styles.logo}
                     resizeMode="contain"
-                    // source={item.icon}
+                    // source={item.icon ? { uri: item.icon } : require('../assets/no_photo.png')}
                     source={require('../../../assets/images/OKBK/logo_OKBK.png')}
                   />
                 </View>
-                {/* {item.number && (
-                  <View style={styles.textWrapper}>
-                    <Text style={styles.text}>{item.number + NumEnding(item.number, [' участник', ' участника', ' участников'])}</Text>
-                  </View>
-                )} */}
                 <View style={styles.textWrapper}>
                   <View style={styles.photoWrapper}>
-                    {/* item.photos */}
-                    {photos.map((photo, i) => {
-                      const l = photos.length
+                    {item.randomUsers.map((user, i) => {
+                      const l = item.randomUsers.length
                       return (
                         <Image
                           style={{
@@ -85,12 +68,13 @@ class Clubs extends PureComponent {
                             zIndex: l - i,
                           }}
                           resizeMode="cover"
-                          source={photo}
+                          // source={require('../../../assets/images/youtube-play-btn.png')}
+                          source={user.photo ? { uri: user.photo } : require('../assets/no_photo.png')}
                         />
                       )
                     })}
                   </View>
-                  <Text style={styles.text}>{256 + NumEnding(256, [' участник', ' участника', ' участников'])}</Text>
+                  <Text style={styles.text}>{item.usersCount + NumEnding(256, [' участник', ' участника', ' участников'])}</Text>
                 </View>
               </View>
             </View>
@@ -104,6 +88,7 @@ class Clubs extends PureComponent {
 const styles = StyleSheet.create({
   pageWrapper: {
     flexGrow: 1,
+    backgroundColor: Colors.backgroundGray,
   },
   cardInner: {
     padding: 20,
