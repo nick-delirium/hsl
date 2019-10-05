@@ -126,6 +126,7 @@ export const setSelectedClub = (club) => (
 const GET_USERS = 'app.okbk.get_users'
 const GET_USERS_SUCCESS = 'app.okbk.get_users_succsess'
 const GET_USERS_FALURE = 'app.okbk.get_users_falure'
+const SET_SELECTED_USER = 'app.okbk.set_selected_user'
 
 export const getUsersRequest = () => ({
   type: GET_USERS,
@@ -150,7 +151,6 @@ export const getUsers = (params) => (
     try {
       const response = await client.query({ query: getUsersQuery, variables: params })
       const res = response.data.users
-      // console.log(res)
       if (res.result) {
         dispatch(getUsersSuccsess(res.users))
       } else {
@@ -160,6 +160,16 @@ export const getUsers = (params) => (
     } catch (e) {
       console.error(e)
     }
+  }
+)
+
+export const setSelectedUser = (user) => (
+  (dispatch) => {
+    dispatch({
+      type: SET_SELECTED_USER,
+      payload: user,
+    })
+    dispatch(changeTitle(`${user.last_name} ${user.first_name}`))
   }
 )
 
@@ -173,7 +183,8 @@ const initialState = {
   error: null,
   clubs: [],
   users: [],
-  selectedClub: null,
+  selectedClub: {},
+  personalInfo: {},
 }
 
 export default function (state = initialState, action) {
@@ -235,6 +246,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         selectedClub: action.payload,
+      }
+    case SET_SELECTED_USER:
+      return {
+        ...state,
+        personalInfo: action.payload,
       }
     case SING_OUT:
       return initialState

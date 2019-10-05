@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-boolean-cast */
 import React, { PureComponent } from 'react'
 import {
   View,
@@ -6,6 +7,7 @@ import {
   Text,
   ScrollView,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
@@ -14,69 +16,101 @@ import { fonts } from '@/constants/Styles'
 import colors from '../colors'
 import Colors from '@/constants/Colors'
 import Card from '@/components/Card'
+import {
+  changeCurrentTab,
+  setSelectedUser,
+  changeTitle,
+} from '../reducer'
 
 const { width } = Dimensions.get('window')
 
 class People extends PureComponent {
+  onItemPress = (item) => {
+    const { actions } = this.props
+    actions.changeCurrentTab('profile')
+    actions.setSelectedUser(item)
+  }
+
   render() {
     const { users, selectedClub } = this.props
-    // selectedClub.name  / short_name- set to title
     return (
       <ScrollView contentContainerStyle={styles.pageWrapper} bounces={false}>
         { selectedClub && (
           <View style={styles.topWrapper}>
 
-            <Image
-              style={styles.logo}
-              resizeMode="contain"
-              // source={selectedClub.icon ? { uri: selectedClub.icon } : require('../assets/no_photo.png')}
-              source={require('../../../assets/images/OKBK/logo_OKBK.png')}
-            />
-            <Text style={styles.сlubText}>{selectedClub.description}</Text>
-
-            <View style={styles.topCard}>
+            {Boolean(selectedClub.icon2 || selectedClub.icon) && (
+              <Image
+                style={styles.logo}
+                resizeMode="contain"
+                source={{ uri: selectedClub.icon2 ? selectedClub.icon2 : selectedClub.icon }}
+              />
+            )}
+            {Boolean(selectedClub.description) && (
+              <Text style={styles.сlubText}>{selectedClub.description}</Text>
+            )}
+            <TouchableOpacity
+              style={styles.topCard}
+              onItemPress={() => this.onItemPress(selectedClub.chief)}
+            >
               <View style={styles.photoWrapper}>
                 <Image
                   style={styles.photo}
                   resizeMode="cover"
-                  source={selectedClub.chief.photo ? { uri: selectedClub.chief.photo } : require('../assets/no_photo.png')}
+                  source={Boolean(selectedClub.chief.photo) ? { uri: selectedClub.chief.photo } : require('../assets/no_photo.png')}
                 />
               </View>
+
               <View style={styles.textWrapper}>
                 <Text style={{ ...styles.textName, color: '#fff' }}>{selectedClub.chief.last_name}</Text>
                 <Text style={{ ...styles.textName, color: '#fff' }}>{selectedClub.chief.first_name}</Text>
-                {/* <Text style={styles.text}>{selectedClub.chief.career}</Text> */}
                 <Text style={styles.text}>Руководитель клуба</Text>
               </View>
-            </View>
+            </TouchableOpacity>
 
-            {selectedClub.phone && <Text style={styles.сlubText}>{selectedClub.phone}</Text>}
-            {selectedClub.email && <Text style={styles.сlubText}>{selectedClub.email}</Text>}
-            {selectedClub.site && <Text style={styles.сlubText}>{selectedClub.site}</Text>}
+            {Boolean(selectedClub.phone) && (
+              <Text style={styles.сlubText}>
+                {selectedClub.phone}
+              </Text>
+            )}
+            {Boolean(selectedClub.email) && (
+              <Text style={styles.сlubText}>
+                {selectedClub.email}
+              </Text>
+            )}
+            {Boolean(selectedClub.site) && (
+              <Text style={styles.сlubText}>
+                {selectedClub.site}
+              </Text>
+            )}
 
           </View>
         )}
         {users.map((item) => (
-          <Card key={item.name && item.name.trim()}>
+          <Card
+            key={Boolean(item.name) && item.name.trim()}
+            onItemPress={() => this.onItemPress(item)}
+          >
             <View style={styles.cardInner}>
               <View style={styles.photoWrapper}>
                 <Image
                   style={styles.photo}
                   resizeMode="cover"
-                  source={item.photo ? { uri: item.photo } : require('../assets/no_photo.png')}
+                  source={Boolean(item.photo) ? { uri: item.photo } : require('../assets/no_photo.png')}
                 />
               </View>
 
               <View style={styles.textWrapper}>
                 <Text style={styles.textName}>{item.last_name}</Text>
                 <Text style={styles.textName}>{item.first_name}</Text>
-                <Text
-                  style={{ ...styles.text, color: colors.grayText }}
-                  numberOfLines={3}
-                  ellipsizeMode="tail"
-                >
-                  {item.career /* it will be shorter */}
-                </Text>
+                {Boolean(item.career) && (
+                  <Text
+                    style={{ ...styles.text, color: colors.grayText }}
+                    numberOfLines={3}
+                    ellipsizeMode="tail"
+                  >
+                    {item.career}
+                  </Text>
+                )}
               </View>
 
             </View>
@@ -101,11 +135,8 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   logo: {
-    // position: 'absolute',
-    // bottom: 0,
-    // left: -10,
-    // height: '100%',
-    width: '70%',
+    height: 100,
+    width: 200,
     padding: 10,
   },
   topCard: {
@@ -148,7 +179,6 @@ const styles = StyleSheet.create({
     height: 80,
     width: 80,
     borderRadius: 40,
-    borderWidth: 1,
   },
   textWrapper: {
     flex: 3,
@@ -176,9 +206,11 @@ const mapStateToProps = createStructuredSelector({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  // actions: {
-  //   getClubs: () => dispatch(getClubs()),
-  // },
+  actions: {
+    setSelectedUser: (user) => dispatch(setSelectedUser(user)),
+    changeCurrentTab: (tabName) => dispatch(changeCurrentTab(tabName)),
+    changeTitle: (title) => dispatch(changeTitle(title)),
+  },
 })
 
 export default connect(

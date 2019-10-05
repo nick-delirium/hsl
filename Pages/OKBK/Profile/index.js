@@ -52,12 +52,17 @@ const ProfileActions = ({ singOutAction }) => (
 class Profile extends React.PureComponent {
   render() {
     const {
-      self = false,
       personalInfo = {},
       account: { user },
       actions,
+      clubs,
     } = this.props
-    const displayedUser = self ? user : personalInfo
+    const self = personalInfo ? false : true
+    const displayedUser = personalInfo || user
+    const businessClub = displayedUser.business_club_id
+      ? clubs.find((club) => (club.id === displayedUser.business_club_id))
+      : null
+    const bcIcon = get(businessClub, 'icon')
     return (
       <ScrollView>
         <View style={styles.mainView}>
@@ -79,12 +84,14 @@ class Profile extends React.PureComponent {
             <Text style={styles.smallText}>
               {displayedUser.city_name}
             </Text>
-            <Text style={styles.smallText}>
-              {displayedUser.business_club_name}
-            </Text>
-            {displayedUser.career && (
+            {Boolean(displayedUser.career) && (
               <Text style={styles.smallText}>
                 {displayedUser.career}
+              </Text>
+            )}
+            {Boolean(displayedUser.bio) && (
+              <Text style={styles.smallText}>
+                {displayedUser.bio}
               </Text>
             )}
 
@@ -98,30 +105,30 @@ class Profile extends React.PureComponent {
             )}
 
             <Text style={styles.heading}> Контакты </Text>
-            {displayedUser.contact_email && (
+            {Boolean(displayedUser.contact_email) && (
               <Text style={styles.smallText}>
                 {displayedUser.contact_email}
               </Text>
             )}
-            {displayedUser.phone && (
+            {Boolean(displayedUser.phone) && (
               <Text style={styles.smallText}>
                 {displayedUser.phone}
               </Text>
             )}
             <View style={styles.contacts}>
-              {displayedUser.phone && (
+              {Boolean(displayedUser.phone) && (
                 <TouchableWithoutFeedback
                   onPress={() => {
                     return openLink(`https://api.whatsapp.com/send?phone=${displayedUser.phone.replace('+', '').replace(/ /g,'')}`)
                   }}
                 >
-                  <View style={styles.contactsRow}>
+                  <View style={{ ...styles.contactsRow, marginRight: 20 }}>
                     <Image style={{ width: 20, height: 20, marginRight: 10 }} resizeMode="contain" source={require('../assets/WU.png')} />
                     <Text style={{ ...styles.smallText, marginBottom: 0, color: '#33CC33' }}>whatsapp</Text>
                   </View>
                 </TouchableWithoutFeedback>
               )}
-              {displayedUser.social_media && (
+              {Boolean(displayedUser.social_media) && (
                 <TouchableWithoutFeedback
                   onPress={() => openLink(`https://${displayedUser.social_media}`)}
                 >
@@ -134,6 +141,14 @@ class Profile extends React.PureComponent {
                 </TouchableWithoutFeedback>
               )}
             </View>
+
+            {bcIcon && (
+              <Image
+                source={{ uri: bcIcon }}
+                resizeMode="cover"
+                style={styles.logo}
+              />
+            )}
 
           </View>
         </View>
@@ -158,7 +173,7 @@ const styles = StyleSheet.create({
   contacts: {
     marginTop: 10,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     width: '70%',
   },
   contactsRow: {
@@ -167,10 +182,10 @@ const styles = StyleSheet.create({
     height: 21,
   },
   profilePhoto: {
-    height: 180,
-    width: 180,
-    borderRadius: 90,
-    marginTop: 10,
+    height: 160,
+    width: 160,
+    borderRadius: 80,
+    marginTop: 20,
     marginBottom: 10,
     backgroundColor: '#f6f6f6',
   },
@@ -196,6 +211,12 @@ const styles = StyleSheet.create({
     marginBottom: 11,
     textAlign: 'center',
   },
+  logo: {
+    height: 100,
+    width: 200,
+    padding: 10,
+    marginTop: 20,
+  },
   profileWrapper: {
     flexDirection: 'column',
     alignItems: 'center',
@@ -205,6 +226,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = createStructuredSelector({
   account: (state) => get(state, 'okbk.account'),
+  personalInfo: (state) => get(state, 'okbk.personalInfo'),
+  clubs: (state) => get(state, 'okbk.clubs'),
 })
 const mapDispatchToProps = (dispatch) => ({
   actions: {

@@ -50,10 +50,12 @@ class Clubs extends PureComponent {
               <View style={styles.clubInfo}>
                 <View style={styles.logoWrapper}>
                   <Image
-                    style={styles.logo}
+                    style={{
+                      ...styles.logo,
+                      backgroundColor: item.icon ? 'transparent' : '#eee',
+                    }}
                     resizeMode="contain"
-                    // source={item.icon ? { uri: item.icon } : require('../assets/no_photo.png')}
-                    source={require('../../../assets/images/OKBK/logo_OKBK.png')}
+                    source={item.icon ? { uri: item.icon } : ''}
                   />
                 </View>
                 <View style={styles.textWrapper}>

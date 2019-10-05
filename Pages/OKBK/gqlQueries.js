@@ -99,6 +99,7 @@ query businessClubList
       name,
       short_name,
       icon,
+      icon2,
       description,
       phone,
       email,
