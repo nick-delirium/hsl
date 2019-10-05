@@ -1,197 +1,182 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import {
+  ActivityIndicator,
   StyleSheet,
   View,
-  Text,
   Keyboard,
-  TextInput,
-  Image,
+  Dimensions,
   ScrollView,
   TouchableOpacity,
-  Dimensions,
+  Text,
 } from 'react-native'
-import { fonts } from '@/constants/Styles'
-import Icon from '@/assets/images/search-icon.png'
-import colors from '../colors'
+import { trackPromise, usePromiseTracker } from 'react-promise-tracker'
 import {
   client,
   getClubsQuery,
   getUsersQuery,
+  getAreasQuery,
+  getCitiesListQuery,
 } from '../gqlQueries'
+import DefaultSearchTerms from './components/DefaultSearchTerms'
+import SearchForm from './components/SearchForm'
+import PersonalCard from '../People/components/PersonalCard'
 
 const { width } = Dimensions.get('window')
 const PANEL_TABS = {
   areas: {
     name: 'СФЕРЫ ДЕЯТЕЛЬНОСТИ',
     where: 'сферам деятельности',
+    query: getAreasQuery,
     flex: 2,
   },
   cities: {
     name: 'ГОРОДА',
     where: 'городам',
+    query: getCitiesListQuery,
     flex: 1,
   },
   okbk: {
     name: 'ОКБК',
     where: 'ОКБК',
+    query: getClubsQuery,
     flex: 1,
   },
 }
 
+const defaultSearchResult = {
+  asked: false,
+  data: [],
+}
+
+const getProperEntryData = (tabName, rawData) => {
+  switch (tabName) {
+    case 'okbk':
+      return rawData.businessClubList.businessClubs
+    case 'cities':
+      return rawData.citiesList.citiesList
+    case 'areas':
+      return rawData.businessAreaList.businessAreas
+    default:
+      return []
+  }
+}
+
 const Search = () => {
+  const { promiseInProgress } = usePromiseTracker()
   const [searchFieldValue, setFieldValue] = useState('')
   const [placeholder, setPlaceholder] = useState(PANEL_TABS.okbk.where)
   const [activeTab, setActiveTab] = useState('okbk')
   const [shownEntries, setEntries] = useState([])
+  const [foundData, setFoundData] = useState(defaultSearchResult)
 
-  const onTextChange = useCallback((value) => setFieldValue(value), [searchFieldValue])
   const onTabPress = useCallback((tab) => {
     setActiveTab(tab)
     setPlaceholder(PANEL_TABS[tab].where)
   }, [activeTab])
 
   useEffect(() => {
-    const getClubs = async () => {
-      const response = await client.query({ query: getClubsQuery })
-      const { businessClubList: { businessClubs } } = response.data
-      const clubNames = businessClubs.map((club) => club.name)
-      if (clubNames.length > 0) setEntries(clubNames)
+    const getEntries = () => {
+      const { query } = PANEL_TABS[activeTab]
+      trackPromise(
+        client.query({ query })
+          .then((response) => {
+            const askedData = getProperEntryData(activeTab, response.data)
+            if (askedData.length > 0) setEntries(askedData)
+          }),
+      )
     }
-    getClubs()
-  }, [])
+    getEntries()
+  }, [activeTab])
 
-  const getUsers = useCallback(async () => {
-    const clubId = undefined
-    const areaId = undefined
-    const cityId = undefined
+  const getUsers = useCallback((id, fromItem = false) => {
+    if (searchFieldValue === '' && !fromItem) return
     Keyboard.dismiss()
-    if (searchFieldValue === '') return
-    const response = await client.query({
-      query: getUsersQuery,
-      variables: {
-        search: searchFieldValue,
-        business_club_id: clubId,
-        business_area_id: areaId,
-        city_id: cityId,
-      },
-    })
-    return console.log(response.data.users.users.length)
-  }, [searchFieldValue])
+    const searchByItem = {
+      business_club_id: activeTab === 'okbk' ? id : undefined,
+      business_area_id: activeTab === 'areas' ? id : undefined,
+      city_id: activeTab === 'cities' ? id : undefined,
+    }
+    const searchByQuery = {
+      search: searchFieldValue,
+    }
+
+    trackPromise(
+      client.query({
+        query: getUsersQuery,
+        variables: fromItem ? searchByItem : searchByQuery,
+      })
+        .then((response) => {
+          const resultData = {
+            asked: true,
+            data: response.data.users.users.length > 0 ? response.data.users.users : [],
+          }
+          setFoundData(resultData)
+        }),
+    )
+  }, [searchFieldValue, activeTab])
 
   return (
     <View style={{ flex: 1 }}>
-      <View style={{ width, padding: 10, backgroundColor: '#333376' }}>
-        <View style={styles.inputWrapper}>
-          <TextInput
-            enablesReturnKeyAutomatically
-            blurOnSubmit={false}
-            autoCompleteType="email"
-            keyboardAppearance="light"
-            keyboardType="web-search"
-            clearButtonMode="always"
-            onChangeText={onTextChange}
-            placeholder={`Поиск по ${placeholder}`}
-            placeholderTextColor="rgba(255, 255, 255, 0.3)"
-            returnKeyType="search"
-            style={styles.input}
-            value={searchFieldValue}
-            onSubmitEditing={getUsers}
+      <SearchForm
+        setFieldValue={setFieldValue}
+        searchFieldValue={searchFieldValue}
+        placeholder={placeholder}
+        getUsers={getUsers}
+      />
+      <View style={{ flex: 1, position: 'relative' }}>
+        {promiseInProgress ? (
+          <View style={styles.indicatorWrapper}>
+            <ActivityIndicator />
+          </View>
+        ) : null}
+        {!foundData.asked ? (
+          <DefaultSearchTerms
+            tabs={PANEL_TABS}
+            shownEntries={shownEntries}
+            getUsers={getUsers}
+            onTabPress={onTabPress}
+            activeTab={activeTab}
           />
-          <TouchableOpacity
-            style={{
-              paddingRight: 15,
-              paddingLeft: 15,
-              paddingTop: 5,
-              paddingBottom: 5,
-              marginLeft: 'auto',
-            }}
-            onPress={getUsers}
+        ) : (
+          <ScrollView
+            contentContainerStyle={{ flexGrow: 1, paddingTop: 20, paddingBottom: 20 }}
+            keyboardDismissMode="on-drag"
           >
-            <Image
-              source={Icon}
-              style={{ width: 17, height: 17, alignSelf: 'center' }}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <View style={styles.panel}>
-        {Object.keys(PANEL_TABS).map((tab) => (
-          <TouchableOpacity
-            onPress={() => onTabPress(tab)}
-            style={{
-              ...styles.tab,
-              flex: PANEL_TABS[tab].flex,
-              borderBottomColor: '#333376',
-              borderBottomWidth: tab === activeTab ? 3 : 0,
-            }}
-            key={tab}
-          >
-            <Text
+            <TouchableOpacity
               style={{
-                ...styles.tabText,
-                color: tab === activeTab ? '#333376' : '#9C9CC5',
+                paddingLeft: 20,
+                paddingTop: 10,
+                paddingBottom: 5,
+                paddingRight: 10,
               }}
+              onPress={() => setFoundData(defaultSearchResult)}
             >
-              {PANEL_TABS[tab].name}
-            </Text>
-          </TouchableOpacity>
-        ))}
+              <Text style={{ color: '#333376', fontSize: 17 }}>
+                Вернуться назад
+              </Text>
+            </TouchableOpacity>
+            {foundData.data.map((item) => (
+              <PersonalCard key={item.id} item={item} />
+            ))}
+          </ScrollView>
+        )}
       </View>
-      <ScrollView
-        contentContainerStyle={{ flex: 1, padding: 20 }}
-        keyboardDismissMode="on-drag"
-      >
-        {shownEntries.map((entry) => (
-          <TouchableOpacity key={entry} style={styles.searchEntry}>
-            <Text style={styles.searchEntryText}>{entry}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  inputWrapper: {
-    width: '100%',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 3,
-    marginTop: 5,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  searchEntry: {
-    marginTop: 5,
-    marginBottom: 5,
-    paddingTop: 5,
-    paddingBottom: 5,
-  },
-  searchEntryText: {
-    color: '#959595',
-    fontSize: fonts.normal,
-  },
-  input: {
-    flex: 1,
-    padding: 10,
-    paddingRight: 0,
-    color: colors.text,
-    fontSize: fonts.normal,
-  },
-  panel: {
-    height: 45,
-    backgroundColor: '#E4E4FF',
+  indicatorWrapper: {
+    position: 'absolute',
+    zIndex: 10,
+    top: 0,
+    left: 0,
     width,
-    flexDirection: 'row',
-  },
-  tab: {
-    textAlign: 'center',
-    justifyContent: 'center',
+    height: '100%',
+    backgroundColor: 'rgba(255,255,255, 0.4)',
+    display: 'flex',
     alignItems: 'center',
-  },
-  tabText: {
-    color: '#9C9CC5',
-    fontSize: 14,
-    fontWeight: 'bold',
+    justifyContent: 'center',
   },
 })
 

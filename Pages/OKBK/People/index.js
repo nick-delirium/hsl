@@ -13,14 +13,13 @@ import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { fonts } from '@/constants/Styles'
-import colors from '../colors'
 import Colors from '@/constants/Colors'
-import Card from '@/components/Card'
 import {
   changeCurrentTab,
   setSelectedUser,
   changeTitle,
 } from '../reducer'
+import PersonalCard from './components/PersonalCard'
 
 const { width } = Dimensions.get('window')
 
@@ -35,7 +34,7 @@ class People extends PureComponent {
     const { users, selectedClub } = this.props
     return (
       <ScrollView contentContainerStyle={styles.pageWrapper} bounces={false}>
-        { selectedClub && (
+        {selectedClub && (
           <View style={styles.topWrapper}>
 
             {Boolean(selectedClub.icon2 || selectedClub.icon) && (
@@ -86,35 +85,7 @@ class People extends PureComponent {
           </View>
         )}
         {users.map((item) => (
-          <Card
-            key={Boolean(item.name) && item.name.trim()}
-            onItemPress={() => this.onItemPress(item)}
-          >
-            <View style={styles.cardInner}>
-              <View style={styles.photoWrapper}>
-                <Image
-                  style={styles.photo}
-                  resizeMode="cover"
-                  source={Boolean(item.photo) ? { uri: item.photo } : require('../assets/no_photo.png')}
-                />
-              </View>
-
-              <View style={styles.textWrapper}>
-                <Text style={styles.textName}>{item.last_name}</Text>
-                <Text style={styles.textName}>{item.first_name}</Text>
-                {Boolean(item.career) && (
-                  <Text
-                    style={{ ...styles.text, color: colors.grayText }}
-                    numberOfLines={3}
-                    ellipsizeMode="tail"
-                  >
-                    {item.career}
-                  </Text>
-                )}
-              </View>
-
-            </View>
-          </Card>
+          <PersonalCard onItemPress={() => this.onItemPress(item)} key={item.id} item={item} />
         ))}
       </ScrollView>
     )
@@ -158,16 +129,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#7B7BC7',
-  },
-  cardInner: {
-    padding: 20,
-    paddingTop: 24,
-    paddingBottom: 24,
-    height: 145,
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 4,
-    backgroundColor: '#ffffff',
   },
   photoWrapper: {
     flex: 1,

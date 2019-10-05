@@ -85,7 +85,6 @@ class NavBar extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     position: 'absolute',
     bottom: 0,
     backgroundColor: '#FFFFFF',

@@ -55,7 +55,6 @@ class OKBK extends PureComponent {
     const {
       isLoggedIn,
       isLoading,
-      account,
       error,
     } = this.props
 
@@ -69,11 +68,9 @@ class OKBK extends PureComponent {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
         <View style={styles.main}>
-          {account && (
-            <View style={{ flex: 1 }}>
-              {this.returnTabView()}
-            </View>
-          )}
+          <View style={{ flex: 1, paddingBottom: 60 }}>
+            {this.returnTabView()}
+          </View>
           <Navbar />
         </View>
       </SafeAreaView>

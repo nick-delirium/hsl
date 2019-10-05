@@ -7296,6 +7296,11 @@ react-native-view-shot@2.6.0:
     xmldoc "^0.4.0"
     yargs "^9.0.0"
 
+react-promise-tracker@^2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/react-promise-tracker/-/react-promise-tracker-2.0.5.tgz#01b7cb2819f530ed829232e717c78bf77d39e4bb"
+  integrity sha512-86k2vXybbBFMRpSCaQUCd4JVL7jXUhmqFer0X4zv6P8Bht4+xfqPOTU/brr5IzbbKQrNCr0EEJ8RuYTqH0sj8A==
+
 react-proxy@^1.1.7:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/react-proxy/-/react-proxy-1.1.8.tgz#9dbfd9d927528c3aa9f444e4558c37830ab8c26a"
