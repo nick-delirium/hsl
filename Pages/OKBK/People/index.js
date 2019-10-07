@@ -8,6 +8,7 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
+  Linking,
 } from 'react-native'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
@@ -22,6 +23,7 @@ import {
 import PersonalCard from './components/PersonalCard'
 
 const { width } = Dimensions.get('window')
+const openLink = (link) => Linking.openURL(link)
 
 class People extends PureComponent {
   onItemPress = (item) => {
@@ -45,7 +47,9 @@ class People extends PureComponent {
               />
             )}
             {Boolean(selectedClub.description) && (
-              <Text style={styles.сlubText}>{selectedClub.description}</Text>
+              <Text style={{ ...styles.сlubText, marginTop: 10 }}>
+                {selectedClub.description}
+              </Text>
             )}
             <TouchableOpacity
               style={styles.topCard}
@@ -67,17 +71,17 @@ class People extends PureComponent {
             </TouchableOpacity>
 
             {Boolean(selectedClub.phone) && (
-              <Text style={styles.сlubText}>
+              <Text style={styles.сlubText} onPress={() => openLink(`tel:${selectedClub.phone}`)}>
                 {selectedClub.phone}
               </Text>
             )}
             {Boolean(selectedClub.email) && (
-              <Text style={styles.сlubText}>
+              <Text style={styles.сlubText} onPress={() => openLink(`mailto:${selectedClub.email}`)}>
                 {selectedClub.email}
               </Text>
             )}
             {Boolean(selectedClub.site) && (
-              <Text style={styles.сlubText}>
+              <Text style={styles.сlubText} onPress={() => openLink(`http://${selectedClub.site}`)}>
                 {selectedClub.site}
               </Text>
             )}
@@ -85,7 +89,8 @@ class People extends PureComponent {
           </View>
         )}
         {users.map((item) => (
-          <PersonalCard onItemPress={() => this.onItemPress(item)} key={item.id} item={item} />
+          item.id !== selectedClub.chief.id
+          && <PersonalCard onItemPress={() => this.onItemPress(item)} key={item.id} item={item} />
         ))}
       </ScrollView>
     )

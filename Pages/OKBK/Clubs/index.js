@@ -49,7 +49,13 @@ class Clubs extends PureComponent {
           >
             <View style={styles.cardInner}>
               <View style={styles.header}>
-                <Text style={styles.clubName}>{item.name}</Text>
+                <Text
+                  style={styles.clubName}
+                  numberOfLines={3}
+                  ellipsizeMode="tail"
+                >
+                  {item.name}
+                </Text>
               </View>
               <View style={styles.clubInfo}>
                 <View style={styles.logoWrapper}>

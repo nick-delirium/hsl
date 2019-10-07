@@ -78,9 +78,9 @@ class Profile extends React.PureComponent {
               />
             </View>
             <Text style={styles.nameText}>
-              {displayedUser.last_name}
-              {'\r\n'}
               {displayedUser.first_name}
+              {'\r\n'}
+              {displayedUser.last_name}
             </Text>
             <Text style={styles.smallText}>
               {displayedUser.city_name}
@@ -107,12 +107,12 @@ class Profile extends React.PureComponent {
 
             <Text style={styles.heading}> Контакты </Text>
             {Boolean(displayedUser.contact_email) && (
-              <Text style={styles.smallText}>
+              <Text style={styles.smallText} onPress={() => openLink(`mailto:${displayedUser.contact_email}`)}>
                 {displayedUser.contact_email}
               </Text>
             )}
             {Boolean(displayedUser.phone) && (
-              <Text style={styles.smallText}>
+              <Text style={styles.smallText} onPress={() => openLink(`tel:${displayedUser.phone}`)}>
                 {displayedUser.phone}
               </Text>
             )}
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    marginBottom: 80,
+    marginBottom: 30,
   },
   actions: {
     width,

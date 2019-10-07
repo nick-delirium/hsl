@@ -16,6 +16,7 @@ export const auth = gql`
         id,
         first_name,
         last_name,
+        bio,
         photo,
         career,
         social_media,

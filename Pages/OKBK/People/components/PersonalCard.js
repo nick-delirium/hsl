@@ -22,8 +22,8 @@ const PersonalCard = ({ item, onItemPress }) => (
       </View>
 
       <View style={styles.textWrapper}>
-        <Text style={styles.textName}>{item.last_name}</Text>
         <Text style={styles.textName}>{item.first_name}</Text>
+        <Text style={styles.textName}>{item.last_name}</Text>
         {Boolean(item.career) && (
           <Text style={{ ...styles.text, color: colors.grayText }}>
             {item.career}
@@ -56,7 +56,6 @@ const styles = StyleSheet.create({
     height: 80,
     width: 80,
     borderRadius: 40,
-    borderWidth: 1,
   },
   textWrapper: {
     flex: 3,
