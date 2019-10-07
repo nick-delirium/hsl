@@ -49,7 +49,7 @@ class People extends PureComponent {
             )}
             <TouchableOpacity
               style={styles.topCard}
-              onItemPress={() => this.onItemPress(selectedClub.chief)}
+              onPress={() => this.onItemPress(selectedClub.chief)}
             >
               <View style={styles.photoWrapper}>
                 <Image

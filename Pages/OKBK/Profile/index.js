@@ -58,8 +58,8 @@ class Profile extends React.PureComponent {
       actions,
       clubs,
     } = this.props
-    const self = personalInfo ? false : true
-    const displayedUser = personalInfo || user
+    const self = !Object.entries(personalInfo).length > 0
+    const displayedUser = self ? user : personalInfo
     const businessClub = displayedUser.business_club_id
       ? clubs.find((club) => (club.id === displayedUser.business_club_id))
       : null

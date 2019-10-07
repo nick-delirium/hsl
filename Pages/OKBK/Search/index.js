@@ -9,7 +9,12 @@ import {
   TouchableOpacity,
   Text,
 } from 'react-native'
+import { connect } from 'react-redux'
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker'
+import {
+  changeCurrentTab,
+  setSelectedUser,
+} from '../reducer'
 import {
   client,
   getClubsQuery,
@@ -61,7 +66,7 @@ const getProperEntryData = (tabName, rawData) => {
   }
 }
 
-const Search = () => {
+const Search = ({ actions }) => {
   const { promiseInProgress } = usePromiseTracker()
   const [searchFieldValue, setFieldValue] = useState('')
   const [placeholder, setPlaceholder] = useState(PANEL_TABS.okbk.where)
@@ -115,6 +120,11 @@ const Search = () => {
     )
   }, [searchFieldValue, activeTab])
 
+  const onUserCardPress = (item) => {
+    actions.changeCurrentTab('profile')
+    actions.setSelectedUser(item)
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <SearchForm
@@ -156,7 +166,11 @@ const Search = () => {
               </Text>
             </TouchableOpacity>
             {foundData.data.map((item) => (
-              <PersonalCard key={item.id} item={item} />
+              <PersonalCard
+                key={item.id}
+                item={item}
+                onItemPress={() => onUserCardPress(item)}
+              />
             ))}
           </ScrollView>
         )}
@@ -180,4 +194,15 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Search
+
+const mapDispatchToProps = (dispatch) => ({
+  actions: {
+    setSelectedUser: (user) => dispatch(setSelectedUser(user)),
+    changeCurrentTab: (tabName) => dispatch(changeCurrentTab(tabName)),
+  },
+})
+
+export default connect(
+  () => ({}),
+  mapDispatchToProps,
+)(Search)
