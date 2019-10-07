@@ -11,7 +11,6 @@ import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import Login from './Login'
 import Clubs from './Clubs'
-import People from './People'
 import Search from './Search'
 import Profile from './Profile'
 import { authErrors } from './queriesErrors'
@@ -40,8 +39,6 @@ class OKBK extends PureComponent {
     switch (currentTab) {
       case 'groups':
         return <Clubs />
-      case 'people':
-        return <People />
       case 'profile':
         return <Profile self />
       case 'okbkSearch':

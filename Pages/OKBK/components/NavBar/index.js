@@ -59,7 +59,7 @@ class NavBar extends Component {
         {TABS.map((tab) => (
           <TouchableWithoutFeedback
             key={tab.name}
-            onPressIn={() => actions.changeCurrentTab(tab.name, tab.title)}
+            onPressIn={() => actions.changeCurrentTab(tab.name, tab.title, false)}
           >
             <View
               style={{
@@ -115,7 +115,7 @@ const mapStateToProps = createStructuredSelector({
 })
 const mapDispatchToProps = (dispatch) => ({
   actions: {
-    changeCurrentTab: (name, title) => dispatch(changeCurrentTab(name, title)),
+    changeCurrentTab: (name, title, fakeNavBar) => dispatch(changeCurrentTab(name, title, fakeNavBar)),
   },
 })
 

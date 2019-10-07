@@ -21,6 +21,7 @@ import {
   changeTitle,
 } from '../reducer'
 import PersonalCard from './components/PersonalCard'
+import Profile from '../Profile'
 
 const { width } = Dimensions.get('window')
 const openLink = (link) => Linking.openURL(link)
@@ -28,71 +29,85 @@ const openLink = (link) => Linking.openURL(link)
 class People extends PureComponent {
   onItemPress = (item) => {
     const { actions } = this.props
-    actions.changeCurrentTab('profile')
+    actions.changeTitle(`${item.last_name} ${item.first_name}`, true)
     actions.setSelectedUser(item)
   }
 
   render() {
-    const { users, selectedClub } = this.props
+    const { users, selectedClub, personalInfo } = this.props
     return (
-      <ScrollView contentContainerStyle={styles.pageWrapper} bounces={false}>
-        {selectedClub && (
-          <View style={styles.topWrapper}>
-
-            {Boolean(selectedClub.icon2 || selectedClub.icon) && (
-              <Image
-                style={styles.logo}
-                resizeMode="contain"
-                source={{ uri: selectedClub.icon2 ? selectedClub.icon2 : selectedClub.icon }}
-              />
-            )}
-            {Boolean(selectedClub.description) && (
-              <Text style={{ ...styles.сlubText, marginTop: 10 }}>
-                {selectedClub.description}
-              </Text>
-            )}
-            <TouchableOpacity
-              style={styles.topCard}
-              onPress={() => this.onItemPress(selectedClub.chief)}
-            >
-              <View style={styles.photoWrapper}>
-                <Image
-                  style={styles.photo}
-                  resizeMode="cover"
-                  source={Boolean(selectedClub.chief.photo) ? { uri: selectedClub.chief.photo } : require('../assets/no_photo.png')}
-                />
-              </View>
-
-              <View style={styles.textWrapper}>
-                <Text style={{ ...styles.textName, color: '#fff' }}>{selectedClub.chief.last_name}</Text>
-                <Text style={{ ...styles.textName, color: '#fff' }}>{selectedClub.chief.first_name}</Text>
-                <Text style={styles.text}>Руководитель клуба</Text>
-              </View>
-            </TouchableOpacity>
-
-            {Boolean(selectedClub.phone) && (
-              <Text style={styles.сlubText} onPress={() => openLink(`tel:${selectedClub.phone}`)}>
-                {selectedClub.phone}
-              </Text>
-            )}
-            {Boolean(selectedClub.email) && (
-              <Text style={styles.сlubText} onPress={() => openLink(`mailto:${selectedClub.email}`)}>
-                {selectedClub.email}
-              </Text>
-            )}
-            {Boolean(selectedClub.site) && (
-              <Text style={styles.сlubText} onPress={() => openLink(`http://${selectedClub.site}`)}>
-                {selectedClub.site}
-              </Text>
-            )}
-
+      <View>
+        {Object.entries(personalInfo).length > 0 && (
+          <View
+            style={{
+              width: '100%',
+              height: '100%',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              zIndex: 30,
+              backgroundColor: 'white',
+            }}
+          >
+            <Profile />
           </View>
         )}
-        {users.map((item) => (
-          item.id !== selectedClub.chief.id
-          && <PersonalCard onItemPress={() => this.onItemPress(item)} key={item.id} item={item} />
-        ))}
-      </ScrollView>
+        <ScrollView contentContainerStyle={styles.pageWrapper} bounces={false}>
+          {selectedClub && (
+            <View style={styles.topWrapper}>
+              {Boolean(selectedClub.icon2 || selectedClub.icon) && (
+                <Image
+                  style={styles.logo}
+                  resizeMode="contain"
+                  source={{ uri: selectedClub.icon2 ? selectedClub.icon2 : selectedClub.icon }}
+                />
+              )}
+              {Boolean(selectedClub.description) && (
+                <Text style={{ ...styles.сlubText, marginTop: 10 }}>{selectedClub.description}</Text>
+              )}
+              <TouchableOpacity
+                style={styles.topCard}
+                onPress={() => this.onItemPress(selectedClub.chief)}
+              >
+                <View style={styles.photoWrapper}>
+                  <Image
+                    style={styles.photo}
+                    resizeMode="cover"
+                    source={Boolean(selectedClub.chief.photo) ? { uri: selectedClub.chief.photo } : require('../assets/no_photo.png')}
+                  />
+                </View>
+
+                <View style={styles.textWrapper}>
+                  <Text style={{ ...styles.textName, color: '#fff' }}>{selectedClub.chief.last_name}</Text>
+                  <Text style={{ ...styles.textName, color: '#fff' }}>{selectedClub.chief.first_name}</Text>
+                  <Text style={styles.text}>Руководитель клуба</Text>
+                </View>
+              </TouchableOpacity>
+
+              {Boolean(selectedClub.phone) && (
+                <Text style={styles.сlubText} onPress={() => openLink(`tel:${selectedClub.phone}`)}>
+                  {selectedClub.phone}
+                </Text>
+              )}
+              {Boolean(selectedClub.email) && (
+                <Text style={styles.сlubText} onPress={() => openLink(`mailto:${selectedClub.email}`)}>
+                  {selectedClub.email}
+                </Text>
+              )}
+              {Boolean(selectedClub.site) && (
+                <Text style={styles.сlubText} onPress={() => openLink(`http://${selectedClub.site}`)}>
+                  {selectedClub.site}
+                </Text>
+              )}
+
+            </View>
+          )}
+          {users.map((item) => (
+            item.id !== selectedClub.chief.id
+            && <PersonalCard onItemPress={() => this.onItemPress(item)} key={item.id} item={item} />
+          ))}
+        </ScrollView>
+      </View>
     )
   }
 }
@@ -169,13 +184,14 @@ const styles = StyleSheet.create({
 const mapStateToProps = createStructuredSelector({
   users: (state) => get(state, 'okbk.users'),
   selectedClub: (state) => get(state, 'okbk.selectedClub'),
+  personalInfo: (state) => get(state, 'okbk.personalInfo'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   actions: {
     setSelectedUser: (user) => dispatch(setSelectedUser(user)),
     changeCurrentTab: (tabName) => dispatch(changeCurrentTab(tabName)),
-    changeTitle: (title) => dispatch(changeTitle(title)),
+    changeTitle: (title, navbar) => dispatch(changeTitle(title, navbar)),
   },
 })
 

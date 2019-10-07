@@ -6,14 +6,16 @@ import {
   Keyboard,
   Dimensions,
   ScrollView,
-  TouchableOpacity,
-  Text,
 } from 'react-native'
 import { connect } from 'react-redux'
+import get from 'lodash/get'
+import { createStructuredSelector } from 'reselect'
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker'
 import {
   changeCurrentTab,
   setSelectedUser,
+  changeTitle,
+  setFoundData,
 } from '../reducer'
 import {
   client,
@@ -25,32 +27,25 @@ import {
 import DefaultSearchTerms from './components/DefaultSearchTerms'
 import SearchForm from './components/SearchForm'
 import PersonalCard from '../People/components/PersonalCard'
+import Profile from '../Profile'
 
 const { width } = Dimensions.get('window')
 const PANEL_TABS = {
   areas: {
     name: 'СФЕРЫ ДЕЯТЕЛЬНОСТИ',
-    where: 'сферам деятельности',
     query: getAreasQuery,
     flex: 2,
   },
   cities: {
     name: 'ГОРОДА',
-    where: 'городам',
     query: getCitiesListQuery,
     flex: 1,
   },
   okbk: {
     name: 'ОКБК',
-    where: 'ОКБК',
     query: getClubsQuery,
     flex: 1,
   },
-}
-
-const defaultSearchResult = {
-  asked: false,
-  data: [],
 }
 
 const getProperEntryData = (tabName, rawData) => {
@@ -66,17 +61,14 @@ const getProperEntryData = (tabName, rawData) => {
   }
 }
 
-const Search = ({ actions }) => {
+const Search = ({ actions, foundData, personalInfo }) => {
   const { promiseInProgress } = usePromiseTracker()
   const [searchFieldValue, setFieldValue] = useState('')
-  const [placeholder, setPlaceholder] = useState(PANEL_TABS.okbk.where)
   const [activeTab, setActiveTab] = useState('okbk')
   const [shownEntries, setEntries] = useState([])
-  const [foundData, setFoundData] = useState(defaultSearchResult)
 
   const onTabPress = useCallback((tab) => {
     setActiveTab(tab)
-    setPlaceholder(PANEL_TABS[tab].where)
   }, [activeTab])
 
   useEffect(() => {
@@ -115,22 +107,37 @@ const Search = ({ actions }) => {
             asked: true,
             data: response.data.users.users.length > 0 ? response.data.users.users : [],
           }
-          setFoundData(resultData)
+          actions.setFoundData(resultData)
         }),
     )
   }, [searchFieldValue, activeTab])
 
   const onUserCardPress = (item) => {
-    actions.changeCurrentTab('profile')
+    actions.changeTitle(`${item.last_name} ${item.first_name}`, true)
     actions.setSelectedUser(item)
   }
 
   return (
     <View style={{ flex: 1 }}>
+      {Object.entries(personalInfo).length > 0 && (
+        <View
+          style={{
+            width: '100%',
+            height: '100%',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            zIndex: 30,
+            backgroundColor: 'white',
+          }}
+        >
+          <Profile />
+        </View>
+      )}
       <SearchForm
         setFieldValue={setFieldValue}
         searchFieldValue={searchFieldValue}
-        placeholder={placeholder}
+        placeholder="ОКБК"
         getUsers={getUsers}
       />
       <View style={{ flex: 1, position: 'relative' }}>
@@ -146,25 +153,13 @@ const Search = ({ actions }) => {
             getUsers={getUsers}
             onTabPress={onTabPress}
             activeTab={activeTab}
+            changeTitle={actions.changeTitle}
           />
         ) : (
           <ScrollView
             contentContainerStyle={{ flexGrow: 1, paddingTop: 20, paddingBottom: 20 }}
             keyboardDismissMode="on-drag"
           >
-            <TouchableOpacity
-              style={{
-                paddingLeft: 20,
-                paddingTop: 10,
-                paddingBottom: 5,
-                paddingRight: 10,
-              }}
-              onPress={() => setFoundData(defaultSearchResult)}
-            >
-              <Text style={{ color: '#333376', fontSize: 17 }}>
-                Вернуться назад
-              </Text>
-            </TouchableOpacity>
             {foundData.data.map((item) => (
               <PersonalCard
                 key={item.id}
@@ -194,15 +189,20 @@ const styles = StyleSheet.create({
   },
 })
 
-
+const mapStateToProps = createStructuredSelector({
+  personalInfo: (state) => get(state, 'okbk.personalInfo'),
+  foundData: (state) => get(state, 'okbk.searchData'),
+})
 const mapDispatchToProps = (dispatch) => ({
   actions: {
+    setFoundData: (data) => dispatch(setFoundData(data)),
     setSelectedUser: (user) => dispatch(setSelectedUser(user)),
     changeCurrentTab: (tabName) => dispatch(changeCurrentTab(tabName)),
+    changeTitle: (title, fakeHeader) => dispatch(changeTitle(title, fakeHeader)),
   },
 })
 
 export default connect(
-  () => ({}),
+  mapStateToProps,
   mapDispatchToProps,
 )(Search)

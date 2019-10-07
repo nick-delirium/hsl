@@ -1,5 +1,5 @@
 /* eslint-disable no-extra-boolean-cast */
-import React, { PureComponent } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import {
   View,
   Image,
@@ -22,79 +22,76 @@ import {
   setSelectedClub,
   changeTitle,
 } from '../reducer'
+import People from '../People'
 
 const { height } = Dimensions.get('window')
 
-class Clubs extends PureComponent {
-  componentDidMount() {
-    const { actions } = this.props
+const Clubs = ({ actions, clubs, users }) => {
+  useEffect(() => {
     actions.getClubs()
-  }
+  })
 
-  onItemPress = (item) => {
-    const { actions } = this.props
+  const onItemPress = useCallback((item) => {
     actions.getUsers({ business_club_id: item.id })
-    actions.changeCurrentTab('people')
     actions.setSelectedClub(item)
-  }
+    actions.changeTitle(item.short_name || item.name, true)
+  })
 
-  render() {
-    const { clubs } = this.props
-    return (
-      <ScrollView contentContainerStyle={styles.pageWrapper} bounces={false}>
-        {clubs.map((item) => (
-          <Card
-            key={item.id}
-            onItemPress={() => this.onItemPress(item)}
-          >
-            <View style={styles.cardInner}>
-              <View style={styles.header}>
-                <Text
-                  style={styles.clubName}
-                  numberOfLines={3}
-                  ellipsizeMode="tail"
-                >
-                  {item.name}
+  if (users.length > 0) return <People />
+  return (
+    <ScrollView contentContainerStyle={styles.pageWrapper} bounces={false}>
+      {clubs.map((item) => (
+        <Card
+          key={item.id}
+          onItemPress={() => onItemPress(item)}
+        >
+          <View style={styles.cardInner}>
+            <View style={styles.header}>
+              <Text
+                numberOfLines={3}
+                ellipsizeMode="tail"
+                style={styles.clubName}
+              >
+                {item.name}
+              </Text>
+            </View>
+            <View style={styles.clubInfo}>
+              <View style={styles.logoWrapper}>
+                <Image
+                  style={styles.logo}
+                  resizeMode="contain"
+                  source={Boolean(item.icon) ? { uri: item.icon } : undefined}
+                />
+              </View>
+              <View style={styles.textWrapper}>
+                <View style={styles.photoWrapper}>
+                  {item.randomUsers.map((user, i) => {
+                    const l = item.randomUsers.length
+                    return (
+                      <Image
+                        key={`${item.id}_${Math.random()}`}
+                        style={{
+                          ...styles.photo,
+                          marginRight: (i === l - 1 ? 0 : -10),
+                          zIndex: l - i,
+                        }}
+                        resizeMode="cover"
+                        // source={require('../../../assets/images/youtube-play-btn.png')}
+                        source={Boolean(user.photo) ? { uri: user.photo } : require('../assets/no_photo.png')}
+                      />
+                    )
+                  })}
+                </View>
+                <Text style={styles.text}>
+                  {item.usersCount + NumEnding(item.usersCount, [' участник', ' участника', ' участников'])}
                 </Text>
               </View>
-              <View style={styles.clubInfo}>
-                <View style={styles.logoWrapper}>
-                  <Image
-                    style={styles.logo}
-                    resizeMode="contain"
-                    source={Boolean(item.icon) ? { uri: item.icon } : undefined}
-                  />
-                </View>
-                <View style={styles.textWrapper}>
-                  <View style={styles.photoWrapper}>
-                    {item.randomUsers.map((user, i) => {
-                      const l = item.randomUsers.length
-                      return (
-                        <Image
-                          key={`${item.id}_${Math.random()}`}
-                          style={{
-                            ...styles.photo,
-                            marginRight: (i === l - 1 ? 0 : -10),
-                            zIndex: l - i,
-                          }}
-                          resizeMode="cover"
-                          // source={require('../../../assets/images/youtube-play-btn.png')}
-                          source={Boolean(user.photo) ? { uri: user.photo } : require('../assets/no_photo.png')}
-                        />
-                      )
-                    })}
-                  </View>
-                  <Text style={styles.text}>
-                    {item.usersCount + NumEnding(item.usersCount, [' участник', ' участника', ' участников'])}
-                  </Text>
-                </View>
-              </View>
             </View>
-          </Card>
-        ))}
-      </ScrollView>
-    )
-  }
+          </View>
+        </Card>
+      ))}
+    </ScrollView>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -166,6 +163,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = createStructuredSelector({
   clubs: (state) => get(state, 'okbk.clubs'),
+  users: (state) => get(state, 'okbk.users'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -174,7 +172,7 @@ const mapDispatchToProps = (dispatch) => ({
     getUsers: (params) => dispatch(getUsers(params)),
     changeCurrentTab: (tabName) => dispatch(changeCurrentTab(tabName)),
     setSelectedClub: (club) => dispatch(setSelectedClub(club)),
-    changeTitle: (title) => dispatch(changeTitle(title)),
+    changeTitle: (title, fakeNavBar) => dispatch(changeTitle(title, fakeNavBar)),
   },
 })
 

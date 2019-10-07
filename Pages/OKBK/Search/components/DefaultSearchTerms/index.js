@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import {
   View,
   StyleSheet,
@@ -16,10 +16,15 @@ const DefaultSearchTerms = ({
   shownEntries,
   getUsers,
   onTabPress,
+  changeTitle,
   activeTab,
 }) => {
-  const searchUsers = useCallback((id, fromItem) => getUsers(id, fromItem), [])
+  const searchUsers = useCallback((id, fromItem, entryName) => {
+    changeTitle(entryName, true)
+    getUsers(id, fromItem)
+  }, [])
   const changeTab = useCallback((tabName) => onTabPress(tabName), [])
+
   return (
     <View style={{ flex: 1 }}>
       <View style={styles.panel}>
@@ -53,7 +58,7 @@ const DefaultSearchTerms = ({
           <TouchableOpacity
             key={entry.id}
             style={styles.searchEntry}
-            onPress={() => searchUsers(entry.id, true)}
+            onPress={() => searchUsers(entry.id, true, entry.name)}
           >
             <Text style={styles.searchEntryText}>{entry.name}</Text>
           </TouchableOpacity>
@@ -92,4 +97,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default memo(DefaultSearchTerms)
+export default DefaultSearchTerms

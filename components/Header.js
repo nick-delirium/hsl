@@ -30,7 +30,8 @@ const Header = ({
   fetchEvents,
   categories,
   feedType,
-  tabTitle,
+  okbkTitle,
+  shouldShowOKBKBack,
 }) => {
   const isSearch = /search/.test(location.pathname)
   const isInsidePost = isPostOpen
@@ -42,7 +43,7 @@ const Header = ({
     : isEventArticle ? navTitle.eventTitle : undefined
   const specificUrl = isArticle ? url.articleUrl : url.eventUrl
   const title = isOKBK
-    ? tabTitle : shouldRenderSpecificTitle
+    ? okbkTitle : shouldRenderSpecificTitle
       ? specificTitle : pageTitles[location.pathname].toUpperCase()
   const shouldRenderBackButton = shouldRenderSpecificTitle
   const shouldRenderSearch = (/news|blogs|programs|media|search/i.test(location.pathname) || location.pathname === '/') && !isPostOpen
@@ -199,7 +200,7 @@ const mapStateFromProps = createStructuredSelector({
   categories: (state) => get(state, 'url.categories'),
   postType: (state) => get(state, 'url.type'),
   feedType: (state) => get(state, 'url.feedType'),
-  tabTitle: (state) => get(state, 'okbk.title'),
+  okbkTitle: (state) => get(state, 'okbk.title'),
 })
 
 const mapDispatchToProps = (dispatch) => ({

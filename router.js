@@ -16,25 +16,49 @@ import Article from './Pages/Posts/components/Articles/Article'
 import Event from './Pages/Posts/components/Events/Event'
 import Search from './Pages/Search'
 import Header from './components/Header'
+import FakeHeader from './components/FakeHeader'
 import okbk from './Pages/OKBK'
 
 const { width } = Dimensions.get('window')
 const { height } = Dimensions.get('window')
 
-
-const RouterView = (props) => (
+const RouterView = ({
+  drawerOpen,
+  openDrawer,
+  closePost,
+  goBack,
+  title,
+  url,
+  type,
+  isPostOpen,
+  shouldDisplayOKBKHeader,
+}) => (
   <View style={styles.container}>
-    {props.drawerOpen && <View style={{position: 'absolute', zIndex: 10, top: 0, left: 0, height, width, backgroundColor: '#000000', opacity: 0.7}} />}
+    {drawerOpen && (
+      <View
+        style={{
+          position: 'absolute',
+          zIndex: 10,
+          top: 0,
+          left: 0,
+          height,
+          width,
+          backgroundColor: '#000000',
+          opacity: 0.7,
+        }}
+      />
+    )}
     <Header
-      openDrawer={props.openDrawer}
-      closePost={props.closePost}
-      goBack={props.goBack}
-      navTitle={props.title}
-      url={props.url}
-      type={props.type}
-      isPostOpen={props.isPostOpen}
+      openDrawer={openDrawer}
+      closePost={closePost}
+      goBack={goBack}
+      navTitle={title}
+      url={url}
+      type={type}
+      isPostOpen={isPostOpen}
     />
-
+    {shouldDisplayOKBKHeader && <FakeHeader />}
+        {console.log(shouldDisplayOKBKHeader)}
     <Route exact path={pages.all.path} component={Posts} />
     <Route path={pages.news.path} render={() => (<Posts type="news" />)} />
     <Route path={pages.events.path} render={() => (<Posts type="events" />)} />
@@ -72,6 +96,7 @@ const mapStateToProps = createStructuredSelector({
 
     return { articleUrl, eventUrl }
   },
+  shouldDisplayOKBKHeader: (state) => get(state, 'okbk.shouldRenderFakeHeader'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -79,4 +104,4 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const RouterWithMemo = React.memo(RouterView)
-export default connect(mapStateToProps, mapDispatchToProps)(RouterView)
+export default connect(mapStateToProps, mapDispatchToProps)(RouterWithMemo)

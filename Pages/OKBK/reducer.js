@@ -15,19 +15,27 @@ const SING_OUT = 'app.okbk.sing_out'
 const CHANGE_TAB = 'app.okbk.change_tab'
 const CHANGE_TITLE = 'app.okbk.change_title'
 const GO_BACK = 'app.okbk.go_back'
+const SET_SEARCH_DATA = 'app.okbk.set_search_data'
 
+export const setFoundData = (data) => ({
+  type: SET_SEARCH_DATA,
+  payload: data,
+})
 export const goBack = () => ({
   type: GO_BACK,
 })
-export const changeTitle = (title) => ({
+export const changeTitle = (title, shouldRenderFakeHeader = false) => ({
   type: CHANGE_TITLE,
-  payload: title,
+  payload: {
+    title,
+    shouldRenderFakeHeader,
+  },
 })
 
-export const changeCurrentTab = (tabName, title) => ({
+export const changeCurrentTab = (tabName, title, fakeNavBar = false) => ({
   type: CHANGE_TAB,
   payload: {
-    tabName, title,
+    tabName, title, fakeNavBar,
   },
 })
 export const singInRequest = () => ({
@@ -112,15 +120,10 @@ export const getClubs = () => (
   }
 )
 
-export const setSelectedClub = (club) => (
-  (dispatch) => {
-    dispatch({
-      type: SET_SELECTED_CLUB,
-      payload: club,
-    })
-    dispatch(changeTitle(club.short_name || club.name))
-  }
-)
+export const setSelectedClub = (club) => ({
+  type: SET_SELECTED_CLUB,
+  payload: club,
+})
 
 // Getting users
 const GET_USERS = 'app.okbk.get_users'
@@ -140,12 +143,6 @@ export const getUsersFalure = () => ({
 })
 
 export const getUsers = (params) => (
-  // const {
-  //   business_club_id,
-  //   business_area_id,
-  //   city_id,
-  //   country_id,
-  //   search, } = params
   async (dispatch) => {
     dispatch({ type: GET_USERS })
     try {
@@ -163,32 +160,42 @@ export const getUsers = (params) => (
   }
 )
 
-export const setSelectedUser = (user) => (
-  (dispatch) => {
-    dispatch({
-      type: SET_SELECTED_USER,
-      payload: user,
-    })
-    dispatch(changeTitle(`${user.last_name} ${user.first_name}`))
-  }
-)
+export const setSelectedUser = (user) => ({
+  type: SET_SELECTED_USER,
+  payload: user,
+})
+
+export const defaultSearchResult = {
+  asked: false,
+  data: [],
+}
 
 const initialState = {
+  searchData: defaultSearchResult,
   currentTab: 'feed',
   tabHistory: ['feed'],
+  fakeHistory: [],
   title: 'ОКБК Новости',
-  isLoggedIn: false,
-  isLoading: false,
+  titleHistory: [],
+  prevTitle: '',
+  shouldRenderFakeHeader: false,
   account: {},
-  error: null,
   clubs: [],
   users: [],
   selectedClub: {},
   personalInfo: {},
+  isLoading: false,
+  isLoggedIn: false,
+  error: null,
 }
 
 export default function (state = initialState, action) {
   switch (action.type) {
+    case SET_SEARCH_DATA:
+      return {
+        ...state,
+        searchData: action.payload,
+      }
     case SING_IN:
       return {
         ...state,
@@ -210,27 +217,45 @@ export default function (state = initialState, action) {
         isLoggedIn: true,
         isLoading: false,
       }
-    case CHANGE_TAB:
+    case CHANGE_TAB: {
+      const newTitle = action.payload.title || state.title
       return {
         ...state,
         currentTab: action.payload.tabName,
         personalInfo: action.payload.tabName !== 'profile' ? {} : state.personalInfo,
-        title: action.payload.title || state.title,
+        title: newTitle,
+        titleHistory: [newTitle, ...state.titleHistory],
         tabHistory: [action.payload.tabName, ...state.tabHistory],
+        searchData: initialState.searchData,
+        users: initialState.users,
+        personalInfo: {},
+        shouldRenderFakeHeader: action.payload.fakeNavBar,
+        fakeHistory: [],
       }
+    }
     case CHANGE_TITLE:
       return {
         ...state,
-        title: action.payload,
+        title: action.payload.title,
+        titleHistory: [action.payload.title, ...state.titleHistory],
+        shouldRenderFakeHeader: action.payload.shouldRenderFakeHeader || false,
+        fakeHistory: [action.payload.title, ...state.fakeHistory],
       }
     case GO_BACK: {
-      const { tabHistory } = state
-      if (tabHistory === 0) return state
-      tabHistory.shift()
+      const { tabHistory, fakeHistory, titleHistory } = state
+      if (tabHistory.length === 0) return state
+      if (fakeHistory.length === 0) tabHistory.shift()
+      else fakeHistory.shift()
+      titleHistory.shift()
       return {
         ...state,
         currentTab: tabHistory[0],
         tabHistory,
+        fakeHistory,
+        title: titleHistory[0],
+        personalInfo: {},
+        users: fakeHistory.length === 1 ? state.users : initialState.users,
+        shouldRenderFakeHeader: fakeHistory.length > 0,
       }
     }
     case GET_CLUBS_SUCCESS:
