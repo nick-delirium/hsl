@@ -12,6 +12,7 @@ import { createStructuredSelector } from 'reselect'
 import Login from './Login'
 import Clubs from './Clubs'
 import People from './People'
+import Search from './Search'
 import Profile from './Profile'
 import { authErrors } from './queriesErrors'
 import Navbar from './components/NavBar'
@@ -43,6 +44,8 @@ class OKBK extends PureComponent {
         return <People />
       case 'profile':
         return <Profile self />
+      case 'okbkSearch':
+        return <Search />
       default:
         return <Text>Feed</Text>
     }
@@ -52,7 +55,6 @@ class OKBK extends PureComponent {
     const {
       isLoggedIn,
       isLoading,
-      account,
       error,
     } = this.props
 
@@ -66,11 +68,9 @@ class OKBK extends PureComponent {
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
         <View style={styles.main}>
-          {account && (
-            <View style={{ flex: 1 }}>
-              {this.returnTabView()}
-            </View>
-          )}
+          <View style={{ flex: 1, paddingBottom: 60 }}>
+            {this.returnTabView()}
+          </View>
           <Navbar />
         </View>
       </SafeAreaView>

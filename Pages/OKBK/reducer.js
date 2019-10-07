@@ -214,7 +214,8 @@ export default function (state = initialState, action) {
       return {
         ...state,
         currentTab: action.payload.tabName,
-        title: action.payload.title,
+        personalInfo: action.payload.tabName !== 'profile' ? {} : state.personalInfo,
+        title: action.payload.title || state.title,
         tabHistory: [action.payload.tabName, ...state.tabHistory],
       }
     case CHANGE_TITLE:

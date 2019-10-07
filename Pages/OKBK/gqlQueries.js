@@ -5,41 +5,41 @@ export const client = new ApolloClient({
 })
 
 export const auth = gql`
-query auth ($email: String!, $password: String!) {
-  auth (email: $email, password: $password) {
-    result,
-    code,
-    message,
-    sessionId,
-    groups { id, name },
-    user {
-      id,
-      first_name,
-      last_name,
-      photo,
-      career,
-      social_media,
-      contact_email,
-      phone,
-      business_club_id,
-      business_club_name,
-      city_id,
-      city_name,
-      country_id,
-      country_name,
-      business_areas { id, name },
-      groups { id, name }
+  query auth ($email: String!, $password: String!) {
+    auth (email: $email, password: $password) {
+      result,
+      code,
+      message,
+      sessionId,
+      groups { id, name },
+      user {
+        id,
+        first_name,
+        last_name,
+        photo,
+        career,
+        social_media,
+        contact_email,
+        phone,
+        business_club_id,
+        business_club_name,
+        city_id,
+        city_name,
+        country_id,
+        country_name,
+        business_areas { id, name },
+        groups { id, name }
+      }
     }
   }
-}
 `
 
 export const logaut = gql`
-query logout($session: String!) {
-  logout (session : $session){
-    result
+  query logout($session: String!) {
+    logout (session : $session){
+      result
+    }
   }
-}
 `
 export const getUsersQuery = gql`
 query users(
@@ -130,4 +130,31 @@ query businessClubList
     }
   }
 }
+`
+export const getAreasQuery = gql`
+  query businessAreaList {
+    businessAreaList {
+      result,
+      code,
+      message,
+      businessAreas {
+        id,
+        name,
+      }
+    }
+  }
+`
+export const getCitiesListQuery = gql`
+  query citiesList {
+    citiesList {
+      result,
+      code,
+      message,
+      citiesList {
+        id,
+        name,
+        country { id, name },
+      }
+    }
+  }
 `

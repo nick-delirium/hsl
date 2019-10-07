@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-boolean-cast */
 import React, { PureComponent } from 'react'
 import {
   View,
@@ -42,7 +43,10 @@ class Clubs extends PureComponent {
     return (
       <ScrollView contentContainerStyle={styles.pageWrapper} bounces={false}>
         {clubs.map((item) => (
-          <Card key={item.name.trim()} onItemPress={() => this.onItemPress(item)}>
+          <Card
+            key={item.id}
+            onItemPress={() => this.onItemPress(item)}
+          >
             <View style={styles.cardInner}>
               <View style={styles.header}>
                 <Text style={styles.clubName}>{item.name}</Text>
@@ -50,12 +54,9 @@ class Clubs extends PureComponent {
               <View style={styles.clubInfo}>
                 <View style={styles.logoWrapper}>
                   <Image
-                    style={{
-                      ...styles.logo,
-                      backgroundColor: item.icon ? 'transparent' : '#eee',
-                    }}
+                    style={styles.logo}
                     resizeMode="contain"
-                    source={item.icon ? { uri: item.icon } : ''}
+                    source={Boolean(item.icon) ? { uri: item.icon } : undefined}
                   />
                 </View>
                 <View style={styles.textWrapper}>
@@ -64,6 +65,7 @@ class Clubs extends PureComponent {
                       const l = item.randomUsers.length
                       return (
                         <Image
+                          key={`${item.id}_${Math.random()}`}
                           style={{
                             ...styles.photo,
                             marginRight: (i === l - 1 ? 0 : -10),
@@ -71,7 +73,7 @@ class Clubs extends PureComponent {
                           }}
                           resizeMode="cover"
                           // source={require('../../../assets/images/youtube-play-btn.png')}
-                          source={user.photo ? { uri: user.photo } : require('../assets/no_photo.png')}
+                          source={Boolean(user.photo) ? { uri: user.photo } : require('../assets/no_photo.png')}
                         />
                       )
                     })}

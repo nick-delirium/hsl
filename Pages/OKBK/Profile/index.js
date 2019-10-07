@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 import React from 'react'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -57,8 +58,8 @@ class Profile extends React.PureComponent {
       actions,
       clubs,
     } = this.props
-    const self = personalInfo ? false : true
-    const displayedUser = personalInfo || user
+    const self = !Object.entries(personalInfo).length > 0
+    const displayedUser = self ? user : personalInfo
     const businessClub = displayedUser.business_club_id
       ? clubs.find((club) => (club.id === displayedUser.business_club_id))
       : null
@@ -119,7 +120,7 @@ class Profile extends React.PureComponent {
               {Boolean(displayedUser.phone) && (
                 <TouchableWithoutFeedback
                   onPress={() => {
-                    return openLink(`https://api.whatsapp.com/send?phone=${displayedUser.phone.replace('+', '').replace(/ /g,'')}`)
+                    return openLink(`https://api.whatsapp.com/send?phone=${displayedUser.phone.replace('+', '').replace(/ /g, '')}`)
                   }}
                 >
                   <View style={{ ...styles.contactsRow, marginRight: 20 }}>

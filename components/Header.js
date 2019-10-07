@@ -117,8 +117,8 @@ const Header = ({
           <Text
             style={shouldRenderSpecificTitle ? styles.articleTitle : styles.navTitle}
           >
-            {title && title.slice(0, 20)}
-            {title && title.length > 20 && '...'}
+            {title && title.slice(0, 23)}
+            {title && title.length > 23 && '...'}
           </Text>
         </TouchableOpacity>
       </View>
