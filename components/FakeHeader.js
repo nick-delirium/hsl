@@ -17,12 +17,12 @@ import {
 
 const Header = ({ title, actions, fakeHistory }) => {
   const shouldRenderBackButton = true
-  console.log(fakeHistory)
+
   const goBackAction = () => {
-    console.log(fakeHistory)
     if (fakeHistory.length === 1) actions.setFoundData(defaultSearchResult)
     actions.goBack()
   }
+
   return (
     <View style={styles.nav}>
       <View
