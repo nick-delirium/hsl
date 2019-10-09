@@ -48,7 +48,7 @@ const Clubs = ({ actions, clubs, users }) => {
           <View style={styles.cardInner}>
             <View style={styles.header}>
               <Text
-                numberOfLines={3}
+                numberOfLines={2}
                 ellipsizeMode="tail"
                 style={styles.clubName}
               >

@@ -99,7 +99,9 @@ class Login extends PureComponent {
                 onSubmitEditing={this.onSubmit}
               />
             </View>
-
+            {error && (
+              <Text>{error}</Text>
+            )}
             <TouchableOpacity
               onPress={this.onSubmit}
               style={{
@@ -113,9 +115,7 @@ class Login extends PureComponent {
               </StyledText>
             </TouchableOpacity>
           </View>
-          {error && (
-            <Text>{error}</Text>
-          )}
+
           <Image
             style={styles.logo}
             resizeMode="contain"

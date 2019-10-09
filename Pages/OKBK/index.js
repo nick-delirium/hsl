@@ -57,7 +57,7 @@ class OKBK extends PureComponent {
 
     if (isLoading) return <Text>loading</Text>
 
-    if (!isLoggedIn && !error) {
+    if (!isLoggedIn || error) {
       return (
         <Login error={get(authErrors, error)} />
       )
