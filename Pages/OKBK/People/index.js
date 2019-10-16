@@ -78,9 +78,11 @@ class People extends PureComponent {
                 </View>
 
                 <View style={styles.textWrapper}>
-                  <Text style={{ ...styles.textName, color: '#fff' }}>{selectedClub.chief.last_name}</Text>
                   <Text style={{ ...styles.textName, color: '#fff' }}>{selectedClub.chief.first_name}</Text>
-                  <Text style={styles.text}>Руководитель клуба</Text>
+                  <Text style={{ ...styles.textName, color: '#fff' }}>{selectedClub.chief.last_name}</Text>
+                  <Text style={styles.text}>
+                    {`${Boolean(selectedClub.chief_position) ? selectedClub.chief_position : 'Руководитель клуба'}`}
+                  </Text>
                 </View>
               </TouchableOpacity>
 

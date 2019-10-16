@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#ffffff',
+    borderRadius: 4,
   },
   photoWrapper: {
     flex: 1,

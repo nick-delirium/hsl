@@ -5,6 +5,7 @@ import {
   getClubsQuery,
   getUsersQuery,
 } from './gqlQueries'
+import {getPostsByCategory} from '../Posts/reducer'
 
 // Auth
 const SING_IN = 'app.okbk.sing_in'
@@ -165,6 +166,40 @@ export const setSelectedUser = (user) => ({
   payload: user,
 })
 
+// getting OKBK news
+// const GET_NEWS = 'app.okbk.get_news'
+// const GET_NEWS_SUCCESS = 'app.okbk.get_news_succsess'
+// const GET_NEWS_FALURE = 'app.okbk.get_news_falure'
+
+// export const getNewssRequest = () => ({
+//   type: GET_NEWS,
+// })
+// export const getNewsSuccsess = (users) => ({
+//   type: GET_NEWS_SUCCESS,
+//   payload: users,
+// })
+// export const getNewsFalure = () => ({
+//   type: GET_NEWS_FALURE,
+// })
+// export const getNews = () => (
+//   async (dispatch) => {
+//     dispatch(getNewssRequest())
+//     try {
+//       dispatch(getPostsByCategory(792))
+//       // const response = await client.query({ query: getUsersQuery, variables: params })
+//       // const res = response.data.users
+//       // if (res.result) {
+//       //   dispatch(getUsersSuccsess(res.users))
+//       // } else {
+//       //   console.error(res.message)
+//       //   dispatch(getUsersFalure())
+//       // }
+//     } catch (e) {
+//       console.error(e)
+//     }
+//   }
+// )
+
 export const defaultSearchResult = {
   asked: false,
   data: [],
@@ -172,10 +207,13 @@ export const defaultSearchResult = {
 
 const initialState = {
   searchData: defaultSearchResult,
-  currentTab: 'feed',
-  tabHistory: ['feed'],
+  // currentTab: 'feed',
+  // tabHistory: ['feed'],
+  // title: 'ОКБК Новости',
+  currentTab: 'groups',
+  tabHistory: ['groups'],
+  title: 'ОКБК',
   fakeHistory: [],
-  title: 'ОКБК Новости',
   titleHistory: [],
   prevTitle: '',
   shouldRenderFakeHeader: false,

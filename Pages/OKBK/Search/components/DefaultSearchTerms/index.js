@@ -22,11 +22,11 @@ const DefaultSearchTerms = ({
   const searchUsers = useCallback((id, fromItem, entryName) => {
     changeTitle(entryName, true)
     getUsers(id, fromItem)
-  }, [])
+  })
   const changeTab = useCallback((tabName) => onTabPress(tabName), [])
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <View style={styles.panel}>
         {Object.keys(tabs).map((tab) => (
           <TouchableOpacity
@@ -51,7 +51,7 @@ const DefaultSearchTerms = ({
         ))}
       </View>
       <ScrollView
-        contentContainerStyle={{ flex: 1, padding: 20 }}
+        contentContainerStyle={{ flexGrow: 1, padding: 20 }}
         keyboardDismissMode="on-drag"
       >
         {shownEntries.map((entry) => (

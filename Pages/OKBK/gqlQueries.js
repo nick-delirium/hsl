@@ -109,6 +109,7 @@ query businessClubList
       randomUsers {
         photo
       },
+      chief_position,
       chief {
         id,
         first_name,

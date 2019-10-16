@@ -28,6 +28,7 @@ import DefaultSearchTerms from './components/DefaultSearchTerms'
 import SearchForm from './components/SearchForm'
 import PersonalCard from '../People/components/PersonalCard'
 import Profile from '../Profile'
+import Colors from '@/constants/Colors'
 
 const { width } = Dimensions.get('window')
 const PANEL_TABS = {
@@ -64,7 +65,7 @@ const getProperEntryData = (tabName, rawData) => {
 const Search = ({ actions, foundData, personalInfo }) => {
   const { promiseInProgress } = usePromiseTracker()
   const [searchFieldValue, setFieldValue] = useState('')
-  const [activeTab, setActiveTab] = useState('okbk')
+  const [activeTab, setActiveTab] = useState('areas')
   const [shownEntries, setEntries] = useState([])
 
   const onTabPress = useCallback((tab) => {
@@ -140,7 +141,7 @@ const Search = ({ actions, foundData, personalInfo }) => {
         placeholder="ОКБК"
         getUsers={getUsers}
       />
-      <View style={{ flex: 1, position: 'relative' }}>
+      <View style={{ flex: 1, position: 'relative', backgroundColor: Colors.backgroundGray }}>
         {promiseInProgress ? (
           <View style={styles.indicatorWrapper}>
             <ActivityIndicator />
