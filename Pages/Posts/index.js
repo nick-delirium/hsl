@@ -35,7 +35,6 @@ class AllPosts extends React.PureComponent {
   }
 
   componentDidMount() {
-    console.log('m')
     this.getInitialData()
     const { type, setFeedTypeFromRender } = this.props
     if (type) setFeedTypeFromRender(type)
@@ -43,7 +42,6 @@ class AllPosts extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('u')
     const { isRefresh, removeRefreshFlag, type, usedCategories } = this.props
     const isCategoryChanged = prevProps.usedCategories.subcat !== usedCategories.subcat
       || prevProps.usedCategories.mainCat !== usedCategories.mainCat
@@ -251,7 +249,6 @@ class AllPosts extends React.PureComponent {
     } = this.props
 
     const displayingPosts = type ? data : posts
-    console.log('how many:', displayingPosts && displayingPosts.length, 'type', type)
     const dataWithMedia = displayingPosts && displayingPosts.length
       ? displayingPosts.map((item) => {
         const mediaUrl = get(item, '_links.wp:featuredmedia.href', null)

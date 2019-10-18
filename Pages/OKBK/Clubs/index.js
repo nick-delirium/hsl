@@ -18,13 +18,9 @@ import { NumeralDeclension } from '@/common/format'
 import {
   getClubs,
   setSelectedClub,
-} from './reducer'
-import {
   changeTitle,
-} from '../reducer'
-import {
   getUsers,
-} from '../People/reducer'
+} from '../reducer'
 import People from '../People'
 
 const { height } = Dimensions.get('window')
@@ -165,8 +161,8 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = createStructuredSelector({
-  clubs: (state) => get(state, 'okbk.clubs.clubs'),
-  users: (state) => get(state, 'okbk.users.users'),
+  clubs: (state) => get(state, 'okbk.clubs'),
+  users: (state) => get(state, 'okbk.users'),
 })
 
 const mapDispatchToProps = (dispatch) => ({

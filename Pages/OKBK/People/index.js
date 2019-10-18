@@ -18,8 +18,8 @@ import Colors from '@/constants/Colors'
 import {
   changeCurrentTab,
   changeTitle,
+  setSelectedUser,
 } from '../reducer'
-import { setSelectedUser } from './reducer'
 import PersonalCard from './components/PersonalCard'
 import Profile from '../Profile'
 
@@ -186,9 +186,9 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = createStructuredSelector({
-  users: (state) => get(state, 'okbk.users.users'),
-  selectedClub: (state) => get(state, 'okbk.clubs.selectedClub'),
-  personalInfo: (state) => get(state, 'okbk.users.personalInfo'),
+  users: (state) => get(state, 'okbk.users'),
+  selectedClub: (state) => get(state, 'okbk.selectedClub'),
+  personalInfo: (state) => get(state, 'okbk.personalInfo'),
 })
 
 const mapDispatchToProps = (dispatch) => ({

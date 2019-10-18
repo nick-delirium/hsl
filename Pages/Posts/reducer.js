@@ -80,7 +80,6 @@ export const getPosts = (
 ) => (dispatch) => {
   dispatch(fetchAllPostsReq(limit, isRefresh))
   dispatch(fetchAdsReq(limit, isRefresh))
-  console.log(limit, isRefresh, page)
   fetch(api.getPosts(limit, page))
     .then((response) => response.json())
     .then((posts) => {
@@ -139,7 +138,6 @@ export const getPostsByCategory = (
   page = 1,
   isInitial = true,
 ) => (dispatch) => {
-  console.log('trying to get', api.getPostsByCategory(category, limit, page))
   dispatch(fetchPostsReq(limit, category, isRefresh))
   fetch(api.getPostsByCategory(category, limit, page))
     .then((response) => response.json())
@@ -183,7 +181,6 @@ export const getEvents = (
   fetch(api.getEvents(startDate, endDate, limit))
     .then((response) => {
       let a = response.json()
-      console.log(a)
       return a
     })
     .then((result) => dispatch(fetchEventsSuccess(result.events)))

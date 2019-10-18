@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = createStructuredSelector({
-  currentTab: (state) => get(state, 'okbk.root.currentTab'),
+  currentTab: (state) => get(state, 'okbk.currentTab'),
 })
 const mapDispatchToProps = (dispatch) => ({
   actions: {

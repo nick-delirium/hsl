@@ -15,8 +15,8 @@ import {
   changeCurrentTab,
   changeTitle,
   setFoundData,
+  setSelectedUser,
 } from '../reducer'
-import { setSelectedUser } from '../People/reducer'
 import {
   client,
   getClubsQuery,
@@ -191,8 +191,8 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = createStructuredSelector({
-  personalInfo: (state) => get(state, 'okbk.users.personalInfo'),
-  foundData: (state) => get(state, 'okbk.root.searchData'),
+  personalInfo: (state) => get(state, 'okbk.personalInfo'),
+  foundData: (state) => get(state, 'okbk.searchData'),
 })
 const mapDispatchToProps = (dispatch) => ({
   actions: {

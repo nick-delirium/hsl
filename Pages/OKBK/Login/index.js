@@ -11,7 +11,7 @@ import {
 import { connect } from 'react-redux'
 import colors from '../colors'
 import fonts from '@/constants/Styles'
-import { singIn } from './reducer'
+import { singIn } from '../reducer'
 
 const { height } = Dimensions.get('window')
 const { width } = Dimensions.get('window')
@@ -41,7 +41,6 @@ class Login extends PureComponent {
 
   onSubmit = () => {
     const { email, password } = this.state
-    console.log(email, password)
 
     const { actions } = this.props
     if (email !== '' && password !== '') actions.singIn({ email, password })

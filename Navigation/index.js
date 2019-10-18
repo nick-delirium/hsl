@@ -91,8 +91,8 @@ class RouterWithDrawer extends React.PureComponent {
 
 const mapStateFromProps = createStructuredSelector({
   isPostOpen: (state) => get(state, 'url.isPostOpen'),
-  tabHistory: (state) => get(state, 'okbk.root.tabHistory', []),
-  fakeHistory: (state) => get(state, 'okbk.root.fakeHistory'),
+  tabHistory: (state) => get(state, 'okbk.tabHistory', []),
+  fakeHistory: (state) => get(state, 'okbk.fakeHistory'),
 })
 
 const mapDispatchToProps = (dispatch) => ({

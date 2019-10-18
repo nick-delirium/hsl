@@ -199,7 +199,7 @@ const mapStateFromProps = createStructuredSelector({
   categories: (state) => get(state, 'url.categories'),
   postType: (state) => get(state, 'url.type'),
   feedType: (state) => get(state, 'url.feedType'),
-  okbkTitle: (state) => get(state, 'okbk.root.title'),
+  okbkTitle: (state) => get(state, 'okbk.title'),
 })
 
 const mapDispatchToProps = (dispatch) => ({

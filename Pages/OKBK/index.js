@@ -16,7 +16,7 @@ import Profile from './Profile'
 import Feed from './Feed'
 import { authErrors } from './queriesErrors'
 import Navbar from './components/NavBar'
-import { accountConfirmed } from './Login/reducer'
+import { accountConfirmed } from './reducer'
 
 class OKBK extends PureComponent {
   componentDidMount() {
@@ -30,7 +30,6 @@ class OKBK extends PureComponent {
     AsyncStorage.getItem('account', (e, acc) => {
       if (acc !== null) {
         actions.accountConfirmed(JSON.parse(acc))
-        console.log(JSON.parse(acc).sessionId, 'found in local storage')
       }
     })
   }
@@ -97,11 +96,11 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = createStructuredSelector({
-  isLoggedIn: (state) => get(state, 'okbk.login.isLoggedIn'),
-  isLoading: (state) => get(state, 'okbk.root.isLoading'),
-  account: (state) => get(state, 'okbk.login.account'),
-  error: (state) => get(state, 'okbk.login.error'),
-  currentTab: (state) => get(state, 'okbk.root.currentTab'),
+  isLoggedIn: (state) => get(state, 'okbk.isLoggedIn'),
+  isLoading: (state) => get(state, 'okbk.isLoading'),
+  account: (state) => get(state, 'okbk.account'),
+  error: (state) => get(state, 'okb.error'),
+  currentTab: (state) => get(state, 'okbk.currentTab'),
 })
 const mapDispatchToProps = (dispatch) => ({
   actions: {

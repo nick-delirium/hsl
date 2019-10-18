@@ -13,7 +13,6 @@ import Colors from '@/constants/Colors'
 import CardArticle from '@/Pages/Posts/components/Articles/CardArticle'
 import Article from '@/Pages/Posts/components/Articles/Article'
 import { setFeedType } from '@/Navigation/reducer'
-
 import {
   rmRefreshFlag,
   getNews,
@@ -31,7 +30,6 @@ class Feed extends React.PureComponent {
   }
 
   componentDidMount() {
-    console.log('m')
     this.getInitialData()
   }
 
@@ -112,7 +110,6 @@ class Feed extends React.PureComponent {
       isLoading,
       isPostOpen,
     } = this.props
-    console.log(posts.length)
     const dataWithMedia = posts && posts.length > 0
       ? posts.map((item) => {
         const mediaUrl = get(item, '_links.wp:featuredmedia.href', null)
@@ -158,12 +155,12 @@ const styles = StyleSheet.create({
 })
 
 const mapStateFromProps = createStructuredSelector({
-  isLoading: (state) => get(state, 'okbk.root.isLoading'),
+  isLoading: (state) => get(state, 'okbk.isLoading'),
   // isError: (state) => get(state, 'posts.isError'),
-  posts: (state) => get(state, 'okbk.root.posts'),
+  posts: (state) => get(state, 'okbk.posts'),
   isPostOpen: (state) => get(state, 'url.isPostOpen'),
   postType: (state) => get(state, 'url.type'),
-  isRefresh: (state) => get(state, 'okbk.root.isRefresh'),
+  isRefresh: (state) => get(state, 'okbk.isRefresh'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
