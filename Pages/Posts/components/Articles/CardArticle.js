@@ -12,7 +12,7 @@ import { createStructuredSelector } from 'reselect'
 import { changeLocation, togglePost } from '@/Navigation/reducer'
 import CachedImage from '@/components/CachedImage'
 import { setData } from './articleReducer'
-import { fonts } from '@/constants/Styles'
+import fonts from '@/constants/Styles'
 import Card from '@/components/Card'
 
 class CardArticle extends React.PureComponent {

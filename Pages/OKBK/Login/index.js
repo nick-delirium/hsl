@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import colors from '../colors'
-import { fonts } from '@/constants/Styles'
+import fonts from '@/constants/Styles'
 import { singIn } from '../reducer'
 
 const { height } = Dimensions.get('window')

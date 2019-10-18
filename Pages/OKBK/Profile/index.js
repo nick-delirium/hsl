@@ -15,7 +15,7 @@ import {
   Alert,
   Linking,
 } from 'react-native'
-import { fonts } from '@/constants/Styles'
+import fonts from '@/constants/Styles'
 import { singOut } from '../reducer'
 
 const { width } = Dimensions.get('window')

@@ -20,7 +20,7 @@ import { compose } from 'redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import { categories, rusCats } from '@/constants/places'
-import { fonts } from '@/constants/Styles'
+import fonts from '@/constants/Styles'
 import { formatText } from '@/common/format'
 import { getPlaces } from './reducer'
 

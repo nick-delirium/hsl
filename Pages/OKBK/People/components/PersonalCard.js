@@ -7,7 +7,7 @@ import {
   StyleSheet,
 } from 'react-native'
 import Card from '@/components/Card'
-import { fonts } from '@/constants/Styles'
+import fonts from '@/constants/Styles'
 import colors from '../../colors'
 
 const PersonalCard = ({ item, onItemPress }) => (

@@ -9,7 +9,7 @@ import {
 import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { fonts } from '@/constants/Styles'
+import fonts from '@/constants/Styles'
 import Colors from '@/constants/Colors'
 import CardArticle from '@/Pages/Posts/components/Articles/CardArticle'
 import Article from '@/Pages/Posts/components/Articles/Article'

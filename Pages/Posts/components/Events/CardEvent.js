@@ -12,7 +12,7 @@ import CachedImage from '@/components/CachedImage'
 import { changeLocation, togglePost } from '@/Navigation/reducer'
 import { setEvent } from './eventReducer'
 import { formatDate } from '@/common/format'
-import { fonts } from '@/constants/Styles'
+import fonts from '@/constants/Styles'
 import Card from '@/components/Card'
 
 class CardEvent extends React.Component {

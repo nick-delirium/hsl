@@ -9,7 +9,7 @@ import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import get from 'lodash/get'
-import { fonts } from '@/constants/Styles'
+import fonts from '@/constants/Styles'
 import { getPostsByCategory } from '@/Pages/Posts/reducer'
 import { setSubCategories } from '@/Navigation/reducer'
 

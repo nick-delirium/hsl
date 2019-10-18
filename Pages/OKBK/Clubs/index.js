@@ -11,7 +11,7 @@ import {
 import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import { fonts } from '@/constants/Styles'
+import fonts from '@/constants/Styles'
 import Colors from '@/constants/Colors'
 import Card from '@/components/Card'
 import { NumEnding } from '@/common/format'
