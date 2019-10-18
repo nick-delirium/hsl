@@ -49,11 +49,11 @@ const pages = {
     path: '/search',
     okbkSub: false,
   },
-  okbk: {
-    name: 'ОКБК',
-    path: '/okbk',
-    okbkSub: false,
-  },
+  // okbk: {
+  //   name: 'ОКБК',
+  //   path: '/okbk',
+  //   okbkSub: false,
+  // },
 }
 
 export const pageTitles = {
@@ -64,6 +64,6 @@ export const pageTitles = {
   [pages.programs.path]: pages.programs.name,
   [pages.media.path]: pages.media.name,
   [pages.places.path]: pages.places.name,
-  [pages.okbk.path]: 'ОКБК: Новости',
+  // [pages.okbk.path]: 'ОКБК: Новости',
 }
 export default pages

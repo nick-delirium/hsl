@@ -69,7 +69,7 @@ const RouterView = ({
     <Route path={pages.post.path} render={() => (<Article />)} />
     <Route path={pages.event.path} render={() => (<Event />)} />
     <Route path={pages.places.path} component={Places} />
-    <Route path={pages.okbk.path} component={okbk} />
+    {/* <Route path={pages.okbk.path} component={okbk} /> */}
   </View>
 )
 

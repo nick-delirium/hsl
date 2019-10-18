@@ -179,7 +179,6 @@ export const getEvents = (
   limit = DEFAULT_LIMIT,
   isRefresh = false,
 ) => (dispatch) => {
-  console.log('limit', limit)
   dispatch(fetchEventsReq(startDate, endDate, limit, isRefresh))
   fetch(api.getEvents(startDate, endDate, limit))
     .then((response) => {
