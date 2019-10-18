@@ -115,8 +115,8 @@ const styles = StyleSheet.create({
 })
 
 const mapStateFromProps = createStructuredSelector({
-  title: (state) => get(state, 'okbk.title'),
-  fakeHistory: (state) => get(state, 'okbk.fakeHistory'),
+  title: (state) => get(state, 'okbk.root.title'),
+  fakeHistory: (state) => get(state, 'okbk.root.fakeHistory'),
 })
 
 const mapDispatchToProps = (dispatch) => ({

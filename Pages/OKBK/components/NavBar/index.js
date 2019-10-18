@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import get from 'lodash/get'
@@ -111,11 +112,13 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = createStructuredSelector({
-  currentTab: (state) => get(state, 'okbk.currentTab'),
+  currentTab: (state) => get(state, 'okbk.root.currentTab'),
 })
 const mapDispatchToProps = (dispatch) => ({
   actions: {
-    changeCurrentTab: (name, title, fakeNavBar) => dispatch(changeCurrentTab(name, title, fakeNavBar)),
+    changeCurrentTab: (name, title, fakeNavBar) => {
+      return dispatch(changeCurrentTab(name, title, fakeNavBar))
+    },
   },
 })
 

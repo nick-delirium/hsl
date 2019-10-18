@@ -16,7 +16,7 @@ import {
   Linking,
 } from 'react-native'
 import fonts from '@/constants/Styles'
-import { singOut } from '../reducer'
+import { singOut } from '../Login/reducer'
 
 const { width } = Dimensions.get('window')
 
@@ -226,9 +226,9 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = createStructuredSelector({
-  account: (state) => get(state, 'okbk.account'),
-  personalInfo: (state) => get(state, 'okbk.personalInfo'),
-  clubs: (state) => get(state, 'okbk.clubs'),
+  account: (state) => get(state, 'okbk.login.account'),
+  personalInfo: (state) => get(state, 'okbk.users.personalInfo'),
+  clubs: (state) => get(state, 'okbk.clubs.clubs'),
 })
 const mapDispatchToProps = (dispatch) => ({
   actions: {

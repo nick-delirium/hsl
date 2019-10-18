@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 import React from 'react'
 import {
   ScrollView,
@@ -14,27 +15,26 @@ import { getPostsByCategory } from '@/Pages/Posts/reducer'
 import { setSubCategories } from '@/Navigation/reducer'
 
 class BlogCategories extends React.Component {
-
   onCatPress = (cat) => {
-    const { subCategories } = this.props
+    const { subCategories, setSubCategoriesAction, fetchByCategory } = this.props
     const index = subCategories.indexOf(cat.id)
     if (index > -1) {
       subCategories.splice(index, 1)
     } else {
       subCategories.push(cat.id)
     }
-    this.props.setSubCategories(subCategories)
+    setSubCategoriesAction(subCategories)
     const catIds = subCategories.join(',')
-    let category = catIds || 4
-    this.props.fetchByCategory(category, undefined, false, 4)
+    const category = catIds || 4
+    fetchByCategory(category, undefined, false, 4)
   }
 
-  render () {
+  render() {
     const { categories, subCategories } = this.props
-    const blogCategories = categories.filter(cat => cat.parent == 4)
+    const blogCategories = categories.filter((cat) => cat.parent === 4)
     return (
       <ScrollView
-        horizontal={true}
+        horizontal
         contentContainerStyle={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}
         showsHorizontalScrollIndicator={false}
       >
@@ -52,7 +52,7 @@ class BlogCategories extends React.Component {
             }}
             onPress={() => this.onCatPress(cat)}
           >
-            <Text style={{fontSize: fonts.normal, color: subCategories.includes(cat.id) ? '#fff' : '#333376'}}>
+            <Text style={{ fontSize: fonts.normal, color: subCategories.includes(cat.id) ? '#fff' : '#333376' }}>
               {cat.name}
             </Text>
           </TouchableOpacity>
@@ -63,8 +63,10 @@ class BlogCategories extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchByCategory: (cat, limit, isRefresh, mainCategory) => dispatch(getPostsByCategory(cat, limit, isRefresh, mainCategory)),
-  setSubCategories: (subCategories) => dispatch(setSubCategories(subCategories)),
+  fetchByCategory: (cat, limit, isRefresh, mainCategory) => {
+    return dispatch(getPostsByCategory(cat, limit, isRefresh, mainCategory))
+  },
+  setSubCategoriesAction: (subCategories) => dispatch(setSubCategories(subCategories)),
 })
 const mapStateFromProps = createStructuredSelector({
   categories: (state) => get(state, 'url.categories'),
@@ -77,4 +79,3 @@ export default compose(
   withRouter,
   withConnect,
 )(BlogCategories)
-

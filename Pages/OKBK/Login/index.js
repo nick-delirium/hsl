@@ -11,7 +11,7 @@ import {
 import { connect } from 'react-redux'
 import colors from '../colors'
 import fonts from '@/constants/Styles'
-import { singIn } from '../reducer'
+import { singIn } from './reducer'
 
 const { height } = Dimensions.get('window')
 const { width } = Dimensions.get('window')
@@ -174,7 +174,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   logo: {
-    // width: '160%',
     height: '40%',
   },
 })

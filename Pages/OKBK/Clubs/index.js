@@ -14,14 +14,17 @@ import { createStructuredSelector } from 'reselect'
 import fonts from '@/constants/Styles'
 import Colors from '@/constants/Colors'
 import Card from '@/components/Card'
-import { NumEnding } from '@/common/format'
+import { NumeralDeclension } from '@/common/format'
 import {
   getClubs,
-  changeCurrentTab,
-  getUsers,
   setSelectedClub,
+} from './reducer'
+import {
   changeTitle,
 } from '../reducer'
+import {
+  getUsers,
+} from '../People/reducer'
 import People from '../People'
 
 const { height } = Dimensions.get('window')
@@ -83,7 +86,7 @@ const Clubs = ({ actions, clubs, users }) => {
                   })}
                 </View>
                 <Text style={styles.text}>
-                  {item.usersCount + NumEnding(item.usersCount, [' участник', ' участника', ' участников'])}
+                  {item.usersCount + NumeralDeclension(item.usersCount, [' участник', ' участника', ' участников'])}
                 </Text>
               </View>
             </View>
@@ -162,15 +165,14 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = createStructuredSelector({
-  clubs: (state) => get(state, 'okbk.clubs'),
-  users: (state) => get(state, 'okbk.users'),
+  clubs: (state) => get(state, 'okbk.clubs.clubs'),
+  users: (state) => get(state, 'okbk.users.users'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   actions: {
     getClubs: () => dispatch(getClubs()),
     getUsers: (params) => dispatch(getUsers(params)),
-    changeCurrentTab: (tabName) => dispatch(changeCurrentTab(tabName)),
     setSelectedClub: (club) => dispatch(setSelectedClub(club)),
     changeTitle: (title, fakeNavBar) => dispatch(changeTitle(title, fakeNavBar)),
   },

@@ -17,9 +17,9 @@ import fonts from '@/constants/Styles'
 import Colors from '@/constants/Colors'
 import {
   changeCurrentTab,
-  setSelectedUser,
   changeTitle,
 } from '../reducer'
+import { setSelectedUser } from './reducer'
 import PersonalCard from './components/PersonalCard'
 import Profile from '../Profile'
 
@@ -63,7 +63,9 @@ class People extends PureComponent {
                 />
               )}
               {Boolean(selectedClub.description) && (
-                <Text style={{ ...styles.сlubText, marginTop: 10 }}>{selectedClub.description}</Text>
+                <Text style={{ ...styles.сlubText, marginTop: 10 }}>
+                  {selectedClub.description}
+                </Text>
               )}
               <TouchableOpacity
                 style={styles.topCard}
@@ -184,9 +186,9 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = createStructuredSelector({
-  users: (state) => get(state, 'okbk.users'),
-  selectedClub: (state) => get(state, 'okbk.selectedClub'),
-  personalInfo: (state) => get(state, 'okbk.personalInfo'),
+  users: (state) => get(state, 'okbk.users.users'),
+  selectedClub: (state) => get(state, 'okbk.clubs.selectedClub'),
+  personalInfo: (state) => get(state, 'okbk.users.personalInfo'),
 })
 
 const mapDispatchToProps = (dispatch) => ({

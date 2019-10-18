@@ -9,7 +9,6 @@ import {
 import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import fonts from '@/constants/Styles'
 import Colors from '@/constants/Colors'
 import CardArticle from '@/Pages/Posts/components/Articles/CardArticle'
 import Article from '@/Pages/Posts/components/Articles/Article'
@@ -159,12 +158,12 @@ const styles = StyleSheet.create({
 })
 
 const mapStateFromProps = createStructuredSelector({
-  isLoading: (state) => get(state, 'okbk.isLoading'),
+  isLoading: (state) => get(state, 'okbk.root.isLoading'),
   // isError: (state) => get(state, 'posts.isError'),
-  posts: (state) => get(state, 'okbk.posts'),
+  posts: (state) => get(state, 'okbk.root.posts'),
   isPostOpen: (state) => get(state, 'url.isPostOpen'),
   postType: (state) => get(state, 'url.type'),
-  isRefresh: (state) => get(state, 'okbk.isRefresh'),
+  isRefresh: (state) => get(state, 'okbk.root.isRefresh'),
 })
 
 const mapDispatchToProps = (dispatch) => ({

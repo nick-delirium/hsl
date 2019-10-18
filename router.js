@@ -58,7 +58,6 @@ const RouterView = ({
       isPostOpen={isPostOpen}
     />
     {shouldDisplayOKBKHeader && <FakeHeader />}
-        {console.log(shouldDisplayOKBKHeader)}
     <Route exact path={pages.all.path} component={Posts} />
     <Route path={pages.news.path} render={() => (<Posts type="news" />)} />
     <Route path={pages.events.path} render={() => (<Posts type="events" />)} />
@@ -69,7 +68,7 @@ const RouterView = ({
     <Route path={pages.post.path} render={() => (<Article />)} />
     <Route path={pages.event.path} render={() => (<Event />)} />
     <Route path={pages.places.path} component={Places} />
-    {/* <Route path={pages.okbk.path} component={okbk} /> */}
+    <Route path={pages.okbk.path} component={okbk} />
   </View>
 )
 
@@ -96,7 +95,7 @@ const mapStateToProps = createStructuredSelector({
 
     return { articleUrl, eventUrl }
   },
-  shouldDisplayOKBKHeader: (state) => get(state, 'okbk.shouldRenderFakeHeader'),
+  shouldDisplayOKBKHeader: (state) => get(state, 'okbk.root.shouldRenderFakeHeader'),
 })
 
 const mapDispatchToProps = (dispatch) => ({

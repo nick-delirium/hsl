@@ -16,7 +16,7 @@ import Profile from './Profile'
 import Feed from './Feed'
 import { authErrors } from './queriesErrors'
 import Navbar from './components/NavBar'
-import { accountConfirmed } from './reducer'
+import { accountConfirmed } from './Login/reducer'
 
 class OKBK extends PureComponent {
   componentDidMount() {
@@ -47,7 +47,11 @@ class OKBK extends PureComponent {
       case 'favorites':
         return (
           <View style={{ backgroundColor: '#e1e1e1', flex: 1 }}>
-            <Text style={{ fontSize: 26, textAlign: 'center', color: '#959595', marginTop: 60 }}>
+            <Text
+              style={{
+                fontSize: 26, textAlign: 'center', color: '#959595', marginTop: 60,
+              }}
+            >
               Здесь пусто
             </Text>
           </View>
@@ -93,11 +97,11 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = createStructuredSelector({
-  isLoggedIn: (state) => get(state, 'okbk.isLoggedIn'),
-  isLoading: (state) => get(state, 'okbk.isLoading'),
-  account: (state) => get(state, 'okbk.account'),
-  error: (state) => get(state, 'okbk.error'),
-  currentTab: (state) => get(state, 'okbk.currentTab'),
+  isLoggedIn: (state) => get(state, 'okbk.login.isLoggedIn'),
+  isLoading: (state) => get(state, 'okbk.root.isLoading'),
+  account: (state) => get(state, 'okbk.login.account'),
+  error: (state) => get(state, 'okbk.login.error'),
+  currentTab: (state) => get(state, 'okbk.root.currentTab'),
 })
 const mapDispatchToProps = (dispatch) => ({
   actions: {

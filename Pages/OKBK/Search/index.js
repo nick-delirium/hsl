@@ -13,10 +13,10 @@ import { createStructuredSelector } from 'reselect'
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker'
 import {
   changeCurrentTab,
-  setSelectedUser,
   changeTitle,
   setFoundData,
 } from '../reducer'
+import { setSelectedUser } from '../People/reducer'
 import {
   client,
   getClubsQuery,
@@ -191,8 +191,8 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = createStructuredSelector({
-  personalInfo: (state) => get(state, 'okbk.personalInfo'),
-  foundData: (state) => get(state, 'okbk.searchData'),
+  personalInfo: (state) => get(state, 'okbk.users.personalInfo'),
+  foundData: (state) => get(state, 'okbk.root.searchData'),
 })
 const mapDispatchToProps = (dispatch) => ({
   actions: {
