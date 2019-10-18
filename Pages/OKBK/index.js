@@ -13,6 +13,7 @@ import Login from './Login'
 import Clubs from './Clubs'
 import Search from './Search'
 import Profile from './Profile'
+import Feed from './Feed'
 import { authErrors } from './queriesErrors'
 import Navbar from './components/NavBar'
 import { accountConfirmed } from './reducer'
@@ -43,8 +44,18 @@ class OKBK extends PureComponent {
         return <Profile self />
       case 'okbkSearch':
         return <Search />
+      case 'favorites':
+        return (
+          <View style={{ backgroundColor: '#e1e1e1', flex: 1 }}>
+            <Text style={{ fontSize: 26, textAlign: 'center', color: '#959595', marginTop: 60 }}>
+              Здесь пусто
+            </Text>
+          </View>
+        )
+
       default:
-        return <Text>Feed</Text>
+        return <Feed />
+        // <Text>Feed</Text>
     }
   }
 

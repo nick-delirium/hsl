@@ -179,9 +179,14 @@ export const getEvents = (
   limit = DEFAULT_LIMIT,
   isRefresh = false,
 ) => (dispatch) => {
+  console.log('limit', limit)
   dispatch(fetchEventsReq(startDate, endDate, limit, isRefresh))
   fetch(api.getEvents(startDate, endDate, limit))
-    .then((response) => response.json())
+    .then((response) => {
+      let a = response.json()
+      console.log(a)
+      return a
+    })
     .then((result) => dispatch(fetchEventsSuccess(result.events)))
     .catch((e) => dispatch(fetchEventsFail(e)))
 }

@@ -5,7 +5,7 @@ import {
   getClubsQuery,
   getUsersQuery,
 } from './gqlQueries'
-import {getPostsByCategory} from '../Posts/reducer'
+import api from '@/api'
 
 // Auth
 const SING_IN = 'app.okbk.sing_in'
@@ -167,38 +167,52 @@ export const setSelectedUser = (user) => ({
 })
 
 // getting OKBK news
-// const GET_NEWS = 'app.okbk.get_news'
-// const GET_NEWS_SUCCESS = 'app.okbk.get_news_succsess'
-// const GET_NEWS_FALURE = 'app.okbk.get_news_falure'
+const GET_NEWS = 'app.okbk.get_news'
+const GET_NEWS_SUCCESS = 'app.okbk.get_news_succsess'
+const GET_NEWS_FALURE = 'app.okbk.get_news_falure'
+const GET_NEWS_INITIAL_SUCCESS = 'app.okbk.get_news_initial_success'
+const REMOVE_REFRESH_FLAG = 'app.okbk.rm_flag'
+const DEFAULT_LIMIT = 20
 
-// export const getNewssRequest = () => ({
-//   type: GET_NEWS,
-// })
-// export const getNewsSuccsess = (users) => ({
-//   type: GET_NEWS_SUCCESS,
-//   payload: users,
-// })
-// export const getNewsFalure = () => ({
-//   type: GET_NEWS_FALURE,
-// })
-// export const getNews = () => (
-//   async (dispatch) => {
-//     dispatch(getNewssRequest())
-//     try {
-//       dispatch(getPostsByCategory(792))
-//       // const response = await client.query({ query: getUsersQuery, variables: params })
-//       // const res = response.data.users
-//       // if (res.result) {
-//       //   dispatch(getUsersSuccsess(res.users))
-//       // } else {
-//       //   console.error(res.message)
-//       //   dispatch(getUsersFalure())
-//       // }
-//     } catch (e) {
-//       console.error(e)
-//     }
-//   }
-// )
+export const getNewsRequest = () => ({
+  type: GET_NEWS,
+})
+export const getNewsSuccess = (posts) => ({
+  type: GET_NEWS_SUCCESS,
+  payload: posts,
+})
+const getNewsInitialSuccess = (data) => ({
+  type: GET_NEWS_INITIAL_SUCCESS,
+  payload: data,
+})
+export const getNewsFalure = () => ({
+  type: GET_NEWS_FALURE,
+})
+
+export const rmRefreshFlag = () => ({
+  type: REMOVE_REFRESH_FLAG,
+})
+
+export const getNews = (
+  limit = DEFAULT_LIMIT,
+  isRefresh = false,
+  page = 1,
+  isInitial = true,
+) => (dispatch) => {
+  dispatch(getNewsRequest(limit, isRefresh))
+  console.log(limit, isRefresh, page)
+  fetch(api.getPostsByCategory(792, limit, page))
+    .then((response) => response.json())
+    .then((posts) => {
+      if (isInitial) return dispatch(getNewsInitialSuccess(posts))
+      return dispatch(getNewsSuccess(posts))
+    })
+    .catch((e) => {
+      console.log(e)
+      return dispatch(getNewsFalure(e))
+    })
+}
+
 
 export const defaultSearchResult = {
   asked: false,
@@ -225,6 +239,8 @@ const initialState = {
   isLoading: false,
   isLoggedIn: false,
   error: null,
+  isRefresh: false,
+  posts: [],
 }
 
 export default function (state = initialState, action) {
@@ -314,6 +330,23 @@ export default function (state = initialState, action) {
       return {
         ...state,
         personalInfo: action.payload,
+      }
+    case REMOVE_REFRESH_FLAG:
+      return {
+        ...state,
+        isRefresh: false,
+      }
+    case GET_NEWS_INITIAL_SUCCESS:
+      return {
+        ...state,
+        posts: action.payload,
+        isLoading: false,
+      }
+    case GET_NEWS_SUCCESS:
+      return {
+        ...state,
+        posts: [...state.posts, ...action.payload],
+        isLoading: false,
       }
     case SING_OUT:
       return initialState

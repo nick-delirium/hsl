@@ -50,7 +50,7 @@ class CardArticle extends React.PureComponent {
     const {
       title,
       descr,
-      categories,
+      categories = [],
       mediaUrl,
       type,
       htmlView,
