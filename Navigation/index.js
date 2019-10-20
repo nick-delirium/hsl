@@ -2,6 +2,7 @@ import React from 'react'
 import { BackHandler, Keyboard } from 'react-native'
 import Drawer from 'react-native-drawer'
 import get from 'lodash/get'
+import { Linking } from 'expo'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router-native'
@@ -19,8 +20,28 @@ class RouterWithDrawer extends React.PureComponent {
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
+    this.addLinkingListener()
+    const url = await Linking.getInitialURL()
+    console.log(url)
+  }
+
+  componentWillUnmount() {
+    this.removeLinkingListener()
+  }
+
+  handleRedirect = (event) => {
+    const { path, queryParams } = Linking.parse(event.url)
+    console.log(path, queryParams)
+  }
+
+  addLinkingListener = () => {
+    Linking.addEventListener('url', this.handleRedirect);
+  }
+
+  removeLinkingListener = () => {
+    Linking.removeEventListener('url', this.handleRedirect);
   }
 
   handleBackPress = () => {

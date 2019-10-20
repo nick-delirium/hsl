@@ -4,13 +4,13 @@ import {
   View,
   Text,
   ScrollView,
-  WebView,
   Image,
   TouchableOpacity,
   Linking,
   Platform,
   Dimensions,
 } from 'react-native'
+import { WebView } from 'react-native-webview'
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'

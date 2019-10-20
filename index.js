@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react'
 import {
   StyleSheet,
@@ -48,59 +49,15 @@ class AppIndex extends React.Component {
       if (!result) return AsyncStorage.setItem('cachedate', (new Date()).toString())
       const diff = (new Date(result) - new Date()) / 1000 / 24 / 60 / 60
       if (diff < -1) {
-        await FileSystem.deleteAsync(cacheFolder, { idempotent: true })
-        await FileSystem.makeDirectoryAsync(cacheFolder)
+        try {
+          await FileSystem.deleteAsync(cacheFolder, { idempotent: true })
+          await FileSystem.makeDirectoryAsync(cacheFolder)
+        } catch (e) {
+          console.log(e)
+        }
         return AsyncStorage.setItem('cacheddate', (new Date()).toString())
       }
     })
-  }
-
-  render() {
-    if (!this.state.isSplashReady) {
-      return (
-        <AppLoading
-          startAsync={this._cacheSplashResourcesAsync}
-          onFinish={() => this.setState({ isSplashReady: true })}
-          onError={console.warn}
-          autoHideSplash={false}
-        />
-      )
-    }
-
-    if (this.state.isSplashReady && !this.state.isAppReady) {
-      return (
-        <Animated.View
-          style={{
-            opacity: this.state.fadeAnim,
-            justifyContent: 'center',
-            alignItems: 'center',
-            flex: 1,
-          }}
-        >
-          <Animated.Image
-            source={require("./assets/images/HSL-logo.png")}
-            style={{
-              aspectRatio: 2.3,
-              resizeMode: 'contain'
-            }}
-            onLoad={this._cacheResourcesAsync}
-          />
-        </Animated.View>
-      )
-    }
-
-    return (
-      <NativeRouter>
-        <View style={styles.container}>
-          <StatusBar
-            style={{ zIndex: 10 }}
-            barStyle='light-content'
-            backgroundColor="#333376"
-          />
-          <RouterWithDrawer />
-        </View>
-      </NativeRouter>
-    )
   }
 
   _cacheSplashResourcesAsync = async () => {
@@ -158,15 +115,64 @@ class AppIndex extends React.Component {
     const images = [
       require('./assets/images/HSL-logo.png'),
     ];
-    const cacheImages = images.map(image => Asset.fromModule(image).downloadAsync());
+    const cacheImages = images.map((image) => Asset.fromModule(image).downloadAsync());
     return Promise.all(cacheImages)
+  }
+
+  render() {
+    const { isSplashReady, isAppReady, fadeAnim } = this.state
+    if (!isSplashReady) {
+      return (
+        <AppLoading
+          startAsync={this._cacheSplashResourcesAsync}
+          onFinish={() => this.setState({ isSplashReady: true })}
+          onError={console.warn}
+          autoHideSplash={false}
+        />
+      )
+    }
+
+    if (isSplashReady && !isAppReady) {
+      return (
+        <Animated.View
+          style={{
+            opacity: fadeAnim,
+            justifyContent: 'center',
+            alignItems: 'center',
+            flex: 1,
+          }}
+        >
+          <Animated.Image
+            source={require('./assets/images/HSL-logo.png')}
+            style={{
+              aspectRatio: 2.3,
+              resizeMode: 'contain',
+            }}
+            onLoad={this._cacheResourcesAsync}
+          />
+        </Animated.View>
+      )
+    }
+
+    return (
+      <NativeRouter>
+        <View style={styles.container}>
+          <StatusBar
+            style={{ zIndex: 10 }}
+            barStyle="light-content"
+            backgroundColor="#333376"
+          />
+          <RouterWithDrawer />
+        </View>
+      </NativeRouter>
+    )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
 })
 
@@ -178,7 +184,7 @@ const mapDispatchToProps = (dispatch) => ({
   fetchAdsCustom: () => dispatch(fetchAdsReq(20)),
   setPostsCustom: (data) => dispatch(fetchAllSuccess(data)),
   fetchAdsSuccessCustom: () => dispatch(fetchAdsSuccess()),
-  fetchFail: (e) => dispatch(fetchAllFail(e))
+  fetchFail: (e) => dispatch(fetchAllFail(e)),
 })
 
 export default connect(

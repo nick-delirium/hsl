@@ -55,7 +55,7 @@ class DrawerPanel extends React.PureComponent {
             resizeMode="contain"
           />
         </TouchableOpacity>
-        <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between' }}>
+        <ScrollView bounces={false} contentContainerStyle={{ flexGrow: 1, justifyContent: 'space-between' }}>
           <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
             <View style={{ flex: 1 }}>
               {validMenuItems.map((item) => (
