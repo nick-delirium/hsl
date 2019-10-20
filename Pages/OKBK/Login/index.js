@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import colors from '../colors'
-import { fonts } from '@/constants/Styles'
+import fonts from '@/constants/Styles'
 import { singIn } from '../reducer'
 
 const { height } = Dimensions.get('window')
@@ -41,10 +41,9 @@ class Login extends PureComponent {
 
   onSubmit = () => {
     const { email, password } = this.state
-    console.log(email, password)
 
     const { actions } = this.props
-    actions.singIn({ email, password })
+    if (email !== '' && password !== '') actions.singIn({ email, password })
   }
 
   render() {
@@ -99,7 +98,9 @@ class Login extends PureComponent {
                 onSubmitEditing={this.onSubmit}
               />
             </View>
-
+            {error && (
+              <Text>{error}</Text>
+            )}
             <TouchableOpacity
               onPress={this.onSubmit}
               style={{
@@ -113,9 +114,7 @@ class Login extends PureComponent {
               </StyledText>
             </TouchableOpacity>
           </View>
-          {error && (
-            <Text>{error}</Text>
-          )}
+
           <Image
             style={styles.logo}
             resizeMode="contain"
@@ -174,7 +173,6 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   logo: {
-    // width: '160%',
     height: '40%',
   },
 })

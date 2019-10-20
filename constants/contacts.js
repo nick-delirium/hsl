@@ -12,8 +12,8 @@ export const contacts = [
   {
     isEmail: 0,
     path: 'www.hansanglab.com',
-    text: ''
-  }
+    text: '',
+  },
 ]
 
 export const social = [
@@ -36,7 +36,7 @@ export const social = [
     iosUrl: 'vk://vk.com/hansanglab',
     andrUrl: 'intent://vk.com/hansanglab#Intent;package=com.vkontakte.android;scheme=vkontakte;end',
     image: require('../assets/images/social/vk.png'),
-    url: 'https://vk.com/hansanglab'
+    url: 'https://vk.com/hansanglab',
   },
   {
     name: 'yt',
@@ -44,5 +44,5 @@ export const social = [
     andrUrl: 'intent://www.youtube.com/channel/UC5BDXrYkDYDb-ENhEzUtWEQ#Intent;package=com.google.android.youtube;scheme=https;end',
     image: require('../assets/images/social/yt.png'),
     url: 'https://www.youtube.com/channel/UC5BDXrYkDYDb-ENhEzUtWEQ',
-  }
+  },
 ]

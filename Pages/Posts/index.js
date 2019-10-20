@@ -27,6 +27,7 @@ const { height } = Dimensions.get('window')
 class AllPosts extends React.PureComponent {
   constructor(props) {
     super(props)
+    this._FlatList = React.createRef()
     this.state = {
       page: 1,
       isEndListLoading: false,
@@ -34,7 +35,6 @@ class AllPosts extends React.PureComponent {
   }
 
   componentDidMount() {
-    console.log('m')
     this.getInitialData()
     const { type, setFeedTypeFromRender } = this.props
     if (type) setFeedTypeFromRender(type)
@@ -42,14 +42,13 @@ class AllPosts extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('u')
     const { isRefresh, removeRefreshFlag, type, usedCategories } = this.props
     const isCategoryChanged = prevProps.usedCategories.subcat !== usedCategories.subcat
       || prevProps.usedCategories.mainCat !== usedCategories.mainCat
     const isTypeChanged = type !== prevProps.type
     if (isTypeChanged) this.getInitialData()
-    if (isRefresh && !prevProps.isRefresh) {
-      this._FlatList.scrollToOffset({ offset: 0, animated: true })
+    if (isRefresh && !prevProps.isRefresh && this._FlatList.current) {
+      this._FlatList.current.scrollToOffset({ offset: 0, animated: true })
       removeRefreshFlag()
     }
   }
@@ -80,7 +79,7 @@ class AllPosts extends React.PureComponent {
 
     if (type === 'events') {
       const startDate = formatEventDate()
-      fetchEvents(startDate, undefined, treshold)
+      fetchEvents(startDate, undefined, undefined, treshold)
       this.setState({ page, isEndListLoading: false })
     } else {
       const category = categories.find((cat) => (cat.slug === type))
@@ -122,7 +121,7 @@ class AllPosts extends React.PureComponent {
     // eslint-disable-next-line quotes
     if (type === 'events') {
       const startDate = formatEventDate()
-      fetchEvents(startDate, undefined, true)
+      fetchEvents(startDate, undefined, undefined, true)
     } else {
       const category = categories.find((cat) => (cat.slug === type))
       if (type && category) {
@@ -151,7 +150,7 @@ class AllPosts extends React.PureComponent {
     } = this.props
     if (type === 'events') {
       const startDate = formatEventDate()
-      fetchEvents(startDate, undefined, true)
+      fetchEvents(startDate, undefined, undefined, true)
     } else {
       const category = categories.find((cat) => (cat.slug === type))
       if (type && category) {
@@ -250,7 +249,6 @@ class AllPosts extends React.PureComponent {
     } = this.props
 
     const displayingPosts = type ? data : posts
-    console.log('how many:', displayingPosts && displayingPosts.length, 'type', type)
     const dataWithMedia = displayingPosts && displayingPosts.length
       ? displayingPosts.map((item) => {
         const mediaUrl = get(item, '_links.wp:featuredmedia.href', null)
@@ -267,7 +265,7 @@ class AllPosts extends React.PureComponent {
           <FlatList
             data={dataWithMedia}
             style={{ flex: 1 }}
-            ref={(r) => this._FlatList = r}
+            ref={this._FlatList}
             renderItem={this.renderCardItem}
             onRefresh={this.refreshData}
             refreshing={isLoading}

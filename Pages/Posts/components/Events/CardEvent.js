@@ -12,7 +12,7 @@ import CachedImage from '@/components/CachedImage'
 import { changeLocation, togglePost } from '@/Navigation/reducer'
 import { setEvent } from './eventReducer'
 import { formatDate } from '@/common/format'
-import { fonts } from '@/constants/Styles'
+import fonts from '@/constants/Styles'
 import Card from '@/components/Card'
 
 class CardEvent extends React.Component {
@@ -39,6 +39,7 @@ class CardEvent extends React.Component {
     // TODO receive slug
     const startDate = formatDate(dateStart)
     const endDate = formatDate(dateEnd)
+    if (!startDate) return null
     return (
       <Card onItemPress={() => this.onItemPress(this.props)}>
         {image && (
@@ -74,7 +75,7 @@ class CardEvent extends React.Component {
               />
               <View>
                 <Text style={{ color: '#525252' }}>
-                  {`${startDate.date} - ${endDate.date}`}
+                  {startDate ? `${startDate.date} - ${endDate.date}` : ''}
                 </Text>
               </View>
             </View>

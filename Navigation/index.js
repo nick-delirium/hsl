@@ -5,9 +5,10 @@ import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router-native'
-import RouterView from '../router'
 import DrawerPanel from './components/DrawerPanel'
+import RouterView from '../router'
 import { togglePost } from './reducer'
+import { goBack } from '@/Pages/OKBK/reducer'
 
 class RouterWithDrawer extends React.PureComponent {
   constructor(props, context) {
@@ -27,10 +28,16 @@ class RouterWithDrawer extends React.PureComponent {
       history,
       location,
       isPostOpen,
+      tabHistory,
+      fakeHistory,
       actions,
     } = this.props
     if (isPostOpen) {
       actions.togglePost(false)
+      return true
+    }
+    if (tabHistory.length > 1 || fakeHistory.length > 0) {
+      actions.goBack()
       return true
     }
     if (location.pathname === '/') return false
@@ -91,11 +98,14 @@ class RouterWithDrawer extends React.PureComponent {
 
 const mapStateFromProps = createStructuredSelector({
   isPostOpen: (state) => get(state, 'url.isPostOpen'),
+  tabHistory: (state) => get(state, 'okbk.tabHistory', []),
+  fakeHistory: (state) => get(state, 'okbk.fakeHistory'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   actions: {
     togglePost: (isOpen) => dispatch(togglePost(isOpen)),
+    goBack: () => dispatch(goBack()),
   },
 })
 

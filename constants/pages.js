@@ -2,52 +2,58 @@ const pages = {
   all: {
     name: 'Все',
     path: '/',
+    okbkSub: false,
   },
   news: {
     name: 'Новости',
     path: '/news',
+    okbkSub: false,
   },
   events: {
     name: 'Мероприятия',
     path: '/events',
+    okbkSub: false,
   },
   blogs: {
     name: 'Блоги',
     path: '/blogs',
+    okbkSub: false,
   },
-  programs: { //one 'm' in db
+  programs: { // one 'm' in db
     name: 'Программы',
     path: '/programs',
+    okbkSub: false,
   },
   media: {
     name: 'Медиа',
     path: '/media',
+    okbkSub: false,
   },
   places: {
     name: 'Карта',
-    path: '/places'
+    path: '/places',
+    okbkSub: false,
   },
-
-  // invite: {
-  //   name: 'Пригласить друга',
-  //   path: '/invite',
-  // },
   post: {
     name: '',
     path: '/post/:id',
+    okbkSub: false,
   },
   event: {
     name: '',
     path: '/event/:slug',
+    okbkSub: false,
   },
   search: {
     name: '',
     path: '/search',
+    okbkSub: false,
   },
   okbk: {
     name: 'ОКБК',
     path: '/okbk',
-  }
+    okbkSub: false,
+  },
 }
 
 export const pageTitles = {
@@ -58,6 +64,6 @@ export const pageTitles = {
   [pages.programs.path]: pages.programs.name,
   [pages.media.path]: pages.media.name,
   [pages.places.path]: pages.places.name,
-  [pages.okbk.path]: pages.okbk.name,
+  [pages.okbk.path]: 'ОКБК: Новости',
 }
 export default pages
