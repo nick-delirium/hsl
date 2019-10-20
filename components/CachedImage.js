@@ -81,7 +81,7 @@ class CachedImage extends Component {
   }
 
   render() {
-    const { style, categories } = this.props
+    const { style, categories, date } = this.props
     const { loading, failed, imguri } = this.state
     if (loading) {
       return (
@@ -99,11 +99,7 @@ class CachedImage extends Component {
     }
 
     return (
-      <View
-        style={{
-          ...style, overflow: 'hidden', height: style.height, backgroundColor: '#525252',
-        }}
-      >
+      <View style={{ ...style, ...styles.container }}>
         <Image
           source={{ uri: imguri }}
           resizeMethod="scale"
@@ -114,13 +110,15 @@ class CachedImage extends Component {
         />
         {categories && (
           <View style={styles.category}>
-            <Text
-              style={{
-                color: '#fff',
-                fontWeight: 'bold',
-              }}
-            >
+            <Text style={styles.text}>
               {categories.name}
+            </Text>
+          </View>
+        )}
+        {date && (
+          <View style={styles.date}>
+            <Text style={styles.text}>
+              {date}
             </Text>
           </View>
         )}
@@ -130,6 +128,11 @@ class CachedImage extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    overflow: 'hidden',
+    backgroundColor: '#525252',
+    position: 'relative',
+  },
   category: {
     padding: 7,
     marginLeft: 10,
@@ -137,6 +140,19 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     alignSelf: 'flex-start',
     top: -180,
+  },
+  date: {
+    position: 'absolute',
+    padding: 7,
+    fontSize: 12,
+    borderRadius: 2,
+    bottom: 10,
+    right: 10,
+    zIndex: 2,
+  },
+  text: {
+    color: '#fff',
+    fontWeight: 'bold',
   },
 })
 

@@ -54,17 +54,18 @@ class CardArticle extends React.PureComponent {
       mediaUrl,
       type,
       htmlView,
+      date,
     } = this.props
     const renderDescr = htmlView ? descr : descr.split('\n<')[0]
     const isPromo = categories.map((c) => c.id).includes(617)
-    const categoriesWithoutPromo = categories.filter((c) => c.id !== 617)
     return (
       <Card onItemPress={this.onItemPress}>
         {mediaUrl && (
           <CachedImage
             source={mediaUrl}
             title={mediaUrl.slice(-4)}
-            categories={!type && categoriesWithoutPromo[0] ? categoriesWithoutPromo[0] : undefined}
+            categories={!type && categories[0] ? categories[0] : undefined}
+            date={date || undefined}
             style={{
               flex: 1,
               height: 190,

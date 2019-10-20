@@ -17,7 +17,7 @@ import {
   rmRefreshFlag,
 } from './reducer'
 import { getCategories, setFeedType } from '@/Navigation/reducer'
-import { formatEventDate } from '@/common/format'
+import { formatDate, formatEventDate } from '@/common/format'
 import Article from './components/Articles/Article'
 import Event from './components/Events/Event'
 import BlogCategories from './components/Articles/BlogCategories'
@@ -205,6 +205,7 @@ class AllPosts extends React.PureComponent {
       .slice(0, 100)
       .split('')
       .join('')
+    const createDt = formatDate(item.date, 'T')
     return (
       <CardArticle
         key={item.id}
@@ -217,6 +218,7 @@ class AllPosts extends React.PureComponent {
         categories={categories.filter((cat) => (item.categories.includes(cat.id)))}
         content={get(item, 'content.rendered')}
         type={type}
+        date={createDt ? createDt.date : undefined}
       />
     )
   }
