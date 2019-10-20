@@ -1,17 +1,17 @@
 import React from 'react'
 import { BackHandler, Keyboard } from 'react-native'
 import Drawer from 'react-native-drawer'
-import DrawerPanel from './components/DrawerPanel'
-import RouterView from '../router.js'
-import { togglePost } from './reducer'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router-native'
+import RouterView from '../router'
+import DrawerPanel from './components/DrawerPanel'
+import { togglePost } from './reducer'
 
 class RouterWithDrawer extends React.PureComponent {
   constructor(props, context) {
-    super(props, context);
+    super(props, context)
     this.state = {
       drawerOpen: false,
       drawerDisabled: false,
@@ -23,7 +23,12 @@ class RouterWithDrawer extends React.PureComponent {
   }
 
   handleBackPress = () => {
-    const { history, location, isPostOpen, actions } = this.props
+    const {
+      history,
+      location,
+      isPostOpen,
+      actions,
+    } = this.props
     if (isPostOpen) {
       actions.togglePost(false)
       return true
@@ -50,12 +55,12 @@ class RouterWithDrawer extends React.PureComponent {
 
   render() {
     const { location } = this.props
-    const { drawerOpen } = this.state
+    const { drawerOpen, drawerDisabled } = this.state
     return (
       <Drawer
         ref={(ref) => this._drawer = ref}
         type="overlay"
-        content={<DrawerPanel isOpen={this.state.drawerOpen} closeDrawer={this.closeDrawer} />}
+        content={<DrawerPanel isOpen={drawerOpen} closeDrawer={this.closeDrawer} />}
         onOpen={() => {
           setTimeout(() => { this.setState({ drawerOpen: true }) }, 0)
         }}
@@ -64,8 +69,8 @@ class RouterWithDrawer extends React.PureComponent {
         }}
         tweenDuration={100}
         panThreshold={0.08}
-        disabled={this.state.drawerDisabled}
-        openDrawerOffset={(viewport) => 100}
+        disabled={drawerDisabled}
+        openDrawerOffset={() => 100}
         closedDrawerOffset={0}
         panOpenMask={0.2}
         acceptDoubleTap
@@ -74,7 +79,7 @@ class RouterWithDrawer extends React.PureComponent {
         negotiatePan
       >
         <RouterView
-          openDrawer={this.openDrawer.bind(this)}
+          openDrawer={this.openDrawer}
           location={location.pathname}
           goBack={this.goBack}
           drawerOpen={drawerOpen}
@@ -91,7 +96,7 @@ const mapStateFromProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   actions: {
     togglePost: (isOpen) => dispatch(togglePost(isOpen)),
-  }
+  },
 })
 
 const RouterWithRouter = withRouter(RouterWithDrawer)

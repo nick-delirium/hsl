@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 import api from '../api'
 
 const CHANGE_LOCATION = 'app.location.change'
@@ -45,26 +46,26 @@ export const togglePost = (isPostOpen, type = '') => ({
   payload: {
     isPostOpen,
     type,
-  }
+  },
 })
 
 export const getCategories = () => {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(fetchCategoriesReq())
-    const res = fetch(api.getCategories())
+    fetch(api.getCategories())
       .then((response) => {
         return response.json()
       })
       .then((result) => {
-        result = result.map(cat => ({
+        const shrinkedResult = result.map((cat) => ({
           id: cat.id,
           parent: cat.parent,
           name: cat.name,
-          slug: cat.slug
+          slug: cat.slug,
         }))
-        dispatch(fetchSuccess(result))
+        dispatch(fetchSuccess(shrinkedResult))
       })
-      .catch(e => {
+      .catch((e) => {
         console.log('error', e)
         dispatch(fetchFail(e))
       })
@@ -76,7 +77,7 @@ export const setSubCategories = (subCategories) => ({
   payload: subCategories,
 })
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case SET_FEED_TYPE:
       return {
@@ -86,14 +87,14 @@ export default function(state = initialState, action) {
     case CHANGE_LOCATION:
       return {
         ...state,
-        path: action.payload
+        path: action.payload,
       }
-      case TOGGLE_POST:
-        return {
-          ...state,
-          isPostOpen: action.payload.isPostOpen,
-          type: action.payload.type,
-        }
+    case TOGGLE_POST:
+      return {
+        ...state,
+        isPostOpen: action.payload.isPostOpen,
+        type: action.payload.type,
+      }
     case FETCH_CATEGORIES_START:
       return {
         ...state,
@@ -115,7 +116,7 @@ export default function(state = initialState, action) {
     case SET_SUBGETEGORIES:
       return {
         ...state,
-        subCategories: action.payload
+        subCategories: action.payload,
       }
 
     default:
