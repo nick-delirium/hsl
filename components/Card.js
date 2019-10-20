@@ -17,17 +17,15 @@ class Card extends React.PureComponent {
   render() {
     const { onItemPress, children } = this.props
     return (
-      <View>
-        <TouchableOpacity
-          delayPressIn={150}
-          activeOpacity={onItemPress ? 0.6 : 1}
-          onPress={this.onPress}
-        >
-          <View style={styles.card}>
-            {children}
-          </View>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        delayPressIn={150}
+        activeOpacity={onItemPress ? 0.6 : 1}
+        onPress={this.onPress}
+      >
+        <View style={styles.card}>
+          {children}
+        </View>
+      </TouchableOpacity>
     )
   }
 }

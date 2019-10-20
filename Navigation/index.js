@@ -1,13 +1,14 @@
 import React from 'react'
 import { BackHandler, Keyboard } from 'react-native'
 import Drawer from 'react-native-drawer'
-import DrawerPanel from './components/DrawerPanel'
-import RouterView from '../router.js'
-import { togglePost } from './reducer'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router-native'
+import DrawerPanel from './components/DrawerPanel'
+import RouterView from '../router'
+import { togglePost } from './reducer'
+import { goBack } from '@/Pages/OKBK/reducer'
 
 class RouterWithDrawer extends React.PureComponent {
   constructor(props, context) {
@@ -23,9 +24,13 @@ class RouterWithDrawer extends React.PureComponent {
   }
 
   handleBackPress = () => {
-    const { history, location, isPostOpen, actions } = this.props
+    const { history, location, isPostOpen, tabHistory, fakeHistory, actions } = this.props
     if (isPostOpen) {
       actions.togglePost(false)
+      return true
+    }
+    if (tabHistory.length > 1 || fakeHistory.length > 0) {
+      actions.goBack()
       return true
     }
     if (location.pathname === '/') return false
@@ -86,12 +91,15 @@ class RouterWithDrawer extends React.PureComponent {
 
 const mapStateFromProps = createStructuredSelector({
   isPostOpen: (state) => get(state, 'url.isPostOpen'),
+  tabHistory: (state) => get(state, 'okbk.tabHistory', []),
+  fakeHistory: (state) => get(state, 'okbk.fakeHistory'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
   actions: {
     togglePost: (isOpen) => dispatch(togglePost(isOpen)),
-  }
+    goBack: () => dispatch(goBack()),
+  },
 })
 
 const RouterWithRouter = withRouter(RouterWithDrawer)
