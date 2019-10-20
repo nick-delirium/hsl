@@ -7,7 +7,7 @@ import {
   Text,
 } from 'react-native'
 import { contacts } from '@/constants/contacts'
-import { fonts } from '@/constants/Styles'
+import fonts from '@/constants/Styles'
 
 const onLinkPress = ({ path, isEmail }) => {
   Linking.openURL(`${isEmail ? 'mailto:' : 'https://'}${path}`)

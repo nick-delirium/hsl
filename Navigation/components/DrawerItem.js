@@ -11,27 +11,24 @@ import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router-native'
 import { changeLocation } from '../reducer'
-import { fonts } from '../../constants/Styles'
+import fonts from '../../constants/Styles'
 
 class DrawerItem extends React.PureComponent {
-  constructor(props) {
-    super(props)
-  }
-
   onItemPress = async (path) => {
-    if (this.props.share) {
+    const { share, history, changeLoc, closeDrawer, closePost } = this.props
+    if (share) {
       try {
         await Share.share({
-          message: `Рекомендую мобильное приложение Hansang Lab\nhttps://hansanglab.com/get_app`,
+          message: 'Рекомендую мобильное приложение Hansang Lab\nhttps://hansanglab.com/get_app',
         });
       } catch (error) {
-        alert(error.message);
+        alert(error.message)
       }
     }
-    if (this.props.closePost) this.props.closePost()
-    this.props.history.push(path)
-    this.props.changeLoc(path)
-    this.props.closeDrawer()
+    if (closePost) closePost()
+    history.push(path)
+    changeLoc(path)
+    closeDrawer()
   }
 
   isButtonActive = (url) => {
@@ -74,7 +71,7 @@ const styles = StyleSheet.create({
     color: '#a3a3a3',
   },
   text: {
-    fontSize: fonts.normal,
+    fontSize: fonts.heading,
     fontWeight: 'bold',
     color: '#000',
   },

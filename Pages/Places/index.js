@@ -20,13 +20,13 @@ import { compose } from 'redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import { categories, rusCats } from '@/constants/places'
-import { fonts } from '@/constants/Styles'
+import fonts from '@/constants/Styles'
 import { formatText } from '@/common/format'
 import { getPlaces } from './reducer'
 
 
 class Places extends PureComponent {
-  constructor(props){
+  constructor(props) {
     super(props)
     this.state = {
       hasLocationPermissions: false,
@@ -46,14 +46,38 @@ class Places extends PureComponent {
   }
 
   componentDidMount() {
+    const { places, GetPlaces } = this.props
+    const { city } = this.state
     this._getLocationAsync()
-    if (!this.props.places || !this.props.places.length){
-      this.props.getPlaces(this.state.city)
+    if (!places || !places.length) {
+      GetPlaces(city)
     }
   }
 
+  onMarkerPress(location) {
+    this.setState({ selectedMarker: location })
+  }
+
+  onCatPress(cat) {
+    const { places } = this.props
+    // const { city } = this.state
+    let activeFilters = [... this.state.activeFilters]
+    const index = activeFilters.indexOf(cat)
+    if (index > -1) {
+      activeFilters.splice(index, 1)
+    } else {
+      activeFilters.push(cat)
+    }
+
+    const filteredLocations = places.filter((place) => (
+      // if (place.city === city)
+      activeFilters.find((filtr) => place.type === filtr)
+    ))
+    this.setState({ activeFilters, displayingMarkers: filteredLocations })
+  }
+
   _getLocationAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    const { status } = await Permissions.askAsync(Permissions.LOCATION)
     if (status !== 'granted') {
       // locationState === 1, no permission
     } else {
@@ -67,40 +91,15 @@ class Places extends PureComponent {
       this.mapRef.getMapRef().animateToRegion(region, 200)
       // locationState === 2, permission
     }
-
-
   };
 
-  onMarkerPress(location) {
-    this.setState({ selectedMarker: location })
-  }
-
-  onCatPress(cat) {
-    const { places } = this.props
-    // const { city } = this.state
-    let activeFilters = [...this.state.activeFilters]
-    const index = activeFilters.indexOf(cat)
-    if (index > -1) {
-      activeFilters.splice(index, 1)
-    } else {
-      activeFilters.push(cat)
-    }
-
-    let filteredLocations = places.filter(place => {
-      // if (place.city === city)
-        return activeFilters.find(filtr => place.type === filtr)
-    })
-    this.setState({activeFilters: activeFilters, displayingMarkers: filteredLocations})
-  }
-
   renderCluster = (cluster, onPress) => {
-    const pointCount = cluster.pointCount,
-          coordinate = cluster.coordinate
+    const { pointCount, coordinate } = cluster
 
     return (
-      <MapView.Marker pinColor='#000' coordinate={coordinate} onPress={onPress}>
+      <MapView.Marker pinColor="#000" coordinate={coordinate} onPress={onPress}>
         <View style={styles.marker}>
-          <Text style={{color: '#000', textAlign: 'center', paddingTop: 5}}>
+          <Text style={ {color: '#000', textAlign: 'center', paddingTop: 5 }}>
             {pointCount}
           </Text>
         </View>
@@ -305,7 +304,7 @@ const styles = StyleSheet.create({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  getPlaces: (city) => dispatch(getPlaces(city))
+  GetPlaces: (city) => dispatch(getPlaces(city)),
 })
 
 const mapStateToProps = createStructuredSelector({

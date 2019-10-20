@@ -4,7 +4,7 @@ import {
   View,
   StatusBar,
   Animated,
-  AsyncStorage
+  AsyncStorage,
 } from 'react-native'
 import { AppLoading, SplashScreen } from 'expo'
 import { Asset } from 'expo-asset'
@@ -46,7 +46,7 @@ class AppIndex extends React.Component {
     if (!folder.exists) await FileSystem.makeDirectoryAsync(cacheFolder)
     AsyncStorage.getItem('cachedate', async (err, result) => {
       if (!result) return AsyncStorage.setItem('cachedate', (new Date()).toString())
-      const diff = (new Date(result) - new Date())/1000/24/60/60
+      const diff = (new Date(result) - new Date()) / 1000 / 24 / 60 / 60
       if (diff < -1) {
         await FileSystem.deleteAsync(cacheFolder, { idempotent: true })
         await FileSystem.makeDirectoryAsync(cacheFolder)
