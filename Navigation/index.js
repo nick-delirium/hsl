@@ -31,8 +31,21 @@ class RouterWithDrawer extends React.PureComponent {
   async componentDidMount() {
     this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
     this.addLinkingListener()
-    const url = await Linking.getInitialURL()
-    console.log('initial url', url)
+
+    try {
+      const url = await Linking.getInitialURL()
+      if (url.includes('redirect')) {
+        const { path, queryParams } = Linking.parse(event.url)
+        console.log('initial url', url, path, queryParams)
+        // if query.type === article => history.push('/'),
+        // if query.type === event => history.push('/events'),
+        // find by id
+        // setItem(finded)
+        // openPost from url reducer
+      }
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   componentWillUnmount() {

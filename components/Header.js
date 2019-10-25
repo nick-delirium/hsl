@@ -6,6 +6,7 @@ import {
   Image,
   Share,
   TouchableOpacity,
+  Linking,
 } from 'react-native'
 import get from 'lodash/get'
 import { withRouter } from 'react-router-native'
@@ -41,6 +42,7 @@ const Header = ({
   const specificTitle = isArticle ? navTitle.articleTitle
     : isEventArticle ? navTitle.eventTitle : undefined
   const specificUrl = isArticle ? url.articleUrl : url.eventUrl
+  const specificInApp = isArticle ? url.articleInApp : url.eventInApp
   const title = isOKBK
     ? okbkTitle : shouldRenderSpecificTitle
       ? specificTitle : pageTitles[location.pathname].toUpperCase()
@@ -51,7 +53,7 @@ const Header = ({
   const share = async () => {
     try {
       await Share.share({
-        message: `${specificTitle}\n${specificUrl}`,
+        message: `${specificTitle}\n${specificUrl}?expoLink=${specificInApp}`,
       })
     } catch (error) {
       alert(error.message)

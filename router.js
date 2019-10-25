@@ -72,7 +72,6 @@ const RouterView = ({
   </View>
 )
 
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#E1E1E1',
@@ -92,8 +91,10 @@ const mapStateToProps = createStructuredSelector({
   url: (state) => {
     const articleUrl = get(state, 'article.link')
     const eventUrl = get(state, 'event.link')
+    const articleInApp = get(state, 'article.inAppLink')
+    const eventInApp = get(state, 'event.inAppLink')
 
-    return { articleUrl, eventUrl }
+    return { articleUrl, eventUrl, eventInApp, articleInApp }
   },
   shouldDisplayOKBKHeader: (state) => get(state, 'okbk.shouldRenderFakeHeader'),
 })
