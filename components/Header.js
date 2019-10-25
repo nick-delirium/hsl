@@ -6,7 +6,6 @@ import {
   Image,
   Share,
   TouchableOpacity,
-  Linking,
 } from 'react-native'
 import get from 'lodash/get'
 import { withRouter } from 'react-router-native'
