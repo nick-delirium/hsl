@@ -11,6 +11,18 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "org",
+            "project": "proj",
+            "authToken": "token"
+          }
+        }
+      ]
+    },
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
