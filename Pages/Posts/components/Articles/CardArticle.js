@@ -42,7 +42,7 @@ class CardArticle extends React.PureComponent {
       content: data.content,
     }
     try {
-      const inAppLink = await Linking.makeUrl('redirect', { id, type: 'article' })
+      const inAppLink = await Linking.makeUrl('redirect', { type: `article|${id}` })
       setPost({ ...article, inAppLink })
       openPost(true, 'article')
     } catch (e) {

@@ -94,7 +94,12 @@ const mapStateToProps = createStructuredSelector({
     const articleInApp = get(state, 'article.inAppLink')
     const eventInApp = get(state, 'event.inAppLink')
 
-    return { articleUrl, eventUrl, eventInApp, articleInApp }
+    return {
+      articleUrl,
+      eventUrl,
+      eventInApp,
+      articleInApp,
+    }
   },
   shouldDisplayOKBKHeader: (state) => get(state, 'okbk.shouldRenderFakeHeader'),
 })

@@ -2,6 +2,11 @@ const mainUrl = 'https://hansanglab.com/wp-json'
 const url = `${mainUrl}/wp/v2`
 
 const getPosts = (limit, page = 1) => `${url}/posts?per_page=${limit}&page=${page}`
+const getPost = (id, isEvent) => {
+  const firstPart = isEvent ? mainUrl : url
+  const lastPart = isEvent ? '/tribe/events/v1/events/' : '/posts/'
+  return `${firstPart}${lastPart}${id}`
+}
 const getPostsByCategory = (category, limit, page = 1) => `${url}/posts?categories=${category}&per_page=${limit}&page=${page}`
 const getPromoCards = (limit) => getPostsByCategory(617, limit)
 const getCategories = () => `${url}/categories?per_page=100&orderby=count&order=desc`
@@ -15,6 +20,7 @@ const getPlaces = (page = 1) => `${mainUrl}/tribe/events/v1/venues?per_page=50&p
 
 export default {
   getPosts,
+  getPost,
   getPostsByCategory,
   getCategories,
   getPostBySlug,

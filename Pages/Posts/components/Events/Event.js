@@ -67,6 +67,7 @@ class Event extends React.PureComponent {
     const { width } = Dimensions.get('window')
     const startDate = formatDate(dateStart)
     const endDate = formatDate(dateEnd)
+
     return (
       <ScrollView ref="_scrollRef" contentContainerStyle={styles.scrollview}>
         <View style={styles.description}>

@@ -214,7 +214,7 @@ class AllPosts extends React.PureComponent {
         link={item.link}
         title={item.title.rendered || item.title}
         descr={descrRendered || descrItem}
-        mediaUrl={item.mediaUrl ? item.mediaUrl : null}
+        mediaUrl={item.mediaUrl || null}
         categories={categories.filter((cat) => (item.categories.includes(cat.id)))}
         content={get(item, 'content.rendered')}
         type={type}
