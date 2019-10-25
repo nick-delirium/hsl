@@ -4,12 +4,20 @@ import Drawer from 'react-native-drawer'
 import get from 'lodash/get'
 import { Linking } from 'expo'
 import { connect } from 'react-redux'
+import * as Sentry from 'sentry-expo'
+import Constants from 'expo-constants'
 import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router-native'
 import DrawerPanel from './components/DrawerPanel'
 import RouterView from '../router'
 import { togglePost } from './reducer'
 import { goBack } from '@/Pages/OKBK/reducer'
+
+Sentry.init({
+  dsn: 'https://5c75f18266074671887021dc70aa309b@sentry.io/1534014',
+  enableInExpoDevelopment: false,
+})
+Sentry.setRelease(Constants.manifest.revisionId)
 
 class RouterWithDrawer extends React.PureComponent {
   constructor(props, context) {
