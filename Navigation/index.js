@@ -96,16 +96,18 @@ class RouterWithDrawer extends React.PureComponent {
 
   handleRedirect = (event) => {
     const { path, queryParams } = Linking.parse(event.url)
-    const [type, id] = queryParams.type.split('|')
-    this.findRedirectArticle(id, type)
+    if (path.includes('redirect')) {
+      const [type, id] = queryParams.type.split('|')
+      this.findRedirectArticle(id, type)
+    }
   }
 
   addLinkingListener = () => {
-    Linking.addEventListener('url', this.handleRedirect);
+    Linking.addEventListener('url', this.handleRedirect)
   }
 
   removeLinkingListener = () => {
-    Linking.removeEventListener('url', this.handleRedirect);
+    Linking.removeEventListener('url', this.handleRedirect)
   }
 
   handleBackPress = () => {
