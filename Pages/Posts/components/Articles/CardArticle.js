@@ -46,7 +46,7 @@ class CardArticle extends React.PureComponent {
       setPost({ ...article, inAppLink })
       openPost(true, 'article')
     } catch (e) {
-      console.error(e)
+      throw new Error(e)
     }
     // history.push(newPath)
     // changeLoc(newPath)
