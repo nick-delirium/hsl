@@ -3,14 +3,21 @@
     "name": "Hansang Lab",
     "slug": "HSL",
     "privacy": "public",
+    "scheme": "hslapp",
     "sdkVersion": "35.0.0",
-    "platforms": ["ios", "android"],
-    "version": "1.1.4",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "version": "1.1.8",
     "orientation": "portrait",
     "icon": "./assets/images/appIcons/playstore_icon_HSL.png",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "hooks": {
       "postPublish": [
         {
@@ -23,7 +30,6 @@
         }
       ]
     },
-    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "hansanglab.com",
@@ -41,15 +47,14 @@
         "com.google.android.c2dm.permission.RECEIVE",
         "com.google.android.providers.gsf.permission.READ_GSERVICES"
       ],
-      "versionCode": 11,
+      "versionCode": 15,
       "package": "com.hansanglab.hansanglabapp",
       "icon": "./assets/images/appIcons/playstore_icon_HSL.png",
       "config": {
         "googleMaps": {
           "apiKey": "api"
+          }
         }
       }
-    },
-    "description": ""
   }
 }
