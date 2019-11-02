@@ -81,7 +81,7 @@ class CachedImage extends Component {
   }
 
   render() {
-    const { style, categories, date } = this.props
+    const { style, categories } = this.props
     const { loading, failed, imguri } = this.state
     if (loading) {
       return (
@@ -115,13 +115,6 @@ class CachedImage extends Component {
             </Text>
           </View>
         )}
-        {date && (
-          <View style={styles.date}>
-            <Text style={styles.text}>
-              {date}
-            </Text>
-          </View>
-        )}
       </View>
     )
   }
@@ -140,15 +133,6 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     alignSelf: 'flex-start',
     top: -180,
-  },
-  date: {
-    position: 'absolute',
-    padding: 7,
-    fontSize: 12,
-    borderRadius: 2,
-    bottom: 10,
-    right: 10,
-    zIndex: 2,
   },
   text: {
     color: '#fff',

@@ -1,6 +1,6 @@
 /* eslint-disable quote-props */
 
-export const formatDate = (date) => {
+export const formatDate = (date, splitBy = ' ') => {
   if (!date || date === 0 || !date.split) {
     return false
   }
@@ -18,7 +18,7 @@ export const formatDate = (date) => {
     '11': 'ноября',
     '12': 'декабря',
   }
-  const splitted = date.split(splitBy)
+  const splitted = date.split(splitBy).length === 2 ? date.split(splitBy) : date.split(' ')
   const splitDate = splitted[0].split('-')
   const month = months[splitDate[1]]
   const time = splitted[1].split(':')
@@ -26,6 +26,13 @@ export const formatDate = (date) => {
     date: `${splitDate[2]}\u00A0${month}`,
     time: `${time[0]}:${time[1]}`,
   })
+}
+
+export const formatDateAsNumeric = (date) => {
+  const dateObj = new Date(date)
+  let day = `${dateObj.getDate()}`
+  day = day.length === 2 ? day : `0${day}`
+  return `${day}.${dateObj.getMonth() + 1}.${dateObj.getFullYear()}`
 }
 
 export const formatText = (text, noDots) => text.replace(/<[^>]*>/g, '') + (!noDots ? '...' : '')
