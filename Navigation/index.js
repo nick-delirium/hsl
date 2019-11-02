@@ -41,7 +41,7 @@ class RouterWithDrawer extends React.PureComponent {
         const { path, queryParams } = Linking.parse(url)
         console.log('initial url', url, path, queryParams.type.split('|'))
         const [type, id] = queryParams.type.split('|')
-        this.findRedirectArticle(id, type)
+        this.findRedirectToArticle(id, type)
       }
     } catch (e) {
       console.log(e)
@@ -52,7 +52,7 @@ class RouterWithDrawer extends React.PureComponent {
     this.removeLinkingListener()
   }
 
-  findRedirectArticle = (id, type) => {
+  findRedirectToArticle = (id, type) => {
     const { history, actions } = this.props
     const isEvent = type === 'event'
     const route = isEvent ? '/events' : '/'
@@ -98,7 +98,7 @@ class RouterWithDrawer extends React.PureComponent {
     const { path, queryParams } = Linking.parse(event.url)
     if (path.includes('redirect')) {
       const [type, id] = queryParams.type.split('|')
-      this.findRedirectArticle(id, type)
+      this.findRedirectToArticle(id, type)
     }
   }
 

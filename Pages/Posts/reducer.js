@@ -142,11 +142,14 @@ export const getPostsByCategory = (
   fetch(api.getPostsByCategory(category, limit, page))
     .then((response) => response.json())
     .then((result) => {
-      if (mainCategory) {
-        return dispatch(fetchSubCategorySuccess(result, category, isRefresh, mainCategory))
+      if (result && result.length > 0) {
+        if (mainCategory) {
+          return dispatch(fetchSubCategorySuccess(result, category, isRefresh, mainCategory))
+        }
+        if (isInitial) return dispatch(fetchInitialSuccess(result))
+        return dispatch(fetchSuccess(result, category, isRefresh))
       }
-      if (isInitial) return dispatch(fetchInitialSuccess(result))
-      return dispatch(fetchSuccess(result, category, isRefresh))
+      console.log('end of posts')
     })
     .catch((e) => dispatch(fetchFail(e)))
 }
@@ -176,14 +179,20 @@ export const getEvents = (
   endDate = undefined,
   limit = DEFAULT_LIMIT,
   isRefresh = false,
+  page = 1,
 ) => (dispatch) => {
   dispatch(fetchEventsReq(startDate, endDate, limit, isRefresh))
-  fetch(api.getEvents(startDate, endDate, limit))
+  fetch(api.getEvents(startDate, endDate, limit, page))
     .then((response) => {
-      let a = response.json()
-      return a
+      return response.json()
     })
-    .then((result) => dispatch(fetchEventsSuccess(result.events)))
+    .then((result) => {
+      if (result.events && result.events.length > 0) {
+        dispatch(fetchEventsSuccess(result.events))
+      } else {
+        console.log('end of events')
+      }
+    })
     .catch((e) => dispatch(fetchEventsFail(e)))
 }
 

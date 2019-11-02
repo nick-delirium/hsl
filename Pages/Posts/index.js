@@ -17,7 +17,7 @@ import {
   rmRefreshFlag,
 } from './reducer'
 import { getCategories, setFeedType } from '@/Navigation/reducer'
-import { formatDate, formatEventDate } from '@/common/format'
+import { formatDateAsNumeric, formatEventDate } from '@/common/format'
 import Article from './components/Articles/Article'
 import Event from './components/Events/Event'
 import BlogCategories from './components/Articles/BlogCategories'
@@ -79,7 +79,7 @@ class AllPosts extends React.PureComponent {
 
     if (type === 'events') {
       const startDate = formatEventDate()
-      fetchEvents(startDate, undefined, undefined, treshold)
+      fetchEvents(startDate, undefined, undefined, treshold, page)
       this.setState({ page, isEndListLoading: false })
     } else {
       const category = categories.find((cat) => (cat.slug === type))
@@ -205,7 +205,7 @@ class AllPosts extends React.PureComponent {
       .slice(0, 100)
       .split('')
       .join('')
-    const createDt = formatDate(item.date, 'T')
+    const createDt = item.date ? formatDateAsNumeric(item.date) : undefined
     return (
       <CardArticle
         key={item.id}
@@ -218,7 +218,7 @@ class AllPosts extends React.PureComponent {
         categories={categories.filter((cat) => (item.categories.includes(cat.id)))}
         content={get(item, 'content.rendered')}
         type={type}
-        date={createDt ? createDt.date : undefined}
+        date={createDt}
       />
     )
   }
@@ -261,7 +261,7 @@ class AllPosts extends React.PureComponent {
         }
       }) : []
     return (
-      <View style={{ position: 'relative', flex: 1 }}>
+      <View style={{ position: 'relative', flex: 1, paddingBottom: 10 }}>
         {isPostOpen && this.renderPost(postType)}
         {dataWithMedia.length > 0 && (
           <FlatList
@@ -320,8 +320,8 @@ const mapDispatchToProps = (dispatch) => ({
   fetchByCategory: (cat, limit, isRefresh = false, mainCategory, page = 1, isInitial = false) => {
     dispatch(getPostsByCategory(cat, limit, isRefresh, mainCategory, page, isInitial))
   },
-  fetchEvents: (startDate, endDate, limit, isInitial = false) => (
-    dispatch(getEvents(startDate, endDate, limit, isInitial))
+  fetchEvents: (startDate, endDate, limit, isInitial = false, page = 1) => (
+    dispatch(getEvents(startDate, endDate, limit, isInitial, page))
   ),
   fetchCategories: () => dispatch(getCategories()),
   setFeedTypeFromRender: (value) => dispatch(setFeedType(value)),

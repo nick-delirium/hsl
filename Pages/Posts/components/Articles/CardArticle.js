@@ -71,7 +71,6 @@ class CardArticle extends React.PureComponent {
             source={mediaUrl}
             title={mediaUrl.slice(-4)}
             categories={!type && categories[0] ? categories[0] : undefined}
-            date={date || undefined}
             style={{
               flex: 1,
               height: 190,
@@ -93,6 +92,11 @@ class CardArticle extends React.PureComponent {
               {renderDescr}
               ...
             </Text>
+            {date && (
+              <Text style={{ paddingTop: 8 }}>
+                {date}
+              </Text>
+            )}
           </View>
         )}
       </Card>
