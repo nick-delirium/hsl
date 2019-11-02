@@ -1,7 +1,7 @@
 /* eslint-disable quote-props */
 
-export const formatDate = (date, splitBy = ' ') => {
-  if (!date) {
+export const formatDate = (date) => {
+  if (!date || date === 0 || !date.split) {
     return false
   }
   const months = {

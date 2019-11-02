@@ -12,6 +12,9 @@ import DrawerPanel from './components/DrawerPanel'
 import RouterView from '../router'
 import { togglePost } from './reducer'
 import { goBack } from '@/Pages/OKBK/reducer'
+import api from '@/api'
+import { setData as setArticle } from '@/Pages/Posts/components/Articles/articleReducer'
+import { setEvent } from '@/Pages/Posts/components/Events/eventReducer'
 
 Sentry.init({
   dsn: 'https://5c75f18266074671887021dc70aa309b@sentry.io/1534014',
@@ -31,25 +34,80 @@ class RouterWithDrawer extends React.PureComponent {
   async componentDidMount() {
     this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
     this.addLinkingListener()
-    const url = await Linking.getInitialURL()
-    console.log('initial url', url)
+
+    try {
+      const url = await Linking.getInitialURL()
+      if (url.includes('redirect')) {
+        const { path, queryParams } = Linking.parse(url)
+        console.log('initial url', url, path, queryParams.type.split('|'))
+        const [type, id] = queryParams.type.split('|')
+        this.findRedirectArticle(id, type)
+      }
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   componentWillUnmount() {
     this.removeLinkingListener()
   }
 
+  findRedirectArticle = (id, type) => {
+    const { history, actions } = this.props
+    const isEvent = type === 'event'
+    const route = isEvent ? '/events' : '/'
+    const setAction = isEvent ? actions.setEvent : actions.setArticle
+    history.push(route)
+    fetch(api.getPost(id, isEvent))
+      .then((r) => r.json())
+      .then(async (post) => {
+        const opFailStatus = get(post, 'data.status', 0)
+        if (opFailStatus === 404) return
+        const mediaUrl = get(post, '_links.wp:featuredmedia.href', null)
+          || `https://hansanglab.com/wp-json/wp/v2/media/${get(post, 'featured_media')}`
+
+        const postData = {
+          id,
+          title: get(post, 'title.rendered', ''),
+          mediaUrl,
+          content: post.content,
+        }
+        const eventData = {
+          ...postData,
+          title: get(post, 'title', ''),
+          description: get(post, 'description', ''),
+          dateStart: get(post, 'start_date', '2019-01-01 00:00:00'),
+          dateEnd: get(post, 'end_date', '2019-01-01 00:00:00'),
+          organizer: get(post, 'organizer', ''),
+          url: get(post, 'website', ''),
+          place: get(post, 'venue', ''),
+          allDay: get(post, 'allDay', false),
+          image: get(post, 'image.url'),
+        }
+
+        const itemData = isEvent ? eventData : postData
+        const inAppLink = await Linking.makeUrl('redirect', { type: `${type}|${id}` })
+
+        setAction({ ...itemData, inAppLink })
+        actions.togglePost(true, type)
+      })
+      .catch((e) => console.error(e))
+  }
+
   handleRedirect = (event) => {
     const { path, queryParams } = Linking.parse(event.url)
-    console.log('in app redirect', path, queryParams)
+    if (path.includes('redirect')) {
+      const [type, id] = queryParams.type.split('|')
+      this.findRedirectArticle(id, type)
+    }
   }
 
   addLinkingListener = () => {
-    Linking.addEventListener('url', this.handleRedirect);
+    Linking.addEventListener('url', this.handleRedirect)
   }
 
   removeLinkingListener = () => {
-    Linking.removeEventListener('url', this.handleRedirect);
+    Linking.removeEventListener('url', this.handleRedirect)
   }
 
   handleBackPress = () => {
@@ -133,8 +191,10 @@ const mapStateFromProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   actions: {
-    togglePost: (isOpen) => dispatch(togglePost(isOpen)),
+    togglePost: (isOpen, type) => dispatch(togglePost(isOpen, type)),
     goBack: () => dispatch(goBack()),
+    setArticle: (article) => dispatch(setArticle(article)),
+    setEvent: (event) => dispatch(setEvent(event)),
   },
 })
 

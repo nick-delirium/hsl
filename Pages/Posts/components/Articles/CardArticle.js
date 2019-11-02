@@ -4,6 +4,7 @@ import {
   View,
   Text,
 } from 'react-native'
+import { Linking } from 'expo'
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
@@ -16,7 +17,7 @@ import fonts from '@/constants/Styles'
 import Card from '@/components/Card'
 
 class CardArticle extends React.PureComponent {
-  onItemPress = () => {
+  onItemPress = async () => {
     const {
       setPost,
       // changeLoc,
@@ -40,9 +41,14 @@ class CardArticle extends React.PureComponent {
       categories,
       content: data.content,
     }
-    setPost(article)
+    try {
+      const inAppLink = await Linking.makeUrl('redirect', { type: `article|${id}` })
+      setPost({ ...article, inAppLink })
+      openPost(true, 'article')
+    } catch (e) {
+      throw new Error(e)
+    }
     // history.push(newPath)
-    openPost(true, 'article')
     // changeLoc(newPath)
   }
 

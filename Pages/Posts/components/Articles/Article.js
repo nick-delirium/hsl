@@ -74,8 +74,7 @@ class Article extends React.PureComponent {
     const {
       title,
       content: {
-        rendered:
-        content,
+        rendered: content,
       },
       mediaUrl,
     } = article

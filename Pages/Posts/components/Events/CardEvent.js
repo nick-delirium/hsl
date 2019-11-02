@@ -5,6 +5,7 @@ import {
   Text,
   Image,
 } from 'react-native'
+import { Linking } from 'expo'
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
@@ -16,13 +17,44 @@ import fonts from '@/constants/Styles'
 import Card from '@/components/Card'
 
 class CardEvent extends React.Component {
-  onItemPress = (event) => {
-    const { actions } = this.props
+  onItemPress = async () => {
+    const {
+      id,
+      title,
+      description,
+      dateStart,
+      dateEnd,
+      image,
+      organizer,
+      url,
+      place,
+      link,
+      allDay,
+      actions,
+    } = this.props
+    const event = {
+      id,
+      title,
+      description,
+      dateStart,
+      dateEnd,
+      link,
+      image,
+      organizer,
+      url,
+      place,
+      allDay,
+    }
     // const newPath = 'event/' + event.slug
-    actions.setEvent(event)
+    try {
+      const inAppLink = await Linking.makeUrl('redirect', { type: `event|${id}` })
+      actions.setEvent({ ...event, inAppLink })
+      actions.openPost(true, 'event')
+    } catch (e) {
+      console.error(e)
+    }
     // history.push(newPath)
     // changeLoc(path)
-    actions.openPost(true, 'event')
   }
 
   render() {
@@ -41,7 +73,7 @@ class CardEvent extends React.Component {
     const endDate = formatDate(dateEnd)
     if (!startDate) return null
     return (
-      <Card onItemPress={() => this.onItemPress(this.props)}>
+      <Card onItemPress={this.onItemPress}>
         {image && (
           <CachedImage
             source={image}
