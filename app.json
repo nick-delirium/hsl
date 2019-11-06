@@ -54,7 +54,23 @@
         "googleMaps": {
           "apiKey": "api"
           }
-        }
+        },
+        "intentFilters": [
+          {
+            "action": "VIEW",
+            "data": [
+              {
+                "scheme": "https",
+                "host": "hansanglab.com",
+                "pathPrefix": "/redirect"
+              }
+            ],
+            "category": [
+              "BROWSABLE",
+              "DEFAULT"
+            ]
+          }
+        ]
       }
   }
 }

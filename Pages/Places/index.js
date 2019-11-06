@@ -29,8 +29,8 @@ class Places extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {
-      hasLocationPermissions: false,
-      locationResult: null,
+      // hasLocationPermissions: false,
+      // locationResult: null,
       selectedMarker: null,
       displayingMarkers: this.props.places,
       locationState: 0,
@@ -41,7 +41,7 @@ class Places extends PureComponent {
         longitude: 30.2531,
         latitudeDelta: 0.3,
         longitudeDelta: 0.3,
-      }
+      },
     }
   }
 
@@ -60,20 +60,20 @@ class Places extends PureComponent {
 
   onCatPress(cat) {
     const { places } = this.props
-    // const { city } = this.state
-    let activeFilters = [... this.state.activeFilters]
-    const index = activeFilters.indexOf(cat)
+    const { activeFilters } = this.state
+    const activeFiltersArr = [...activeFilters]
+    const index = activeFiltersArr.indexOf(cat)
     if (index > -1) {
-      activeFilters.splice(index, 1)
+      activeFiltersArr.splice(index, 1)
     } else {
-      activeFilters.push(cat)
+      activeFiltersArr.push(cat)
     }
 
     const filteredLocations = places.filter((place) => (
       // if (place.city === city)
-      activeFilters.find((filtr) => place.type === filtr)
+      activeFiltersArr.find((filtr) => place.type === filtr)
     ))
-    this.setState({ activeFilters, displayingMarkers: filteredLocations })
+    this.setState({ activeFilters: activeFiltersArr, displayingMarkers: filteredLocations })
   }
 
   _getLocationAsync = async () => {
@@ -99,7 +99,7 @@ class Places extends PureComponent {
     return (
       <MapView.Marker pinColor="#000" coordinate={coordinate} onPress={onPress}>
         <View style={styles.marker}>
-          <Text style={ {color: '#000', textAlign: 'center', paddingTop: 5 }}>
+          <Text style={{ color: '#000', textAlign: 'center', paddingTop: 5 }}>
             {pointCount}
           </Text>
         </View>
@@ -108,8 +108,9 @@ class Places extends PureComponent {
   }
 
   onCardSitePress = () => {
+    const { selectedMarker } = this.state
     const url = !selectedMarker.website.startsWith('http')
-      ? 'https://' + selectedMarker.website : selectedMarker.website
+      ? `https://${selectedMarker.website}` : selectedMarker.website
     return Linking.openURL(url)
   }
 
@@ -120,17 +121,17 @@ class Places extends PureComponent {
     try {
       await Share.share({
         message: `${place.venue}. ${description}${address}\n${link}`,
-      });
+      })
     } catch (error) {
-      alert(error.message);
+      alert(error.message)
     }
   }
 
   renderMapState = (displayingMarkers) => {
-    const { locationState } = this.state
+    const { locationState, initialMapRegion } = this.state
     const width = Dimensions.get('window').width
 
-    switch(locationState) {
+    switch (locationState) {
       case 0: // Ищем ваше местоположение...
       case 1: // Нет разрешения на получение вашего местоположения
       case 2:
@@ -141,7 +142,7 @@ class Places extends PureComponent {
             width={width}
             height={width}
             style={{ width, height: width, zIndex: 1000 }}
-            data={displayingMarkers ? displayingMarkers : [{ geo_lat: 0, geo_lng: 0}]}
+            data={displayingMarkers || [{ geo_lat: 0, geo_lng: 0 }]}
             renderCluster={this.renderCluster}
             renderMarker={(location) => (
               <MapView.Marker
@@ -153,12 +154,12 @@ class Places extends PureComponent {
                 }}
                 title={location.venue}
                 description={location.address}
-                onPress={ () => this.onMarkerPress(location)}
+                onPress={() => this.onMarkerPress(location)}
               />
             )}
             initialRegion={{
-              latitude: this.state.initialMapRegion.latitude,
-              longitude: this.state.initialMapRegion.longitude,
+              latitude: initialMapRegion.latitude,
+              longitude: initialMapRegion.longitude,
               latitudeDelta: 0.3,
               longitudeDelta: 0.3,
             }}
@@ -172,8 +173,9 @@ class Places extends PureComponent {
   }
 
   render() {
-    const { selectedMarker, activeFilters } = this.state
-    const displayingMarkers = this.state.displayingMarkers.length ? this.state.displayingMarkers : this.props.places
+    const { selectedMarker, activeFilters, displayingMarkers } = this.state
+    const { places } = this.props
+    const displayingMarkersArr = displayingMarkers.length ? displayingMarkers : places
     return (
       <ScrollView contentContainerStyle={styles.container}>
         <View>
@@ -195,12 +197,12 @@ class Places extends PureComponent {
                 <Text style={{ color: activeFilters.includes(cat) ? '#fff' : rusCats[cat].color, fontSize: fonts.heading }}>
                   {rusCats[cat].title}
                 </Text>
-              </TouchableOpacity>)
-            )}
+              </TouchableOpacity>
+            ))}
           </ScrollView>
         </View>
         <View>
-          {displayingMarkers ? this.renderMapState(displayingMarkers) : (
+          {displayingMarkersArr ? this.renderMapState(displayingMarkersArr) : (
             <Text>Получаем координаты </Text>
           )}
         </View>
@@ -208,19 +210,20 @@ class Places extends PureComponent {
         <View style={styles.markerCard}>
           {selectedMarker ? (
             <View>
-              <View style={{flexDirection: 'row', flex: 1}}>
+              <View style={{ flexDirection: 'row', flex: 1 }}>
                 <Text
-                  style={{ flex: 0.9, color: '#333376', fontSize: fonts.big, fontWeight: "bold", paddingBottom: 10}}>
+                  style={{ flex: 0.9, color: '#333376', fontSize: fonts.big, fontWeight: 'bold', paddingBottom: 10 }}
+                >
                   {selectedMarker.venue}
                 </Text>
                 <View style={{ marginLeft: 'auto' }}>
                   <TouchableOpacity
-                    onPress={() => {this.share(selectedMarker)}}
+                    onPress={() => { this.share(selectedMarker) }}
                     style={{ flex: 0.1, paddingLeft: 5, paddingTop: 9, paddingBottom: 9 }}
                   >
                     <Image
                       source={require('../../assets/images/share-dark.png')}
-                      style={{ height: 20, width: 20}}
+                      style={{ height: 20, width: 20 }}
                       resizeMode="contain"
                     />
                   </TouchableOpacity>
@@ -235,14 +238,15 @@ class Places extends PureComponent {
               )}
               {selectedMarker.phone && (
                 <Text
-                  style={{color: '#00aadb', textDecorationLine: 'underline'}}
-                  onPress={() => Linking.openURL('tel:' + selectedMarker.phone)}>
+                  style={{ color: '#00aadb', textDecorationLine: 'underline' }}
+                  onPress={() => Linking.openURL(`tel: ${selectedMarker.phone}`)}
+                >
                   {selectedMarker.phone}
                 </Text>
               )}
               {selectedMarker.website && (
                 <Text
-                  style={{color: '#00aadb', textDecorationLine: 'underline', paddingTop: 5}}
+                  style={{ color: '#00aadb', textDecorationLine: 'underline', paddingTop: 5 }}
                   onPress={this.onCardSitePress}
                 >
                   Перейти на сайт
@@ -250,14 +254,13 @@ class Places extends PureComponent {
               )}
             </View>
           ) : (
-              <Text style={{textAlign: 'center'}}>
-                Пожалуйста, выберите точку на карте
-              </Text>
+            <Text style={{ textAlign: 'center' }}>
+              Пожалуйста, выберите точку на карте
+            </Text>
           )}
         </View>
-
       </ScrollView>
-    );
+    )
   }
 }
 
@@ -293,7 +296,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    shadowOffset: {width: 0, height: 4},
+    shadowOffset: { width: 0, height: 4 },
     elevation: 4,
     paddingTop: 10,
     paddingLeft: 20,
@@ -301,7 +304,7 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     margin: 15,
   },
-});
+})
 
 const mapDispatchToProps = (dispatch) => ({
   GetPlaces: (city) => dispatch(getPlaces(city)),
