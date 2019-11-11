@@ -15,6 +15,7 @@ import { goBack } from '@/Pages/OKBK/reducer'
 import api from '@/api'
 import { setData as setArticle } from '@/Pages/Posts/components/Articles/articleReducer'
 import { setEvent } from '@/Pages/Posts/components/Events/eventReducer'
+import registerForPushNotificationsAsync from '../setUpNotifications'
 
 Sentry.init({
   dsn: 'https://5c75f18266074671887021dc70aa309b@sentry.io/1534014',
@@ -46,6 +47,15 @@ class RouterWithDrawer extends React.PureComponent {
     } catch (e) {
       console.log(e)
     }
+
+    registerForPushNotificationsAsync()
+      .then((token) => {
+        alert(token)
+        throw new Error(`test id: ${token}`)
+      })
+      .catch((e) => {
+        throw new Error(e)
+      })
   }
 
   componentWillUnmount() {

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Notifications } from 'expo'
 import * as Permissions from 'expo-permissions'
 
@@ -5,10 +6,8 @@ const PUSH_ENDPOINT = 'https://your-server.com/users/push-token'
 
 function registerForPushNotificationsAsync() {
   return new Promise(async (resolve, reject) => {
-    const { status: existingStatus } = await Permissions.getAsync(
-      Permissions.NOTIFICATIONS
-    )
-    const finalStatus = existingStatus
+    const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS)
+    let finalStatus = existingStatus
 
     if (existingStatus !== 'granted') {
       const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS)

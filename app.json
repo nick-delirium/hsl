@@ -9,7 +9,7 @@
       "ios",
       "android"
     ],
-    "version": "1.1.8",
+    "version": "1.1.9",
     "orientation": "portrait",
     "icon": "./assets/images/appIcons/playstore_icon_HSL.png",
     "updates": {
@@ -18,14 +18,21 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "notification": {
+      "icon": "./assets/images/appIcons/playstore_icon_HSL.png",
+      "iosDisplayInForeground": true,
+      "androidMode": "default",
+      "androidCollapsedTitle": "Hansang Lab",
+      "color": "#000000"
+    },
     "hooks": {
       "postPublish": [
         {
           "file": "sentry-expo/upload-sourcemaps",
           "config": {
-            "organization": "org",
-            "project": "proj",
-            "authToken": "token"
+            "organization": "stas-t",
+            "project": "stas-t",
+            "authToken": "3278003f71294ce2b856b95cd73c46f89e664223a4234c7e8b3ffdec2fd7c763"
           }
         }
       ]
@@ -35,7 +42,7 @@
       "bundleIdentifier": "hansanglab.com",
       "icon": "./assets/images/appIcons/app_store_icon_HSL.png",
       "config": {
-        "googleMapsApiKey": "api"
+        "googleMapsApiKey": "AIzaSyD_6OC-Ssd0kteja4YZw5Q3suNMdIQh3LM"
       }
     },
     "android": {
@@ -43,34 +50,39 @@
         "ACCESS_COARSE_LOCATION",
         "ACCESS_FINE_LOCATION",
         "READ_CONTACTS",
+        "VIBRATE",
         "com.anddoes.launcher.permission.UPDATE_COUNT",
         "com.google.android.c2dm.permission.RECEIVE",
-        "com.google.android.providers.gsf.permission.READ_GSERVICES"
+        "com.google.android.providers.gsf.permission.READ_GSERVICES",
+        "com.sec.android.provider.badge.permission.READ",
+        "com.sec.android.provider.badge.permission.WRITE",
+        "com.sonyericsson.home.permission.BROADCAST_BADGE",
+        "com.google.android.c2dm.permission.RECEIVE"
       ],
-      "versionCode": 15,
+      "versionCode": 16,
       "package": "com.hansanglab.hansanglabapp",
       "icon": "./assets/images/appIcons/playstore_icon_HSL.png",
       "config": {
         "googleMaps": {
-          "apiKey": "api"
-          }
-        },
-        "intentFilters": [
-          {
-            "action": "VIEW",
-            "data": [
-              {
-                "scheme": "https",
-                "host": "hansanglab.com",
-                "pathPrefix": "/redirect"
-              }
-            ],
-            "category": [
-              "BROWSABLE",
-              "DEFAULT"
-            ]
-          }
-        ]
-      }
+          "apiKey": "AIzaSyD_6OC-Ssd0kteja4YZw5Q3suNMdIQh3LM"
+        }
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "https",
+              "host": "hansanglab.com",
+              "pathPrefix": "/"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ]
+    }
   }
 }
