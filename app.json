@@ -42,7 +42,7 @@
       "bundleIdentifier": "hansanglab.com",
       "icon": "./assets/images/appIcons/app_store_icon_HSL.png",
       "config": {
-        "googleMapsApiKey": "AIzaSyD_6OC-Ssd0kteja4YZw5Q3suNMdIQh3LM"
+        "googleMapsApiKey": "key"
       }
     },
     "android": {
@@ -64,7 +64,7 @@
       "icon": "./assets/images/appIcons/playstore_icon_HSL.png",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyD_6OC-Ssd0kteja4YZw5Q3suNMdIQh3LM"
+          "apiKey": "key"
         }
       },
       "intentFilters": [
