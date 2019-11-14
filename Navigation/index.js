@@ -1,5 +1,5 @@
 import React from 'react'
-import { BackHandler, Keyboard } from 'react-native'
+import { BackHandler, Keyboard, AsyncStorage } from 'react-native'
 import Drawer from 'react-native-drawer'
 import get from 'lodash/get'
 import { Linking } from 'expo'
@@ -12,6 +12,7 @@ import DrawerPanel from './components/DrawerPanel'
 import RouterView from '../router'
 import { togglePost } from './reducer'
 import { goBack } from '@/Pages/OKBK/reducer'
+import { client as gqlClient, gqlClientsubscribeToPush } from '@/pages/OKBK/gqlQueries'
 import api from '@/api'
 import { setData as setArticle } from '@/Pages/Posts/components/Articles/articleReducer'
 import { setEvent } from '@/Pages/Posts/components/Events/eventReducer'
@@ -22,6 +23,9 @@ Sentry.init({
   enableInExpoDevelopment: false,
 })
 Sentry.setRelease(Constants.manifest.revisionId)
+
+const rand = () => Math.random().toString(36).substr(2)
+const userToken = () => rand() + rand()
 
 class RouterWithDrawer extends React.PureComponent {
   constructor(props, context) {
@@ -49,8 +53,24 @@ class RouterWithDrawer extends React.PureComponent {
     }
 
     registerForPushNotificationsAsync()
-      .then((token) => {
+      .then(async (token) => {
         alert(token)
+        const possibleToken = userToken()
+        AsyncStorage.getItem('userId', async (err, result) => {
+          if (!result) AsyncStorage.setItem('userId', possibleToken)
+          try {
+            await gqlClient.query({
+              query: gqlClientsubscribeToPush,
+              variables: {
+                userId: result || possibleToken,
+                token,
+              },
+            })
+          } catch (e) {
+            throw new Error(e)
+          }
+        })
+
         throw new Error(`test id: ${token}`)
       })
       .catch((e) => {

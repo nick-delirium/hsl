@@ -9,6 +9,7 @@ import {
 import { connect } from 'react-redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
+import Colors from '@/constants/Colors'
 import Login from './Login'
 import Clubs from './Clubs'
 import Search from './Search'
@@ -77,7 +78,7 @@ class OKBK extends PureComponent {
       )
     }
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF', zIndex: 10 }}>
         <View style={styles.main}>
           <View style={{ flex: 1, paddingBottom: 60 }}>
             {this.returnTabView()}
@@ -92,6 +93,7 @@ class OKBK extends PureComponent {
 const styles = StyleSheet.create({
   main: {
     flex: 1,
+    backgroundColor: Colors.backgroundGray,
   },
 })
 

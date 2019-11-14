@@ -15,12 +15,18 @@ import fonts from '../../constants/Styles'
 
 class DrawerItem extends React.PureComponent {
   onItemPress = async (path) => {
-    const { share, history, changeLoc, closeDrawer, closePost } = this.props
+    const {
+      share,
+      history,
+      changeLoc,
+      closeDrawer,
+      closePost,
+    } = this.props
     if (share) {
       try {
         await Share.share({
           message: 'Рекомендую мобильное приложение Hansang Lab\nhttps://hansanglab.com/get_app',
-        });
+        })
       } catch (error) {
         alert(error.message)
       }
@@ -48,7 +54,7 @@ class DrawerItem extends React.PureComponent {
         <Text
           style={[
             styles.text,
-            isActive && styles.activeButton
+            isActive && styles.activeButton,
           ]}
         >
           {text}
@@ -81,7 +87,7 @@ const mapStateToProps = createStructuredSelector({
   path: (state) => get(state, 'url.path'),
 })
 const mapDispatchToProps = (dispatch) => ({
-  changeLoc: (path) => dispatch(changeLocation(path))
+  changeLoc: (path) => dispatch(changeLocation(path)),
 })
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps)

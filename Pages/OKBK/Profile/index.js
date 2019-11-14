@@ -65,95 +65,103 @@ class Profile extends React.PureComponent {
       : null
     const bcIcon = get(businessClub, 'icon')
     return (
-      <ScrollView>
-        <View style={styles.mainView}>
-          {self && <ProfileActions singOutAction={actions.singOut} />}
-          <View style={styles.profileWrapper}>
+      <View
+        style={{
+          backgroundColor: 'white',
+          width: '100%',
+          height: '100%',
+        }}
+      >
+        {self && <ProfileActions singOutAction={actions.singOut} />}
+        <ScrollView>
+          <View style={styles.mainView}>
+            <View style={styles.profileWrapper}>
 
-            <View>
-              <Image
-                source={displayedUser.photo ? { uri: displayedUser.photo } : require('../assets/no_photo.png')}
-                resizeMode="cover"
-                style={styles.profilePhoto}
-              />
-            </View>
-            <Text style={styles.nameText}>
-              {displayedUser.first_name}
-              {'\r\n'}
-              {displayedUser.last_name}
-            </Text>
-            <Text style={styles.smallText}>
-              {displayedUser.city_name}
-            </Text>
-            {Boolean(displayedUser.career) && (
+              <View>
+                <Image
+                  source={displayedUser.photo ? { uri: displayedUser.photo } : require('../assets/no_photo.png')}
+                  resizeMode="cover"
+                  style={styles.profilePhoto}
+                />
+              </View>
+              <Text style={styles.nameText}>
+                {displayedUser.first_name}
+                {'\r\n'}
+                {displayedUser.last_name}
+              </Text>
               <Text style={styles.smallText}>
-                {displayedUser.career}
+                {displayedUser.city_name}
               </Text>
-            )}
-            {Boolean(displayedUser.bio) && (
-              <Text style={styles.smallText}>
-                {displayedUser.bio}
-              </Text>
-            )}
+              {Boolean(displayedUser.career) && (
+                <Text style={styles.smallText}>
+                  {displayedUser.career}
+                </Text>
+              )}
+              {Boolean(displayedUser.bio) && (
+                <Text style={styles.smallText}>
+                  {displayedUser.bio}
+                </Text>
+              )}
 
-            {displayedUser.business_areas.length > 0 && (
-              <>
-                <Text style={styles.heading}> Сфера деятельности </Text>
-                {displayedUser.business_areas.map((area) => (
-                  <Text key={area.id} style={styles.smallText}>{area.name}</Text>
-                ))}
-              </>
-            )}
+              {displayedUser.business_areas.length > 0 && (
+                <>
+                  <Text style={styles.heading}> Сфера деятельности </Text>
+                  {displayedUser.business_areas.map((area) => (
+                    <Text key={area.id} style={styles.smallText}>{area.name}</Text>
+                  ))}
+                </>
+              )}
 
-            <Text style={styles.heading}> Контакты </Text>
-            {Boolean(displayedUser.contact_email) && (
-              <Text style={styles.smallText} onPress={() => openLink(`mailto:${displayedUser.contact_email}`)}>
-                {displayedUser.contact_email}
-              </Text>
-            )}
-            {Boolean(displayedUser.phone) && (
-              <Text style={styles.smallText} onPress={() => openLink(`tel:${displayedUser.phone}`)}>
-                {displayedUser.phone}
-              </Text>
-            )}
-            <View style={styles.contacts}>
+              <Text style={styles.heading}> Контакты </Text>
+              {Boolean(displayedUser.contact_email) && (
+                <Text style={styles.smallText} onPress={() => openLink(`mailto:${displayedUser.contact_email}`)}>
+                  {displayedUser.contact_email}
+                </Text>
+              )}
               {Boolean(displayedUser.phone) && (
-                <TouchableWithoutFeedback
-                  onPress={() => {
-                    return openLink(`https://api.whatsapp.com/send?phone=${displayedUser.phone.replace('+', '').replace(/ /g, '')}`)
-                  }}
-                >
-                  <View style={{ ...styles.contactsRow, marginRight: 20 }}>
-                    <Image style={{ width: 20, height: 20, marginRight: 10 }} resizeMode="contain" source={require('../assets/WU.png')} />
-                    <Text style={{ ...styles.smallText, marginBottom: 0, color: '#33CC33' }}>whatsapp</Text>
-                  </View>
-                </TouchableWithoutFeedback>
+                <Text style={styles.smallText} onPress={() => openLink(`tel:${displayedUser.phone}`)}>
+                  {displayedUser.phone}
+                </Text>
               )}
-              {Boolean(displayedUser.social_media) && (
-                <TouchableWithoutFeedback
-                  onPress={() => openLink(`https://${displayedUser.social_media}`)}
-                >
-                  <View style={styles.contactsRow}>
-                    <Image style={{ width: 20, height: 20, marginRight: 10 }} resizeMode="contain" source={require('../assets/facebook.png')} />
-                    <Text style={{ ...styles.smallText, marginBottom: 0, color: '#2F80ED' }}>
-                      facebook
-                    </Text>
-                  </View>
-                </TouchableWithoutFeedback>
+              <View style={styles.contacts}>
+                {Boolean(displayedUser.phone) && (
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      return openLink(`https://api.whatsapp.com/send?phone=${displayedUser.phone.replace('+', '').replace(/ /g, '')}`)
+                    }}
+                  >
+                    <View style={{ ...styles.contactsRow, marginRight: 20 }}>
+                      <Image style={{ width: 20, height: 20, marginRight: 10 }} resizeMode="contain" source={require('../assets/WU.png')} />
+                      <Text style={{ ...styles.smallText, marginBottom: 0, color: '#33CC33' }}>whatsapp</Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                )}
+                {Boolean(displayedUser.social_media) && (
+                  <TouchableWithoutFeedback
+                    onPress={() => openLink(`https://${displayedUser.social_media}`)}
+                  >
+                    <View style={styles.contactsRow}>
+                      <Image style={{ width: 20, height: 20, marginRight: 10 }} resizeMode="contain" source={require('../assets/facebook.png')} />
+                      <Text style={{ ...styles.smallText, marginBottom: 0, color: '#2F80ED' }}>
+                        facebook
+                      </Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                )}
+              </View>
+
+              {bcIcon && (
+                <Image
+                  source={{ uri: bcIcon }}
+                  resizeMode="cover"
+                  style={styles.logo}
+                />
               )}
+
             </View>
-
-            {bcIcon && (
-              <Image
-                source={{ uri: bcIcon }}
-                resizeMode="cover"
-                style={styles.logo}
-              />
-            )}
-
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     )
   }
 }
@@ -170,6 +178,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     flexDirection: 'row',
     padding: 15,
+    position: 'absolute',
+    zIndex: 10,
   },
   contacts: {
     marginTop: 10,

@@ -38,7 +38,7 @@ const Clubs = ({ actions, clubs, users }) => {
 
   if (users.length > 0) return <People />
   return (
-    <ScrollView contentContainerStyle={styles.pageWrapper} bounces={false}>
+    <ScrollView contentContainerStyle={styles.pageWrapper}>
       {clubs.map((item) => (
         <Card
           key={item.id}

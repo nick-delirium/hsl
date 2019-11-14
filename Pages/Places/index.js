@@ -28,11 +28,12 @@ import { getPlaces } from './reducer'
 class Places extends PureComponent {
   constructor(props) {
     super(props)
+    const { places } = props
     this.state = {
       // hasLocationPermissions: false,
       // locationResult: null,
       selectedMarker: null,
-      displayingMarkers: this.props.places,
+      displayingMarkers: places,
       locationState: 0,
       activeFilters: [],
       city: null,
@@ -129,7 +130,6 @@ class Places extends PureComponent {
 
   renderMapState = (displayingMarkers) => {
     const { locationState, initialMapRegion } = this.state
-    const width = Dimensions.get('window').width
 
     switch (locationState) {
       case 0: // Ищем ваше местоположение...
@@ -141,7 +141,6 @@ class Places extends PureComponent {
             ref={(r) => this.mapRef = r}
             width={width}
             height={width}
-            style={{ width, height: width, zIndex: 1000 }}
             data={displayingMarkers || [{ geo_lat: 0, geo_lng: 0 }]}
             renderCluster={this.renderCluster}
             renderMarker={(location) => (
@@ -180,19 +179,19 @@ class Places extends PureComponent {
       <ScrollView contentContainerStyle={styles.container}>
         <View>
           <ScrollView
-            horizontal={true}
+            horizontal
             contentContainerStyle={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}
             showsHorizontalScrollIndicator={false}
           >
-            {categories().map((cat, i) => (
+            {categories().map((cat) => (
               <TouchableOpacity
-                key={`${cat}${i}`}
+                key={`${rusCats[cat].title}`}
                 style={{
                   ...styles.category,
                   backgroundColor: activeFilters.includes(cat) ? rusCats[cat].color : 'transparent',
                   borderColor: rusCats[cat].color,
                 }}
-                onPress={this.onCatPress.bind(this, cat)}
+                onPress={() => this.onCatPress(cat)}
               >
                 <Text style={{ color: activeFilters.includes(cat) ? '#fff' : rusCats[cat].color, fontSize: fonts.heading }}>
                   {rusCats[cat].title}
@@ -212,14 +211,25 @@ class Places extends PureComponent {
             <View>
               <View style={{ flexDirection: 'row', flex: 1 }}>
                 <Text
-                  style={{ flex: 0.9, color: '#333376', fontSize: fonts.big, fontWeight: 'bold', paddingBottom: 10 }}
+                  style={{
+                    flex: 0.9,
+                    color: '#333376',
+                    fontSize: fonts.big,
+                    fontWeight: 'bold',
+                    paddingBottom: 10,
+                  }}
                 >
                   {selectedMarker.venue}
                 </Text>
                 <View style={{ marginLeft: 'auto' }}>
                   <TouchableOpacity
                     onPress={() => { this.share(selectedMarker) }}
-                    style={{ flex: 0.1, paddingLeft: 5, paddingTop: 9, paddingBottom: 9 }}
+                    style={{
+                      flex: 0.1,
+                      paddingLeft: 5,
+                      paddingTop: 9,
+                      paddingBottom: 9,
+                    }}
                   >
                     <Image
                       source={require('../../assets/images/share-dark.png')}
@@ -234,7 +244,11 @@ class Places extends PureComponent {
                 <Text>{formatText(selectedMarker.description, true)}</Text>
               )}
               {selectedMarker.address && (
-                <Text>Адрес: {selectedMarker.address}</Text>
+                <Text>
+                  Адрес:
+                  &nbsp;
+                  {selectedMarker.address}
+                </Text>
               )}
               {selectedMarker.phone && (
                 <Text
@@ -264,6 +278,8 @@ class Places extends PureComponent {
   }
 }
 
+const { width } = Dimensions.get('window')
+
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
@@ -274,7 +290,9 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   map: {
-    position: 'absolute',
+    width,
+    height: width,
+    zIndex: 1000,
   },
   category: {
     flex: 1,

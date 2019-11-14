@@ -1,7 +1,7 @@
 /* eslint-disable arrow-body-style */
 import api from '../api'
 
-const CHANGE_LOCATION = 'app.location.change'
+export const CHANGE_LOCATION = 'app.location.change'
 const FETCH_CATEGORIES_START = 'app.categories.fetch.start'
 const FETCH_CATEGORIES_SUCCESS = 'app.categories.fetch.succes'
 const FETCH_CATEGORIES_FAIL = 'app.categories.fetch.fail'

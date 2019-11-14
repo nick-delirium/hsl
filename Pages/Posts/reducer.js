@@ -1,4 +1,7 @@
 import api from '../../api'
+import {
+  CHANGE_LOCATION,
+} from '@/Navigation/reducer'
 
 const FETCH_INITIAL_SUCCESS = 'app.data.fetch.initial.success'
 
@@ -97,7 +100,7 @@ export const getPosts = (
           )
           const flatResult = flatten(result)
           dispatch(fetchAdsSuccess(ads))
-          if (isInitial) (fetchInitialSuccess(flatResult))
+          if (isInitial || isRefresh) dispatch(fetchInitialSuccess(flatResult))
           else dispatch(fetchAllSuccess(flatResult))
         })
         .catch((e) => dispatch(fetchAdsFail(e)))
@@ -183,9 +186,7 @@ export const getEvents = (
 ) => (dispatch) => {
   dispatch(fetchEventsReq(startDate, endDate, limit, isRefresh))
   fetch(api.getEvents(startDate, endDate, limit, page))
-    .then((response) => {
-      return response.json()
-    })
+    .then((response) => response.json())
     .then((result) => {
       if (result.events && result.events.length > 0) {
         dispatch(fetchEventsSuccess(result.events))
@@ -199,7 +200,7 @@ export const getEvents = (
 const initialState = {
   posts: [],
   data: [],
-  isLoading: false,
+  isLoading: true,
   isError: false,
   errorMessage: '',
   subcategory: '0000',
@@ -212,6 +213,7 @@ export default function (state = initialState, action) {
       return {
         ...state,
         data: action.payload,
+        posts: action.payload,
         isLoading: false,
       }
     case REMOVE_REFRESH_FLAG:
@@ -257,7 +259,12 @@ export default function (state = initialState, action) {
       }
     }
     case FETCH_POSTS_BY_SUBCATEGORY_SUCCESS: {
-      const { category, mainCategory, data, isRefresh } = action.payload
+      const {
+        category,
+        mainCategory,
+        data,
+        isRefresh,
+      } = action.payload
       const subcat = (mainCategory && category) ? category : '0000'
       const mainCat = (mainCategory && category) ? mainCategory : category
       const isNewCategory = subcat !== state.subcategory || mainCategory === category
@@ -300,6 +307,8 @@ export default function (state = initialState, action) {
         isLoading: false,
         isError: true,
       }
+    case CHANGE_LOCATION:
+      return initialState
     default:
       return state
   }

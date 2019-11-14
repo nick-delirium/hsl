@@ -43,9 +43,9 @@ class DrawerPanel extends React.PureComponent {
         <TouchableOpacity
           onPress={() => {
             if (!isOpen) return
-            history.push('/')
             closePost()
             changeLoc('/')
+            history.push('/')
             closeDrawer()
           }}
         >

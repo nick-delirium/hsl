@@ -86,6 +86,7 @@ class NavBar extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    zIndex: 10,
     position: 'absolute',
     bottom: 0,
     backgroundColor: '#FFFFFF',

@@ -2,6 +2,7 @@ import React from 'react'
 import {
   FlatList,
   View,
+  ActivityIndicator,
   Dimensions,
   StyleSheet,
 } from 'react-native'
@@ -42,9 +43,11 @@ class AllPosts extends React.PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    const { isRefresh, removeRefreshFlag, type, usedCategories } = this.props
-    const isCategoryChanged = prevProps.usedCategories.subcat !== usedCategories.subcat
-      || prevProps.usedCategories.mainCat !== usedCategories.mainCat
+    const {
+      isRefresh,
+      removeRefreshFlag,
+      type,
+    } = this.props
     const isTypeChanged = type !== prevProps.type
     if (isTypeChanged) this.getInitialData()
     if (isRefresh && !prevProps.isRefresh && this._FlatList.current) {
@@ -118,7 +121,6 @@ class AllPosts extends React.PureComponent {
       fetchCategories()
     }
 
-    // eslint-disable-next-line quotes
     if (type === 'events') {
       const startDate = formatEventDate()
       fetchEvents(startDate, undefined, undefined, true)
@@ -136,7 +138,7 @@ class AllPosts extends React.PureComponent {
         }
       }
     }
-    if (posts.length === 0) fetchPosts(20, false, 1, true)
+    if (type !== 'events' && posts.length === 0) fetchPosts(20, false, 1, true)
   }
 
   refreshData = () => {
@@ -164,7 +166,7 @@ class AllPosts extends React.PureComponent {
         }
       }
     }
-    if (type === undefined) fetchPosts(20, false, 1, true)
+    if (type === undefined) fetchPosts(20, true, 1, false)
   }
 
   _keyExtractor = (item) => `_${item.id}`
@@ -260,6 +262,15 @@ class AllPosts extends React.PureComponent {
           mediaUrl,
         }
       }) : []
+    if (dataWithMedia.length === 0 && isLoading) {
+      return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <ActivityIndicator
+            size="large"
+          />
+        </View>
+      )
+    }
     return (
       <View style={{ position: 'relative', flex: 1, paddingBottom: 10 }}>
         {isPostOpen && this.renderPost(postType)}

@@ -46,13 +46,12 @@ class People extends PureComponent {
               top: 0,
               left: 0,
               zIndex: 30,
-              backgroundColor: 'white',
             }}
           >
             <Profile />
           </View>
         )}
-        <ScrollView contentContainerStyle={styles.pageWrapper} bounces={false}>
+        <ScrollView contentContainerStyle={styles.pageWrapper}>
           {selectedClub && (
             <View style={styles.topWrapper}>
               {Boolean(selectedClub.icon2 || selectedClub.icon) && (

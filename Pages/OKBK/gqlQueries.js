@@ -160,3 +160,19 @@ export const getCitiesListQuery = gql`
     }
   }
 `
+
+export const subscribeToPush = gql`
+  query subscribe(
+    $userId: String!,
+    $token: String!
+  ) {
+    subscribe (
+      userId: $userId,
+      token: $token
+    ) {
+      result,
+      code,
+      message
+    }
+  }
+`

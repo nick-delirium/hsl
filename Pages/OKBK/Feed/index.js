@@ -5,6 +5,7 @@ import {
   FlatList,
   StyleSheet,
   Dimensions,
+  SafeAreaView,
 } from 'react-native'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
@@ -99,9 +100,11 @@ class Feed extends React.PureComponent {
   }
 
   renderPost = () => (
-    <View style={styles.postWrapper}>
-      <Article id />
-    </View>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF', zIndex: 10 }}>
+      <View style={styles.postWrapper}>
+        <Article id />
+      </View>
+    </SafeAreaView>
   )
 
   render() {
@@ -148,8 +151,8 @@ const styles = StyleSheet.create({
     paddingBottom: 92, // height of header
     left: 0,
     zIndex: 9,
-    height,
-    backgroundColor: '#E1E1E1',
+    height: height - 92,
+    backgroundColor: '#ffffff',
     flex: 1,
   },
 })
