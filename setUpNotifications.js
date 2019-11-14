@@ -1,11 +1,13 @@
 /* eslint-disable */
 import { Notifications } from 'expo'
 import * as Permissions from 'expo-permissions'
+import Constants from 'expo-constants';
 
 const PUSH_ENDPOINT = 'https://your-server.com/users/push-token'
 
 function registerForPushNotificationsAsync() {
   return new Promise(async (resolve, reject) => {
+    if (!Constants.isDevice) reject('not a real device')
     try {
       const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS)
       let finalStatus = existingStatus
@@ -24,24 +26,6 @@ function registerForPushNotificationsAsync() {
     } catch (e) {
       throw new Error(e)
     }
-  })
-}
-
-export const pushNotification = (token) => {
-  return fetch(PUSH_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      token: {
-        value: token,
-      },
-      user: {
-        username: 'Brent',
-      },
-    }),
   })
 }
 

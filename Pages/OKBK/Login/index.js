@@ -99,7 +99,7 @@ class Login extends PureComponent {
               />
             </View>
             {error && (
-              <Text>{error}</Text>
+              <Text style={{ color: 'white', marginTop: 20 }}>{error}</Text>
             )}
             <TouchableOpacity
               onPress={this.onSubmit}

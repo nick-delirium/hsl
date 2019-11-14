@@ -59,7 +59,6 @@ class OKBK extends PureComponent {
 
       default:
         return <Feed />
-        // <Text>Feed</Text>
     }
   }
 
@@ -101,7 +100,7 @@ const mapStateToProps = createStructuredSelector({
   isLoggedIn: (state) => get(state, 'okbk.isLoggedIn'),
   isLoading: (state) => get(state, 'okbk.isLoading'),
   account: (state) => get(state, 'okbk.account'),
-  error: (state) => get(state, 'okb.error'),
+  error: (state) => get(state, 'okbk.error'),
   currentTab: (state) => get(state, 'okbk.currentTab'),
 })
 const mapDispatchToProps = (dispatch) => ({

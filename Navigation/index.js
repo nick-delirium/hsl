@@ -2,7 +2,7 @@ import React from 'react'
 import { BackHandler, Keyboard, AsyncStorage } from 'react-native'
 import Drawer from 'react-native-drawer'
 import get from 'lodash/get'
-import { Linking } from 'expo'
+import { Linking, Notifications } from 'expo'
 import { connect } from 'react-redux'
 import * as Sentry from 'sentry-expo'
 import Constants from 'expo-constants'
@@ -12,7 +12,7 @@ import DrawerPanel from './components/DrawerPanel'
 import RouterView from '../router'
 import { togglePost } from './reducer'
 import { goBack } from '@/Pages/OKBK/reducer'
-import { client as gqlClient, gqlClientsubscribeToPush } from '@/pages/OKBK/gqlQueries'
+import { client as gqlClient, subscribeToPush } from '@/Pages/OKBK/gqlQueries'
 import api from '@/api'
 import { setData as setArticle } from '@/Pages/Posts/components/Articles/articleReducer'
 import { setEvent } from '@/Pages/Posts/components/Events/eventReducer'
@@ -60,7 +60,7 @@ class RouterWithDrawer extends React.PureComponent {
           if (!result) AsyncStorage.setItem('userId', possibleToken)
           try {
             await gqlClient.query({
-              query: gqlClientsubscribeToPush,
+              query: subscribeToPush,
               variables: {
                 userId: result || possibleToken,
                 token,
@@ -76,10 +76,20 @@ class RouterWithDrawer extends React.PureComponent {
       .catch((e) => {
         throw new Error(e)
       })
+
+    this._notificationSubscription = Notifications.addListener(this._handleNotification)
   }
 
   componentWillUnmount() {
     this.removeLinkingListener()
+  }
+
+  _handleNotification = (notification) => {
+    const isRedirectPush = Boolean(notification.data.id)
+    if (isRedirectPush) {
+      const { id, type } = notification.data
+      this.findRedirectToArticle(id, type)
+    }
   }
 
   findRedirectToArticle = (id, type) => {
