@@ -44,7 +44,7 @@ class RouterWithDrawer extends React.PureComponent {
       const url = await Linking.getInitialURL()
       if (url.includes('redirect')) {
         const { path, queryParams } = Linking.parse(url)
-        console.log('initial url', url, path, queryParams.type.split('|'))
+        console.log('initial url', url, path, queryParams)
         const [type, id] = queryParams.type.split('|')
         this.findRedirectToArticle(id, type)
       }
@@ -54,7 +54,6 @@ class RouterWithDrawer extends React.PureComponent {
 
     registerForPushNotificationsAsync()
       .then(async (token) => {
-        alert(token)
         const possibleToken = userToken()
         AsyncStorage.getItem('userId', async (err, result) => {
           if (!result) AsyncStorage.setItem('userId', possibleToken)
@@ -71,7 +70,7 @@ class RouterWithDrawer extends React.PureComponent {
           }
         })
 
-        throw new Error(`test id: ${token}`)
+        console.log('push', token)
       })
       .catch((e) => {
         throw new Error(e)
@@ -137,6 +136,7 @@ class RouterWithDrawer extends React.PureComponent {
   handleRedirect = (event) => {
     const { path, queryParams } = Linking.parse(event.url)
     if (path.includes('redirect')) {
+      console.log(event.url, path, queryParams)
       const [type, id] = queryParams.type.split('|')
       this.findRedirectToArticle(id, type)
     }
