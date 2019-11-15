@@ -47,7 +47,7 @@ class CardEvent extends React.Component {
     }
     // const newPath = 'event/' + event.slug
     try {
-      const inAppLink = await Linking.makeUrl('redirect', { type: `event|${id}` })
+      const inAppLink = await Linking.makeUrl('redirect', { type: `eventZ${id}` })
       actions.setEvent({ ...event, inAppLink })
       actions.openPost(true, 'event')
     } catch (e) {

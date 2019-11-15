@@ -45,7 +45,7 @@ class RouterWithDrawer extends React.PureComponent {
       if (url.includes('redirect')) {
         const { path, queryParams } = Linking.parse(url)
         console.log('initial url', url, path, queryParams)
-        const [type, id] = queryParams.type.split('|')
+        const [type, id] = queryParams.type.split('Z')
         this.findRedirectToArticle(id, type)
       }
     } catch (e) {
@@ -125,7 +125,7 @@ class RouterWithDrawer extends React.PureComponent {
         }
 
         const itemData = isEvent ? eventData : postData
-        const inAppLink = await Linking.makeUrl('redirect', { type: `${type}|${id}` })
+        const inAppLink = await Linking.makeUrl('redirect', { type: `${type}Z${id}` })
 
         setAction({ ...itemData, inAppLink })
         actions.togglePost(true, type)
@@ -137,7 +137,7 @@ class RouterWithDrawer extends React.PureComponent {
     const { path, queryParams } = Linking.parse(event.url)
     if (path.includes('redirect')) {
       console.log(event.url, path, queryParams)
-      const [type, id] = queryParams.type.split('|')
+      const [type, id] = queryParams.type.split('Z')
       this.findRedirectToArticle(id, type)
     }
   }
