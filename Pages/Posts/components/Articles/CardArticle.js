@@ -70,7 +70,7 @@ class CardArticle extends React.PureComponent {
           <CachedImage
             source={mediaUrl}
             title={mediaUrl.slice(-4)}
-            categories={!type && categories[0] ? categories[0] : undefined}
+            categories={type === 'all' && categories[0] ? categories[0] : undefined}
             style={{
               flex: 1,
               height: 190,

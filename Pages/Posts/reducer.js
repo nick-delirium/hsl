@@ -213,7 +213,6 @@ export default function (state = initialState, action) {
       return {
         ...state,
         data: action.payload,
-        posts: action.payload,
         isLoading: false,
       }
     case REMOVE_REFRESH_FLAG:
@@ -230,7 +229,7 @@ export default function (state = initialState, action) {
     case FETCH_ALLPOSTS_SUCCESS:
       return {
         ...state,
-        posts: [...state.posts, ...action.payload],
+        data: [...state.posts, ...action.payload],
         isLoading: false,
       }
     case FETCH_ALLPOSTS_FAIL:

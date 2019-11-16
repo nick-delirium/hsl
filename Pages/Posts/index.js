@@ -112,7 +112,6 @@ class AllPosts extends React.PureComponent {
       fetchByCategory,
       fetchCategories,
       fetchEvents,
-      posts,
       type,
       categories,
       subCategories,
@@ -120,7 +119,7 @@ class AllPosts extends React.PureComponent {
     if (!categories || categories.length === 0) {
       fetchCategories()
     }
-
+    if (type === 'all') return fetchPosts(20, false, 1, true)
     if (type === 'events') {
       const startDate = formatEventDate()
       fetchEvents(startDate, undefined, undefined, true)
@@ -138,7 +137,6 @@ class AllPosts extends React.PureComponent {
         }
       }
     }
-    if (type !== 'events' && posts.length === 0) fetchPosts(20, false, 1, true)
   }
 
   refreshData = () => {
@@ -244,7 +242,6 @@ class AllPosts extends React.PureComponent {
 
   render() {
     const {
-      posts,
       isLoading,
       type,
       data,
@@ -252,7 +249,7 @@ class AllPosts extends React.PureComponent {
       postType,
     } = this.props
 
-    const displayingPosts = type ? data : posts
+    const displayingPosts = data
     const dataWithMedia = displayingPosts && displayingPosts.length
       ? displayingPosts.map((item) => {
         const mediaUrl = get(item, '_links.wp:featuredmedia.href', null)
@@ -310,7 +307,6 @@ const styles = StyleSheet.create({
 const mapStateFromProps = createStructuredSelector({
   isLoading: (state) => get(state, 'posts.isLoading'),
   isError: (state) => get(state, 'posts.isError'),
-  posts: (state) => get(state, 'posts.posts'),
   data: (state) => get(state, 'posts.data'),
   usedCategories: (state) => {
     const mainCat = get(state, 'posts.mainCategory')

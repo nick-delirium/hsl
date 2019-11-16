@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     alignSelf: 'flex-start',
     top: -180,
+    backgroundColor: 'rgba(0,0,0, 0.15)',
   },
   text: {
     color: '#fff',
