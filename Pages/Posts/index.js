@@ -164,7 +164,7 @@ class AllPosts extends React.PureComponent {
         }
       }
     }
-    if (type === undefined) fetchPosts(20, true, 1, false)
+    if (type === 'all') fetchPosts(20, true, 1, false)
   }
 
   _keyExtractor = (item) => `_${item.id}`
