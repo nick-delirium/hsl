@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { Notifications } from 'expo'
+import { Platform } from 'react-native'
 import * as Permissions from 'expo-permissions'
 import Constants from 'expo-constants';
 
@@ -27,6 +28,23 @@ function registerForPushNotificationsAsync() {
       throw new Error(e)
     }
   })
+}
+
+export function dismissNotifications() {
+  if (Platform.OS === 'ios') {
+    Notifications.setBadgeNumberAsync(0)
+  } else {
+    Notifications.dismissAllNotificationsAsync()
+  }
+}
+
+export function createAndroidNotificationChanel() {
+  if (Platform.OS === 'android') {
+    Notifications.createChannelAndroidAsync('new-posts', {
+      name: 'New posts',
+      sound: true,
+    });
+  }
 }
 
 export default registerForPushNotificationsAsync

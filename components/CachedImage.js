@@ -133,11 +133,14 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     alignSelf: 'flex-start',
     top: -180,
-    backgroundColor: 'rgba(0,0,0, 0.15)',
+    // backgroundColor: 'rgba(0,0,0, 0.15)',
   },
   text: {
     color: '#fff',
     fontWeight: 'bold',
+    textShadowColor: 'rgba(0,0,0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 3,
   },
 })
 

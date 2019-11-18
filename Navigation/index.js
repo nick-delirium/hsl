@@ -16,7 +16,7 @@ import { client as gqlClient, subscribeToPush } from '@/Pages/OKBK/gqlQueries'
 import api from '@/api'
 import { setData as setArticle } from '@/Pages/Posts/components/Articles/articleReducer'
 import { setEvent } from '@/Pages/Posts/components/Events/eventReducer'
-import registerForPushNotificationsAsync from '../setUpNotifications'
+import registerForPushNotificationsAsync, { dismissNotifications, createAndroidNotificationChanel } from '../setUpNotifications'
 
 Sentry.init({
   dsn: 'https://5c75f18266074671887021dc70aa309b@sentry.io/1534014',
@@ -52,6 +52,9 @@ class RouterWithDrawer extends React.PureComponent {
       console.log(e)
     }
 
+    dismissNotifications()
+    createAndroidNotificationChanel()
+
     registerForPushNotificationsAsync()
       .then(async (token) => {
         const possibleToken = userToken()
@@ -65,6 +68,7 @@ class RouterWithDrawer extends React.PureComponent {
                 token,
               },
             })
+              .then(r => console.log(r))
           } catch (e) {
             throw new Error(e)
           }
