@@ -229,7 +229,7 @@ export default function (state = initialState, action) {
     case FETCH_ALLPOSTS_SUCCESS:
       return {
         ...state,
-        data: [...state.posts, ...action.payload],
+        data: [...state.data, ...action.payload],
         isLoading: false,
       }
     case FETCH_ALLPOSTS_FAIL:

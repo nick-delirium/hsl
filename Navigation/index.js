@@ -68,7 +68,6 @@ class RouterWithDrawer extends React.PureComponent {
                 token,
               },
             })
-              .then(r => console.log(r))
           } catch (e) {
             throw new Error(e)
           }
@@ -91,6 +90,7 @@ class RouterWithDrawer extends React.PureComponent {
     const isRedirectPush = Boolean(notification.data.id)
     if (isRedirectPush) {
       const { id, type } = notification.data
+      console.log(notification.data)
       this.findRedirectToArticle(id, type)
     }
   }
@@ -113,10 +113,12 @@ class RouterWithDrawer extends React.PureComponent {
           id,
           title: get(post, 'title.rendered', ''),
           mediaUrl,
+          link: post.link,
           content: post.content,
         }
         const eventData = {
           ...postData,
+          link: post.url,
           title: get(post, 'title', ''),
           description: get(post, 'description', ''),
           dateStart: get(post, 'start_date', '2019-01-01 00:00:00'),

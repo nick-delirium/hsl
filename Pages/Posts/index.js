@@ -82,7 +82,7 @@ class AllPosts extends React.PureComponent {
 
     if (type === 'events') {
       const startDate = formatEventDate()
-      fetchEvents(startDate, undefined, undefined, treshold, page)
+      fetchEvents(startDate, undefined, undefined, false, page)
       this.setState({ page, isEndListLoading: false })
     } else {
       const category = categories.find((cat) => (cat.slug === type))
@@ -90,17 +90,17 @@ class AllPosts extends React.PureComponent {
         if (category && category.id) {
           if (type === 'blogs' && subCategories.length > 0) {
             const catIds = subCategories.join(',')
-            fetchByCategory(catIds, treshold, undefined, category.id, page)
+            fetchByCategory(catIds, treshold, undefined, category.id, page, false)
             this.setState({ page, isEndListLoading: false })
           } else {
-            fetchByCategory(category.id, treshold, undefined, undefined, page)
+            fetchByCategory(category.id, treshold, undefined, undefined, page, false)
             this.setState({ page, isEndListLoading: false })
           }
         } else {
           console.log(`Error: category ${type} not found`)
         }
       } else {
-        fetchPosts(treshold, false, page)
+        fetchPosts(treshold, false, page, false)
         this.setState({ page, isEndListLoading: false })
       }
     }
