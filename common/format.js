@@ -30,9 +30,9 @@ export const formatDate = (date, splitBy = ' ') => {
 
 export const formatDateAsNumeric = (date) => {
   const dateObj = new Date(date)
-  let day = `${dateObj.getDate()}`
+  let day = `${dateObj.getUTCDate()}`
   day = day.length === 2 ? day : `0${day}`
-  return `${day}.${dateObj.getMonth() + 1}.${dateObj.getFullYear()}`
+  return `${day}.${dateObj.getUTCMonth() + 1}.${dateObj.getUTCFullYear()}`
 }
 
 export const formatText = (text, noDots) => text.replace(/<[^>]*>/g, '') + (!noDots ? '...' : '')
