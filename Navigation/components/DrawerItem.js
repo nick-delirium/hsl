@@ -50,6 +50,7 @@ class DrawerItem extends React.PureComponent {
       <TouchableOpacity
         onPress={() => this.onItemPress(href)}
         style={styles.button}
+        disabled={isActive}
       >
         <Text
           style={[

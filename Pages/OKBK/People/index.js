@@ -8,8 +8,8 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
-  Linking,
 } from 'react-native'
+import * as WebBrowser from 'expo-web-browser'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
@@ -24,7 +24,9 @@ import PersonalCard from './components/PersonalCard'
 import Profile from '../Profile'
 
 const { width } = Dimensions.get('window')
-const openLink = (link) => Linking.openURL(link)
+const openLink = async (link) => {
+  await WebBrowser.openBrowserAsync(link)
+}
 
 class People extends PureComponent {
   onItemPress = (item) => {

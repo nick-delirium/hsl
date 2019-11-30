@@ -1,5 +1,5 @@
 /* eslint-disable no-lonely-if */
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import {
   StyleSheet,
   View,
@@ -12,7 +12,7 @@ import * as FileSystem from 'expo-file-system'
 import get from 'lodash/get'
 import cacheFolder from '../constants/cacheFolder'
 
-class CachedImage extends Component {
+class CachedImage extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {

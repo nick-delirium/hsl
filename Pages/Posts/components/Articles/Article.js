@@ -6,7 +6,6 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-  Linking,
   Platform,
   Dimensions,
 } from 'react-native'
@@ -17,51 +16,40 @@ import { compose } from 'redux'
 import get from 'lodash/get'
 import HTML from 'react-native-render-html'
 import { createStructuredSelector } from 'reselect'
-import { changeLocation } from '@/Navigation/reducer'
+import * as WebBrowser from 'expo-web-browser'
+import { togglePost } from '@/Navigation/reducer'
 import CachedImage from '@/components/CachedImage'
-import { setData } from './articleReducer'
+import { setData as setArticle } from '@/Pages/Posts/components/Articles/articleReducer'
+import { setEvent } from '@/Pages/Posts/components/Events/eventReducer'
+import findPost from '@/common/findPost'
+import api from '@/api'
 
 
 const { width } = Dimensions.get('window')
 
-class Article extends React.PureComponent {
+class Article extends React.Component {
   componentDidMount() {
     this.refs._scrollRef.scrollTo({ x: 0, y: 0, animated: false })
   }
 
-  onLinkPress = (url) => {
-    const { setPost, allPosts } = this.props
-    // TODO: fetch exact post instead of search by allPosts
-    const found = allPosts.find((post) => (post.link === url))
-
-    // TODO: load events
-    // if (url.startsWith('https://hansanglab.com')) {
-    //   urlParts = url.split('/')
-    //   if (urlParts[3] === 'event') {
-    //     let newPath = `${urlParts[3]}/${urlParts[4]}`
-    //   }
-    // }
-
-    if (found) {
-      const article = {
-        title: found.title.rendered,
-        link: found.link,
-        mediaUrl: found.mediaUrl,
-        id: found.id,
-        categories: found.categories,
-        content: found.content,
-      }
-
-      // const newPath = `post/${found.id}`
-      setPost(article)
-      // history.push(newPath)
-      // changeLoc(newPath)
+  onLinkPress = async (url) => {
+    const { actions } = this.props
+    if (url.startsWith('https://hansanglab.com')) {
+      const urlParts = url.split('/').filter(Boolean)
+      const isEvent = urlParts[2] === 'event'
+      const type = isEvent ? 'event' : 'article'
+      const setAction = isEvent ? actions.setEvent : actions.setArticle
+      const slug = urlParts[urlParts.length - 1]
+      const fetchUrl = isEvent ? api.getEventBySlug(slug) : api.getPostBySlug(slug)
+      findPost(type, fetchUrl, setAction, actions.togglePost)
     } else {
-      Linking.openURL(url)
+      await WebBrowser.openBrowserAsync(url)
     }
   }
 
-  onRemoteUrlPress = (url) => Linking.openURL(url)
+  onRemoteUrlPress = async (url) => {
+    await WebBrowser.openBrowserAsync(url)
+  }
 
   render() {
     const {
@@ -202,8 +190,11 @@ const HTMLStyles = StyleSheet.create({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  changeLoc: (path) => dispatch(changeLocation(path)),
-  setPost: (article) => dispatch(setData(article)),
+  actions: {
+    setArticle: (article) => dispatch(setArticle(article)),
+    setEvent: (event) => dispatch(setEvent(event)),
+    togglePost: (isOpen, type) => dispatch(togglePost(isOpen, type)),
+  },
 })
 
 const mapStateToProps = createStructuredSelector({

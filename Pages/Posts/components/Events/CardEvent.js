@@ -72,6 +72,9 @@ class CardEvent extends React.Component {
     const startDate = formatDate(dateStart)
     const endDate = formatDate(dateEnd)
     if (!startDate) return null
+    const oneDay = allDay || startDate.date === endDate.date
+    const showTime = oneDay && startDate.time !== '00:00'
+
     return (
       <Card onItemPress={this.onItemPress}>
         {image && (
@@ -107,11 +110,11 @@ class CardEvent extends React.Component {
               />
               <View>
                 <Text style={{ color: '#525252' }}>
-                  {startDate ? `${startDate.date} - ${endDate.date}` : ''}
+                  {`${startDate.date}${!oneDay ? (`- ${endDate.date}`) : ''}`}
                 </Text>
               </View>
             </View>
-            {allDay && (
+            {showTime && (
               <View style={{ ...styles.row, flex: 1.5 }}>
                 <Image
                   source={require('@/assets/images/time-circle-icon.png')}

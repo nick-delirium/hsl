@@ -9,32 +9,30 @@ import {
 } from 'react-native'
 import { social } from '@/constants/contacts'
 
-const onLinkPress = ({ url, iosUrl, andrUrl, isEmail }) => {
+const onLinkPress = ({ url, iosUrl, andrUrl }) => {
   const appUrl = Platform.OS === 'ios' ? iosUrl : andrUrl
-  Linking.canOpenURL(appUrl).then(supported => {
+  Linking.canOpenURL(appUrl).then((supported) => {
     if (supported) {
       return Linking.openURL(appUrl)
-    } else {
-      return Linking.openURL(url)
     }
+    return Linking.openURL(url)
   })
 }
 
 const Social = () => (
   <View style={styles.socialBlock}>
-    {social.map(item => (
-        <TouchableOpacity
-          key={item.name}
-          onPress={() => onLinkPress(item)}
-        >
-          <Image
-            style={styles.image}
-            resizeMode="contain"
-            source={item.image}
-          />
-        </TouchableOpacity>
-      )
-    )}
+    {social.map((item) => (
+      <TouchableOpacity
+        key={item.name}
+        onPress={() => onLinkPress(item)}
+      >
+        <Image
+          style={styles.image}
+          resizeMode="contain"
+          source={item.image}
+        />
+      </TouchableOpacity>
+    ))}
   </View>
 )
 
@@ -52,8 +50,7 @@ const styles = StyleSheet.create({
   image: {
     height: 20,
     maxWidth: 25,
-  }
+  },
 })
 
 export default React.memo(Social)
-

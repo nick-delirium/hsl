@@ -3,7 +3,6 @@ const SET_DATA = 'app.article.set'
 export const setData = (article) => ({
   type: SET_DATA,
   payload: article,
-  inAppLink: '',
 })
 
 const initialState = {}

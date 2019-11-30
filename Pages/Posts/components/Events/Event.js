@@ -6,8 +6,8 @@ import {
   Text,
   ScrollView,
   Image,
-  Linking,
 } from 'react-native'
+import * as WebBrowser from 'expo-web-browser'
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
@@ -15,34 +15,31 @@ import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import HTML from 'react-native-render-html'
 import Dimensions from 'Dimensions'
-import { changeLocation } from '@/Navigation/reducer'
+import { togglePost } from '@/Navigation/reducer'
+import { setData as setArticle } from '@/Pages/Posts/components/Articles/articleReducer'
+import { setEvent } from '@/Pages/Posts/components/Events/eventReducer'
 import CachedImage from '@/components/CachedImage'
 import { formatDate } from '@/common/format'
+import findPost from '@/common/findPost'
+import api from '@/api'
 
 class Event extends React.PureComponent {
   componentDidMount() {
     this.refs._scrollRef.scrollTo({ x: 0, y: 0, animated: false })
   }
 
-  onLinkPress = (url) => {
-    const { setPost, allPosts } = this.props
-    const found = allPosts.find((post) => (post.link === url))
-
-    if (found) {
-      const article = {
-        title: found.title.rendered,
-        mediaUrl: found.mediaUrl,
-        id: found.id,
-        categories: found.categories,
-        content: found.content,
-      }
-
-      // const newPath = `post/${found.id}`
-      setPost(article)
-      // history.push(newPath)
-      // changeLoc(newPath)
+  onLinkPress = async (url) => {
+    const { actions } = this.props
+    if (url.startsWith('https://hansanglab.com')) {
+      const urlParts = url.split('/').filter(Boolean)
+      const isEvent = urlParts[2] === 'event'
+      const type = isEvent ? 'event' : 'article'
+      const setAction = isEvent ? actions.setEvent : actions.setArticle
+      const slug = urlParts[urlParts.length - 1]
+      const fetchUrl = isEvent ? api.getEventBySlug(slug) : api.getPostBySlug(slug)
+      findPost(type, fetchUrl, setAction, actions.togglePost)
     } else {
-      Linking.openURL(url)
+      await WebBrowser.openBrowserAsync(url)
     }
   }
 
@@ -67,6 +64,8 @@ class Event extends React.PureComponent {
     const { width } = Dimensions.get('window')
     const startDate = formatDate(dateStart)
     const endDate = formatDate(dateEnd)
+    const oneDay = allDay || startDate.date === endDate.date
+    const showTime = oneDay && startDate.time !== '00:00'
 
     return (
       <ScrollView ref="_scrollRef" contentContainerStyle={styles.scrollview}>
@@ -100,9 +99,11 @@ class Event extends React.PureComponent {
 
           <View style={{ ...styles.row, paddingtop: 16 }}>
             <Image source={require('@/assets/images/calendar-icon.png')} style={styles.icon} />
-            <Text style={{ flex: 0.9 }}>{`${startDate.date} - ${endDate.date}`}</Text>
+            <Text style={{ flex: 0.9 }}>
+              {`${startDate.date}${!oneDay ? (`- ${endDate.date}`) : ''}`}
+            </Text>
           </View>
-          {allDay && (
+          {showTime && (
             <View style={styles.row}>
               <Image source={require('@/assets/images/time-icon.png')} style={styles.icon} />
               <Text style={{ flex: 0.9 }}>{`${startDate.time} - ${endDate.time}`}</Text>
@@ -206,7 +207,11 @@ const HTMLStyles = StyleSheet.create({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  changeLoc: (path) => dispatch(changeLocation(path)),
+  actions: {
+    setArticle: (article) => dispatch(setArticle(article)),
+    setEvent: (event) => dispatch(setEvent(event)),
+    togglePost: (isOpen, type) => dispatch(togglePost(isOpen, type)),
+  },
 })
 
 const mapStateToProps = createStructuredSelector({

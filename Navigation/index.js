@@ -10,13 +10,15 @@ import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router-native'
 import DrawerPanel from './components/DrawerPanel'
 import RouterView from '../router'
-import { togglePost } from './reducer'
+import { togglePost, changeLocation } from './reducer'
 import { goBack } from '@/Pages/OKBK/reducer'
 import { client as gqlClient, subscribeToPush } from '@/Pages/OKBK/gqlQueries'
 import api from '@/api'
+import { getPosts } from '@/Pages/Posts/reducer'
 import { setData as setArticle } from '@/Pages/Posts/components/Articles/articleReducer'
 import { setEvent } from '@/Pages/Posts/components/Events/eventReducer'
 import registerForPushNotificationsAsync, { dismissNotifications, createAndroidNotificationChanel } from '../setUpNotifications'
+import findPost from '@/common/findPost'
 
 Sentry.init({
   dsn: 'https://5c75f18266074671887021dc70aa309b@sentry.io/1534014',
@@ -101,49 +103,18 @@ class RouterWithDrawer extends React.PureComponent {
     const route = isEvent ? '/events' : '/'
     const setAction = isEvent ? actions.setEvent : actions.setArticle
     history.push(route)
-    fetch(api.getPost(id, isEvent))
-      .then((r) => r.json())
-      .then(async (post) => {
-        const opFailStatus = get(post, 'data.status', 0)
-        if (opFailStatus === 404) return
-        const mediaUrl = get(post, '_links.wp:featuredmedia.href', null)
-          || `https://hansanglab.com/wp-json/wp/v2/media/${get(post, 'featured_media')}`
-
-        const postData = {
-          id,
-          title: get(post, 'title.rendered', ''),
-          mediaUrl,
-          link: post.link,
-          content: post.content,
-        }
-        const eventData = {
-          ...postData,
-          link: post.url,
-          title: get(post, 'title', ''),
-          description: get(post, 'description', ''),
-          dateStart: get(post, 'start_date', '2019-01-01 00:00:00'),
-          dateEnd: get(post, 'end_date', '2019-01-01 00:00:00'),
-          organizer: get(post, 'organizer', ''),
-          url: get(post, 'website', ''),
-          place: get(post, 'venue', ''),
-          allDay: get(post, 'allDay', false),
-          image: get(post, 'image.url'),
-        }
-
-        const itemData = isEvent ? eventData : postData
-        const inAppLink = await Linking.makeUrl('redirect', { type: `${type}Z${id}` })
-
-        setAction({ ...itemData, inAppLink })
-        actions.togglePost(true, type)
-      })
-      .catch((e) => console.error(e))
+    actions.changeLocation(route)
+    const fetchUrl = api.getPost(id, isEvent)
+    findPost(type, fetchUrl, setAction, actions.togglePost)
   }
 
   handleRedirect = (event) => {
+    const { actions } = this.props
     const { path, queryParams } = Linking.parse(event.url)
     if (path.includes('redirect')) {
       console.log(event.url, path, queryParams)
       const [type, id] = queryParams.type.split('Z')
+      actions.fetchPosts(undefined, true)
       this.findRedirectToArticle(id, type)
     }
   }
@@ -233,6 +204,7 @@ const mapStateFromProps = createStructuredSelector({
   isPostOpen: (state) => get(state, 'url.isPostOpen'),
   tabHistory: (state) => get(state, 'okbk.tabHistory', []),
   fakeHistory: (state) => get(state, 'okbk.fakeHistory'),
+  path: (state) => get(state, 'url.path'),
 })
 
 const mapDispatchToProps = (dispatch) => ({
@@ -241,6 +213,8 @@ const mapDispatchToProps = (dispatch) => ({
     goBack: () => dispatch(goBack()),
     setArticle: (article) => dispatch(setArticle(article)),
     setEvent: (event) => dispatch(setEvent(event)),
+    fetchPosts: (limit, isRefresh) => dispatch(getPosts(limit, isRefresh)),
+    changeLocation: (path) => dispatch(changeLocation(path)),
   },
 })
 

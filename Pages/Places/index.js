@@ -10,6 +10,7 @@ import {
   Image,
   Share,
 } from 'react-native'
+import * as WebBrowser from 'expo-web-browser'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
 import MapView from 'react-native-maps'
@@ -108,11 +109,11 @@ class Places extends PureComponent {
     )
   }
 
-  onCardSitePress = () => {
+  onCardSitePress = async () => {
     const { selectedMarker } = this.state
     const url = !selectedMarker.website.startsWith('http')
       ? `https://${selectedMarker.website}` : selectedMarker.website
-    return Linking.openURL(url)
+    await WebBrowser.openBrowserAsync(url)
   }
 
   share = async (place) => {

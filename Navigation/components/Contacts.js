@@ -2,21 +2,21 @@ import React from 'react'
 import {
   StyleSheet,
   View,
-  Linking,
   TouchableOpacity,
   Text,
 } from 'react-native'
+import * as WebBrowser from 'expo-web-browser'
 import { contacts } from '@/constants/contacts'
 import fonts from '@/constants/Styles'
 
-const onLinkPress = ({ path, isEmail }) => {
-  Linking.openURL(`${isEmail ? 'mailto:' : 'https://'}${path}`)
+const onLinkPress = async ({ path, isEmail }) => {
+  await WebBrowser.openBrowserAsync(`${isEmail ? 'mailto:' : 'https://'}${path}`)
 }
 
 const Contacts = () => (
   <View style={styles.background}>
     <Text style={styles.heading}>Редакция</Text>
-    {contacts.map(item => (
+    {contacts.map((item) => (
       <TouchableOpacity
         key={item.path}
         style={styles.contacts}
@@ -56,12 +56,12 @@ const styles = StyleSheet.create({
   },
   anchor: {
     fontSize: fonts.small,
-    color: '#333376'
+    color: '#333376',
   },
   text: {
     fontSize: fonts.small,
     color: '#959595',
-  }
+  },
 })
 
 export default React.memo(Contacts)

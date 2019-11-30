@@ -11,6 +11,7 @@ const getPostsByCategory = (category, limit, page = 1) => `${url}/posts?categori
 const getPromoCards = (limit) => getPostsByCategory(617, limit)
 const getCategories = () => `${url}/categories?per_page=100&orderby=count&order=desc`
 const getPostBySlug = (slug) => `${url}/posts?slug=${slug}`
+const getEventBySlug = (slug) => `${mainUrl}/tribe/events/v1/events/by-slug/${slug}`
 const getEvents = (startDate, endDate, limit, page) => (
   `${mainUrl}/tribe/events/v1/events/?per_page=${limit}&status=publish&start_date=${startDate}${endDate ? `&end_date=${endDate}` : ''}&page=${page}`
 )
@@ -24,6 +25,7 @@ export default {
   getPostsByCategory,
   getCategories,
   getPostBySlug,
+  getEventBySlug,
   getEvents,
   search,
   getPlaces,
