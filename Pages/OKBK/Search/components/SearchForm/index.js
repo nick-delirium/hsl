@@ -4,14 +4,11 @@ import {
   TextInput,
   TouchableOpacity,
   Image,
-  Dimensions,
   StyleSheet,
 } from 'react-native'
 import Icon from '@/assets/images/search-icon.png'
 import fonts from '@/constants/Styles'
 import colors from '../../../colors'
-
-const { width } = Dimensions.get('window')
 
 const SearchForm = ({
   setFieldValue,
@@ -21,7 +18,7 @@ const SearchForm = ({
 }) => {
   const onTextChange = useCallback((value) => setFieldValue(value), [searchFieldValue])
   return (
-    <View style={{ width, padding: 10, backgroundColor: '#333376' }}>
+    <View style={styles.formWrapper}>
       <View style={styles.inputWrapper}>
         <TextInput
           enablesReturnKeyAutomatically
@@ -39,13 +36,7 @@ const SearchForm = ({
           onSubmitEditing={getUsers}
         />
         <TouchableOpacity
-          style={{
-            paddingRight: 15,
-            paddingLeft: 15,
-            paddingTop: 5,
-            paddingBottom: 5,
-            marginLeft: 'auto',
-          }}
+          style={styles.searchIcon}
           onPress={getUsers}
         >
           <Image
@@ -59,11 +50,15 @@ const SearchForm = ({
 }
 
 const styles = StyleSheet.create({
+  formWrapper: {
+    flex: 1,
+    backgroundColor: '#333376',
+    marginLeft: 5,
+  },
   inputWrapper: {
     width: '100%',
     backgroundColor: 'rgba(255,255,255, 0.2)',
     borderRadius: 3,
-    marginTop: 5,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -73,6 +68,13 @@ const styles = StyleSheet.create({
     paddingRight: 0,
     color: colors.text,
     fontSize: fonts.normal,
+  },
+  searchIcon: {
+    paddingRight: 15,
+    paddingLeft: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+    marginLeft: 'auto',
   },
 })
 

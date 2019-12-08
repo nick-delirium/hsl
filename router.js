@@ -57,7 +57,7 @@ const RouterView = ({
       type={type}
       isPostOpen={isPostOpen}
     />
-    {shouldDisplayOKBKHeader && <FakeHeader />}
+    {shouldDisplayOKBKHeader && <FakeHeader openDrawer={openDrawer} />}
     <Route exact path={pages.all.path} render={() => <Posts type="all" />} />
     <Route path={pages.news.path} render={() => (<Posts type="news" />)} />
     <Route path={pages.events.path} render={() => (<Posts type="events" />)} />

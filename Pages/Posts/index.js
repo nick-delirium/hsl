@@ -282,6 +282,7 @@ class AllPosts extends React.PureComponent {
             keyExtractor={this._keyExtractor}
             onEndReached={dataWithMedia.length > 5 ? this.loadMoreData : null}
             removeClippedSubviews
+            maxToRenderPerBatch={8}
             onEndReachedThreshold={0.5}
             ListHeaderComponent={type === 'blogs' ? (<BlogCategories />) : undefined}
           />
