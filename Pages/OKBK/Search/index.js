@@ -3,7 +3,6 @@ import {
   ActivityIndicator,
   StyleSheet,
   View,
-  Keyboard,
   Dimensions,
   ScrollView,
 } from 'react-native'
@@ -20,15 +19,15 @@ import {
 import {
   client,
   getClubsQuery,
-  getUsersQuery,
   getAreasQuery,
   getCitiesListQuery,
 } from '../gqlQueries'
 import DefaultSearchTerms from './components/DefaultSearchTerms'
-import SearchForm from './components/SearchForm'
 import PersonalCard from '../People/components/PersonalCard'
 import Profile from '../Profile'
 import Colors from '@/constants/Colors'
+import useSearch from './hooks/useSearch'
+import useActiveTab from './hooks/useActiveTab'
 
 const { width } = Dimensions.get('window')
 const PANEL_TABS = {
@@ -64,8 +63,8 @@ const getProperEntryData = (tabName, rawData) => {
 
 const Search = ({ actions, foundData, personalInfo }) => {
   const { promiseInProgress } = usePromiseTracker()
-  const [searchFieldValue, setFieldValue] = useState('')
-  const [activeTab, setActiveTab] = useState('areas')
+  const { activeTab, setActiveTab } = useActiveTab()
+  const { getUsers } = useSearch('', activeTab, actions.setFoundData)
   const [shownEntries, setEntries] = useState([])
 
   const onTabPress = useCallback((tab) => {
@@ -73,6 +72,7 @@ const Search = ({ actions, foundData, personalInfo }) => {
   }, [activeTab])
 
   useEffect(() => {
+    actions.changeTitle('Поиск по ОКБК', true)
     const getEntries = () => {
       const { query } = PANEL_TABS[activeTab]
       trackPromise(
@@ -85,33 +85,6 @@ const Search = ({ actions, foundData, personalInfo }) => {
     }
     getEntries()
   }, [activeTab])
-
-  const getUsers = useCallback((id, fromItem = false) => {
-    if (searchFieldValue === '' && !fromItem) return
-    Keyboard.dismiss()
-    const searchByItem = {
-      business_club_id: activeTab === 'okbk' ? id : undefined,
-      business_area_id: activeTab === 'areas' ? id : undefined,
-      city_id: activeTab === 'cities' ? id : undefined,
-    }
-    const searchByQuery = {
-      search: searchFieldValue,
-    }
-
-    trackPromise(
-      client.query({
-        query: getUsersQuery,
-        variables: fromItem ? searchByItem : searchByQuery,
-      })
-        .then((response) => {
-          const resultData = {
-            asked: true,
-            data: response.data.users.users.length > 0 ? response.data.users.users : [],
-          }
-          actions.setFoundData(resultData)
-        }),
-    )
-  }, [searchFieldValue, activeTab])
 
   const onUserCardPress = (item) => {
     actions.changeTitle(`${item.last_name} ${item.first_name}`, true)
@@ -135,12 +108,6 @@ const Search = ({ actions, foundData, personalInfo }) => {
           <Profile />
         </View>
       )}
-      <SearchForm
-        setFieldValue={setFieldValue}
-        searchFieldValue={searchFieldValue}
-        placeholder="ОКБК"
-        getUsers={getUsers}
-      />
       <View style={{ flex: 1, position: 'relative', backgroundColor: Colors.backgroundGray }}>
         {promiseInProgress ? (
           <View style={styles.indicatorWrapper}>
