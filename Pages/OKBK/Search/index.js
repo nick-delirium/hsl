@@ -26,7 +26,7 @@ import DefaultSearchTerms from './components/DefaultSearchTerms'
 import PersonalCard from '../People/components/PersonalCard'
 import Profile from '../Profile'
 import Colors from '@/constants/Colors'
-import useSearch from './hooks/useSearch'
+import useMemberSearch from './hooks/useMemberSearch'
 import useActiveTab from './hooks/useActiveTab'
 
 const { width } = Dimensions.get('window')
@@ -64,7 +64,7 @@ const getProperEntryData = (tabName, rawData) => {
 const Search = ({ actions, foundData, personalInfo }) => {
   const { promiseInProgress } = usePromiseTracker()
   const { activeTab, setActiveTab } = useActiveTab()
-  const { getUsers } = useSearch('', activeTab, actions.setFoundData)
+  const { getUsers } = useMemberSearch('', activeTab, actions.setFoundData)
   const [shownEntries, setEntries] = useState([])
 
   const onTabPress = useCallback((tab) => {
