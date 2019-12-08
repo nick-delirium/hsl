@@ -28,7 +28,9 @@ class Login extends PureComponent {
     this.emailRef = React.createRef()
     this.state = {
       email: '',
+      emailInvalid: false,
       password: '',
+      showError: true,
     }
   }
 
@@ -36,18 +38,31 @@ class Login extends PureComponent {
     const { email } = this.state
     const isValid = email.length > 5
       && email.includes('@')
-    if (isValid) this.passwordRef.current.focus()
+    if (isValid) {
+      this.setState({ emailInvalid: false })
+      this.passwordRef.current.focus()
+    } else {
+      this.setState({ emailInvalid: true })
+    }
   }
 
   onSubmit = () => {
     const { email, password } = this.state
 
     const { actions } = this.props
-    if (email !== '' && password !== '') actions.singIn({ email, password })
+    if (email !== '' && password !== '') {
+      this.setState({ emailInvalid: false, showError: true })
+      actions.singIn({ email, password })
+    }
   }
 
   render() {
-    const { email, password } = this.state
+    const {
+      email,
+      emailInvalid,
+      password,
+      showError,
+    } = this.state
     const { error } = this.props
     const isDisabled = email === '' || password === ''
     return (
@@ -58,7 +73,7 @@ class Login extends PureComponent {
 
           <View style={styles.form}>
 
-            <View style={styles.inputWrapper}>
+            <View style={{ ...styles.inputWrapper, borderColor: emailInvalid ? '#B62655' : 'transparent' }}>
               <TextInput
                 enablesReturnKeyAutomatically
                 blurOnSubmit={false}
@@ -67,7 +82,9 @@ class Login extends PureComponent {
                 autoCapitalize="none"
                 keyboardAppearance="dark"
                 keyboardType="email-address"
-                onChangeText={(value) => this.setState({ email: value })}
+                onChangeText={(value) => {
+                  this.setState({ email: value, showError: false })
+                }}
                 placeholder="Почта"
                 placeholderTextColor="rgba(255, 255, 255, 0.3)"
                 returnKeyType="next"
@@ -98,8 +115,13 @@ class Login extends PureComponent {
                 onSubmitEditing={this.onSubmit}
               />
             </View>
-            {error && (
-              <Text style={{ color: 'white', marginTop: 20 }}>{error}</Text>
+            {showError && error && (
+              <View style={{ alignItems: 'center', marginTop: 20, width: '100%' }}>
+                <View style={styles.triangle} />
+                <View style={styles.error}>
+                  <Text style={{ color: '#B62655', textAlign: 'center' }}>{error}</Text>
+                </View>
+              </View>
             )}
             <TouchableOpacity
               onPress={this.onSubmit}
@@ -107,6 +129,7 @@ class Login extends PureComponent {
                 ...styles.button,
                 backgroundColor: isDisabled ? '#e05a86' : '#B62655',
               }}
+              disabled={isDisabled}
               activeOpacity={0.6}
             >
               <StyledText>
@@ -142,13 +165,15 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     paddingLeft: 25,
     paddingRight: 25,
-    marginTop: 30,
+    marginTop: 20,
   },
   inputWrapper: {
     width: '100%',
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderRadius: 3,
     marginTop: 5,
+    borderWidth: 1,
+    borderColor: 'transparent',
   },
   input: {
     width: '100%',
@@ -174,6 +199,24 @@ const styles = StyleSheet.create({
   },
   logo: {
     height: '40%',
+  },
+  triangle: {
+    width: 0,
+    height: 0,
+    backgroundColor: 'transparent',
+    borderStyle: 'solid',
+    borderLeftWidth: 6,
+    borderRightWidth: 6,
+    borderBottomWidth: 4,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: '#CFCFF9',
+  },
+  error: {
+    backgroundColor: '#CFCFF9',
+    padding: 8,
+    borderRadius: 3,
+    width: '100%',
   },
 })
 
