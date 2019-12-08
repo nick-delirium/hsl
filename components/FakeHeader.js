@@ -15,7 +15,7 @@ import {
   defaultSearchResult,
 } from '../Pages/OKBK/reducer'
 import SearchForm from '../Pages/OKBK/Search/components/SearchForm'
-import useSearch from '../Pages/OKBK/Search/hooks/useSearch'
+import useMemberSearch from '../Pages/OKBK/Search/hooks/useMemberSearch'
 import useActiveTab from '../Pages/OKBK/Search/hooks/useActiveTab'
 
 const Header = ({
@@ -27,7 +27,7 @@ const Header = ({
 }) => {
   const { activeTab: activeSearchTab } = useActiveTab()
   const shouldRenderBackButton = currentTab !== 'okbkSearch'
-  const { searchFieldValue, setFieldValue, getUsers } = useSearch('', activeSearchTab, actions.setFoundData)
+  const { searchFieldValue, setFieldValue, getUsers } = useMemberSearch('', activeSearchTab, actions.setFoundData)
 
   const goBackAction = () => {
     if (fakeHistory.length === 1) actions.setFoundData(defaultSearchResult)
@@ -75,7 +75,6 @@ const Header = ({
           <Text
             style={styles.navTitle}
           >
-            {currentTab}
             {title && title.slice(0, 23)}
             {title && title.length > 23 && '...'}
           </Text>

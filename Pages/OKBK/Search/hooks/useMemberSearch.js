@@ -6,7 +6,7 @@ import {
   getUsersQuery,
 } from '../../gqlQueries'
 
-function useSearch(initialValue = '', activeTab, setFoundData) {
+function useMemberSearch(initialValue = '', activeTab, setFoundData) {
   const [searchFieldValue, setFieldValue] = useState(initialValue)
 
   const getUsers = useCallback((id, fromItem = false) => {
@@ -43,4 +43,4 @@ function useSearch(initialValue = '', activeTab, setFoundData) {
   }
 }
 
-export default useSearch
+export default useMemberSearch
