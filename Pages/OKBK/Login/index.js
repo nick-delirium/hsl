@@ -7,17 +7,27 @@ import {
   StyleSheet,
   Dimensions,
   Text,
+  Linking,
 } from 'react-native'
 import { connect } from 'react-redux'
-import colors from '../colors'
+import colors from '@/constants/Colors'
 import fonts from '@/constants/Styles'
 import { singIn } from '../reducer'
 
 const { height } = Dimensions.get('window')
 const { width } = Dimensions.get('window')
 
-const StyledText = ({ children, withMargin }) => (
-  <Text style={{ ...styles.text, marginTop: withMargin ? 20 : 0 }}>{children}</Text>
+const StyledText = ({ children, style, onPress }) => (
+  <Text
+    style={{
+      ...styles.text,
+      ...style,
+      textAlign: 'center',
+    }}
+    onPress={onPress}
+  >
+    {children}
+  </Text>
 )
 
 class Login extends PureComponent {
@@ -28,9 +38,9 @@ class Login extends PureComponent {
     this.emailRef = React.createRef()
     this.state = {
       email: '',
-      emailInvalid: false,
+      isEmailInvalid: false,
       password: '',
-      showError: true,
+      shouldShowError: true,
     }
   }
 
@@ -39,10 +49,10 @@ class Login extends PureComponent {
     const isValid = email.length > 5
       && email.includes('@')
     if (isValid) {
-      this.setState({ emailInvalid: false })
+      this.setState({ isEmailInvalid: false })
       this.passwordRef.current.focus()
     } else {
-      this.setState({ emailInvalid: true })
+      this.setState({ isEmailInvalid: true })
     }
   }
 
@@ -51,7 +61,7 @@ class Login extends PureComponent {
 
     const { actions } = this.props
     if (email !== '' && password !== '') {
-      this.setState({ emailInvalid: false, showError: true })
+      this.setState({ isEmailInvalid: false, shouldShowError: true })
       actions.singIn({ email, password })
     }
   }
@@ -59,21 +69,31 @@ class Login extends PureComponent {
   render() {
     const {
       email,
-      emailInvalid,
+      isEmailInvalid,
       password,
-      showError,
+      shouldShowError,
     } = this.state
     const { error } = this.props
     const isDisabled = email === '' || password === ''
     return (
       <View style={styles.pageWrapper}>
         <View style={styles.formWrapper}>
-          <StyledText> Для просмотра </StyledText>
-          <StyledText> необходима авторизация </StyledText>
+          <StyledText style={{ fontWeight: 'bold', color: colors.orange }}>
+            {'Вход для членов\nзакрытого бизнес-клуба\nОКБК'}
+          </StyledText>
+          <StyledText style={{ marginTop: 10 }}>
+            {'По всем вопросам\nобращайтесь по эл.почте:'}
+          </StyledText>
+          <StyledText
+            style={{ color: colors.orange }}
+            onPress={() => Linking.openURL('mailto:info@hansanglab.com')}
+          >
+            info@hansanglab.com
+          </StyledText>
 
           <View style={styles.form}>
 
-            <View style={{ ...styles.inputWrapper, borderColor: emailInvalid ? '#B62655' : 'transparent' }}>
+            <View style={{ ...styles.inputWrapper, borderColor: isEmailInvalid ? colors.red : 'transparent' }}>
               <TextInput
                 enablesReturnKeyAutomatically
                 blurOnSubmit={false}
@@ -83,7 +103,7 @@ class Login extends PureComponent {
                 keyboardAppearance="dark"
                 keyboardType="email-address"
                 onChangeText={(value) => {
-                  this.setState({ email: value, showError: false })
+                  this.setState({ email: value, shouldShowError: false })
                 }}
                 placeholder="Почта"
                 placeholderTextColor="rgba(255, 255, 255, 0.3)"
@@ -115,11 +135,11 @@ class Login extends PureComponent {
                 onSubmitEditing={this.onSubmit}
               />
             </View>
-            {showError && error && (
+            {shouldShowError && error && (
               <View style={{ alignItems: 'center', marginTop: 20, width: '100%' }}>
                 <View style={styles.triangle} />
                 <View style={styles.error}>
-                  <Text style={{ color: '#B62655', textAlign: 'center' }}>{error}</Text>
+                  <Text style={{ color: colors.red, textAlign: 'center' }}>{error}</Text>
                 </View>
               </View>
             )}
@@ -127,7 +147,7 @@ class Login extends PureComponent {
               onPress={this.onSubmit}
               style={{
                 ...styles.button,
-                backgroundColor: isDisabled ? '#e05a86' : '#B62655',
+                backgroundColor: isDisabled ? '#e05a86' : colors.red,
               }}
               disabled={isDisabled}
               activeOpacity={0.6}
@@ -153,7 +173,7 @@ const styles = StyleSheet.create({
   pageWrapper: {
     width,
     height,
-    backgroundColor: colors.loginBg,
+    backgroundColor: colors.purple,
   },
   text: {
     color: colors.text,
@@ -184,7 +204,6 @@ const styles = StyleSheet.create({
   },
   formWrapper: {
     width: '70%',
-    marginTop: 20,
     alignSelf: 'center',
     flexDirection: 'column',
     alignItems: 'center',
@@ -198,7 +217,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   logo: {
-    height: '40%',
+    height: '35%',
   },
   triangle: {
     width: 0,
