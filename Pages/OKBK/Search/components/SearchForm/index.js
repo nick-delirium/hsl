@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import Icon from '@/assets/images/search-icon.png'
 import fonts from '@/constants/Styles'
-import colors from '../../../colors'
+import colors from '@/constants/Colors'
 
 const { width } = Dimensions.get('window')
 
