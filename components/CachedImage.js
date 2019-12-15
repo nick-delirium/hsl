@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import * as FileSystem from 'expo-file-system'
 import get from 'lodash/get'
-import cacheFolder from '../constants/cacheFolder'
+import { cacheFolder } from '../constants/cacheFolder'
 
 class CachedImage extends PureComponent {
   constructor(props) {
