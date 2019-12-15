@@ -6,6 +6,7 @@ import {
   Text,
   ScrollView,
   Image,
+  Dimensions,
 } from 'react-native'
 import * as WebBrowser from 'expo-web-browser'
 import { withRouter } from 'react-router-native'
@@ -14,7 +15,6 @@ import { compose } from 'redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import HTML from 'react-native-render-html'
-import Dimensions from 'Dimensions'
 import { togglePost } from '@/Navigation/reducer'
 import { setData as setArticle } from '@/Pages/Posts/components/Articles/articleReducer'
 import { setEvent } from '@/Pages/Posts/components/Events/eventReducer'

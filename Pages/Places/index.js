@@ -13,9 +13,9 @@ import {
 import * as WebBrowser from 'expo-web-browser'
 import * as Location from 'expo-location'
 import * as Permissions from 'expo-permissions'
-import MapView from 'react-native-maps'
+import MapView from 'react-native-map-clustering'
+import { Marker } from 'react-native-maps'
 import { withRouter } from 'react-router-native'
-import ClusteredMapView from 'react-native-maps-super-cluster'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import get from 'lodash/get'
@@ -24,7 +24,6 @@ import { categories, rusCats } from '@/constants/places'
 import fonts from '@/constants/Styles'
 import { formatText } from '@/common/format'
 import { getPlaces } from './reducer'
-
 
 class Places extends PureComponent {
   constructor(props) {
@@ -90,24 +89,10 @@ class Places extends PureComponent {
         latitudeDelta: 0.3,
         longitudeDelta: 0.3,
       }
-      this.mapRef.getMapRef().animateToRegion(region, 200)
+      this.mapRef.animateToRegion(region, 200)
       // locationState === 2, permission
     }
   };
-
-  renderCluster = (cluster, onPress) => {
-    const { pointCount, coordinate } = cluster
-
-    return (
-      <MapView.Marker pinColor="#000" coordinate={coordinate} onPress={onPress}>
-        <View style={styles.marker}>
-          <Text style={{ color: '#000', textAlign: 'center', paddingTop: 5 }}>
-            {pointCount}
-          </Text>
-        </View>
-      </MapView.Marker>
-    )
-  }
 
   onCardSitePress = async () => {
     const { selectedMarker } = this.state
@@ -137,15 +122,21 @@ class Places extends PureComponent {
       case 1: // Нет разрешения на получение вашего местоположения
       case 2:
         return (
-          <ClusteredMapView
+          <MapView
             style={styles.map}
-            ref={(r) => this.mapRef = r}
+            mapRef={(r) => this.mapRef = r}
             width={width}
             height={width}
-            data={displayingMarkers || [{ geo_lat: 0, geo_lng: 0 }]}
-            renderCluster={this.renderCluster}
-            renderMarker={(location) => (
-              <MapView.Marker
+
+            initialRegion={{
+              latitude: initialMapRegion.latitude,
+              longitude: initialMapRegion.longitude,
+              latitudeDelta: 0.3,
+              longitudeDelta: 0.3,
+            }}
+          >
+            {displayingMarkers.map((location) => (
+              <Marker
                 key={location.id}
                 pinColor={rusCats[location.type] ? rusCats[location.type].color : '#000'}
                 coordinate={{
@@ -156,14 +147,8 @@ class Places extends PureComponent {
                 description={location.address}
                 onPress={() => this.onMarkerPress(location)}
               />
-            )}
-            initialRegion={{
-              latitude: initialMapRegion.latitude,
-              longitude: initialMapRegion.longitude,
-              latitudeDelta: 0.3,
-              longitudeDelta: 0.3,
-            }}
-          />
+            ))}
+          </MapView>
         )
       default:
         return (

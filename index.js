@@ -1,4 +1,4 @@
-/* eslint-disable */
+
 import React from 'react'
 import {
   StyleSheet,
@@ -15,8 +15,6 @@ import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import * as FileSystem from 'expo-file-system'
 
-// import initFirebase from './setUpFirebase'
-// import registerForPushNotificationsAsync from './setUpNotifications'
 import RouterWithDrawer from './Navigation'
 import api from './api'
 import {
@@ -27,26 +25,26 @@ import {
   fetchAllPostsReq,
   fetchAllFail,
 } from './Pages/Posts/reducer'
-import cacheFolder from './constants/cacheFolder'
+import { cacheFolder, cacheDateStorageKey } from './constants/cacheFolder'
+import { logo, defaultPostsLength } from './constants/miscConsts'
 
 class AppIndex extends React.Component {
   constructor(props) {
-    super(props);
-    SplashScreen.preventAutoHide();
+    super(props)
+    SplashScreen.preventAutoHide()
 
     this.state = {
-      fadeAnim: new Animated.Value(0),  // Initial value for opacity: 0
+      fadeAnim: new Animated.Value(0), // Initial value for opacity: 0
       isSplashReady: false,
       isAppReady: false,
-      areReasourcesReady: false,
     }
   }
 
   async componentDidMount() {
     const folder = await FileSystem.getInfoAsync(cacheFolder)
     if (!folder.exists) await FileSystem.makeDirectoryAsync(cacheFolder)
-    AsyncStorage.getItem('cachedate', async (err, result) => {
-      if (!result) return AsyncStorage.setItem('cachedate', (new Date()).toString())
+    AsyncStorage.getItem(cacheDateStorageKey, async (err, result) => {
+      if (!result) return AsyncStorage.setItem(cacheDateStorageKey, (new Date()).toString())
       const diff = (new Date(result) - new Date()) / 1000 / 24 / 60 / 60
       if (diff < -1) {
         try {
@@ -55,67 +53,73 @@ class AppIndex extends React.Component {
         } catch (e) {
           console.log(e)
         }
-        return AsyncStorage.setItem('cacheddate', (new Date()).toString())
+        return AsyncStorage.setItem(cacheDateStorageKey, (new Date()).toString())
       }
     })
   }
 
-  _cacheSplashResourcesAsync = async () => {
-    const gif = require('./assets/images/HSL-logo.png');
-    return Asset.fromModule(gif).downloadAsync()
-  }
+  _cacheSplashResourcesAsync = async () => Asset.fromModule(logo).downloadAsync()
+
 
   _cacheResourcesAsync = async () => {
     SplashScreen.hide()
-    const { posts } = this.props
-    if (!posts || posts.length ===  0) {
-      this.props.fetchPostsCustom()
-      this.props.fetchAdsCustom()
-      fetch(api.getPosts(20))
-        .then(r => r.json())
-        .then(posts => {
-          fetch(api.getPromoCards(20))
-          .then(r => r.json())
-          .then(ads => {
-            const result = posts
-              .filter(post => !post.categories.includes(617))
-              .map(
-              (post, index) => {
-                const count = index + 1
-                const shouldRenderPromo = count % 3 === 0
-                const pointer = count / 3 - 1
-                const ad = ads[pointer]
+    const {
+      posts,
+      fetchPostsCustom,
+      fetchAdsCustom,
+      fetchAdsSuccessCustom,
+      setPostsCustom,
+      fetchFail,
+    } = this.props
+    const { fadeAnim } = this.state
+    if (!posts || posts.length === 0) {
+      fetchPostsCustom()
+      fetchAdsCustom()
+      fetch(api.getPosts(defaultPostsLength))
+        .then((r) => r.json())
+        .then((fetchedPosts) => {
+          fetch(api.getPromoCards(defaultPostsLength))
+            .then((r) => r.json())
+            .then((ads) => {
+              const result = fetchedPosts
+                .filter((post) => !post.categories.includes(617))
+                .map(
+                  (post, index) => {
+                    const count = index + 1
+                    const shouldRenderPromo = count % 3 === 0
+                    const pointer = count / 3 - 1
+                    const ad = ads[pointer]
 
-                return index > 0 && shouldRenderPromo && ad
-                  ? [ad, post] : post
-              }
-            )
-            const flatResult = flatten(result)
-            this.props.fetchAdsSuccessCustom()
-            this.props.setPostsCustom(flatResult)
-          })
-          .catch(e => this.props.fetchFail(e))
+                    return index > 0 && shouldRenderPromo && ad
+                      ? [ad, post] : post
+                  },
+                )
+              const flatResult = flatten(result)
+              fetchAdsSuccessCustom()
+              setPostsCustom(flatResult)
+            })
+            .catch((e) => fetchFail(e))
         })
         .then(async () => {
           Animated.timing(
-            this.state.fadeAnim,
+            fadeAnim,
             {
               toValue: 1,
               duration: 500,
-            }
+            },
           ).start(() => {
             this.setState({ isAppReady: true })
           })
         })
-        .catch(e => console.error(e))
+        .catch((e) => console.error(e))
     }
   }
 
   cacheResourcesAsync = async () => {
     const images = [
-      require('./assets/images/HSL-logo.png'),
-    ];
-    const cacheImages = images.map((image) => Asset.fromModule(image).downloadAsync());
+      logo,
+    ]
+    const cacheImages = images.map((image) => Asset.fromModule(image).downloadAsync())
     return Promise.all(cacheImages)
   }
 
@@ -143,7 +147,7 @@ class AppIndex extends React.Component {
           }}
         >
           <Animated.Image
-            source={require('./assets/images/HSL-logo.png')}
+            source={logo}
             style={{
               aspectRatio: 2.3,
               resizeMode: 'contain',
