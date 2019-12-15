@@ -6,9 +6,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
-  Linking,
-  Image,
-  Share,
 } from 'react-native'
 import * as WebBrowser from 'expo-web-browser'
 import * as Location from 'expo-location'
@@ -22,8 +19,8 @@ import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import { categories, rusCats } from '@/constants/places'
 import fonts from '@/constants/Styles'
-import { formatText } from '@/common/format'
 import { getPlaces } from './reducer'
+import SelectedMarkerCard from './components/SelectedMarkerCard'
 
 class Places extends PureComponent {
   constructor(props) {
@@ -99,19 +96,6 @@ class Places extends PureComponent {
     const url = !selectedMarker.website.startsWith('http')
       ? `https://${selectedMarker.website}` : selectedMarker.website
     await WebBrowser.openBrowserAsync(url)
-  }
-
-  share = async (place) => {
-    const description = place.description ? `${formatText(place.description, true)}. ` : ''
-    const address = place.address ? `${place.address}. ` : ''
-    const link = `https://www.google.com/maps/search/?api=1&query=${place.geo_lat},${place.geo_lng}`
-    try {
-      await Share.share({
-        message: `${place.venue}. ${description}${address}\n${link}`,
-      })
-    } catch (error) {
-      alert(error.message)
-    }
   }
 
   renderMapState = (displayingMarkers) => {
@@ -192,73 +176,10 @@ class Places extends PureComponent {
           )}
         </View>
 
-        <View style={styles.markerCard}>
-          {selectedMarker ? (
-            <View>
-              <View style={{ flexDirection: 'row', flex: 1 }}>
-                <Text
-                  style={{
-                    flex: 0.9,
-                    color: '#333376',
-                    fontSize: fonts.big,
-                    fontWeight: 'bold',
-                    paddingBottom: 10,
-                  }}
-                >
-                  {selectedMarker.venue}
-                </Text>
-                <View style={{ marginLeft: 'auto' }}>
-                  <TouchableOpacity
-                    onPress={() => { this.share(selectedMarker) }}
-                    style={{
-                      flex: 0.1,
-                      paddingLeft: 5,
-                      paddingTop: 9,
-                      paddingBottom: 9,
-                    }}
-                  >
-                    <Image
-                      source={require('../../assets/images/share-dark.png')}
-                      style={{ height: 20, width: 20 }}
-                      resizeMode="contain"
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              {selectedMarker.description && (
-                <Text>{formatText(selectedMarker.description, true)}</Text>
-              )}
-              {selectedMarker.address && (
-                <Text>
-                  Адрес:
-                  &nbsp;
-                  {selectedMarker.address}
-                </Text>
-              )}
-              {selectedMarker.phone && (
-                <Text
-                  style={{ color: '#00aadb', textDecorationLine: 'underline' }}
-                  onPress={() => Linking.openURL(`tel: ${selectedMarker.phone}`)}
-                >
-                  {selectedMarker.phone}
-                </Text>
-              )}
-              {selectedMarker.website && (
-                <Text
-                  style={{ color: '#00aadb', textDecorationLine: 'underline', paddingTop: 5 }}
-                  onPress={this.onCardSitePress}
-                >
-                  Перейти на сайт
-                </Text>
-              )}
-            </View>
-          ) : (
-            <Text style={{ textAlign: 'center' }}>
-              Пожалуйста, выберите точку на карте
-            </Text>
-          )}
-        </View>
+        <SelectedMarkerCard
+          selectedMarker={selectedMarker}
+          onCardSitePress={this.onCardSitePress}
+        />
       </ScrollView>
     )
   }
