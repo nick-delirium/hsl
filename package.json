@@ -40,7 +40,6 @@
     "react-native-drawer": "^2.5.1",
     "react-native-map-clustering": "^3.0.6",
     "react-native-maps": "0.26.1",
-    "react-native-maps-super-cluster": "^1.6.0",
     "react-native-render-html": "^4.1.2",
     "react-native-webview": "7.4.3",
     "react-promise-tracker": "^2.0.5",
