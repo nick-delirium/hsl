@@ -70,9 +70,8 @@ const Search = ({ actions, foundData, personalInfo }) => {
   const onTabPress = useCallback((tab) => {
     setActiveTab(tab)
   }, [activeTab])
-
+  useEffect(() => { actions.changeTitle('Поиск по ОКБК', true) }, [])
   useEffect(() => {
-    actions.changeTitle('Поиск по ОКБК', true)
     const getEntries = () => {
       const { query } = PANEL_TABS[activeTab]
       trackPromise(

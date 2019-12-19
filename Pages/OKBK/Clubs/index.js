@@ -25,71 +25,84 @@ import People from '../People'
 
 const { height } = Dimensions.get('window')
 
-const Clubs = ({ actions, clubs, users }) => {
+const Clubs = ({
+  actions,
+  clubs,
+  users,
+}) => {
   useEffect(() => {
     actions.getClubs()
-  })
+  }, [])
 
   const onItemPress = useCallback((item) => {
     actions.getUsers({ business_club_id: item.id })
     actions.setSelectedClub(item)
     actions.changeTitle(item.short_name || item.name, true)
-  })
+  }, [])
 
-  if (users.length > 0) return <People />
   return (
-    <ScrollView contentContainerStyle={styles.pageWrapper}>
-      {clubs.map((item) => (
-        <Card
-          key={item.id}
-          onItemPress={() => onItemPress(item)}
-        >
-          <View style={styles.cardInner}>
-            <View style={styles.header}>
-              <Text
-                numberOfLines={2}
-                ellipsizeMode="tail"
-                style={styles.clubName}
-              >
-                {item.name}
-              </Text>
-            </View>
-            <View style={styles.clubInfo}>
-              <View style={styles.logoWrapper}>
-                <Image
-                  style={styles.logo}
-                  resizeMode="contain"
-                  source={Boolean(item.icon) ? { uri: item.icon } : undefined}
-                />
-              </View>
-              <View style={styles.textWrapper}>
-                <View style={styles.photoWrapper}>
-                  {item.randomUsers.map((user, i) => {
-                    const l = item.randomUsers.length
-                    return (
-                      <Image
-                        key={`${item.id}_${Math.random()}`}
-                        style={{
-                          ...styles.photo,
-                          marginRight: (i === l - 1 ? 0 : -10),
-                          zIndex: l - i,
-                        }}
-                        resizeMode="cover"
-                        // source={require('../../../assets/images/youtube-play-btn.png')}
-                        source={Boolean(user.photo) ? { uri: user.photo } : require('../assets/no_photo.png')}
-                      />
-                    )
-                  })}
-                </View>
-                <Text style={styles.text}>
-                  {item.usersCount + NumeralDeclension(item.usersCount, [' участник', ' участника', ' участников'])}
+    <>
+      {users.length > 0 && (
+        <View style={{ minHeight: height - 150, backgroundColor: 'white' }}>
+          <People />
+        </View>
+      )}
+      <ScrollView
+        contentContainerStyle={styles.pageWrapper}
+        scrollEventThrottle={5}
+      >
+        {clubs.map((item) => (
+          <Card
+            key={item.id}
+            onItemPress={() => onItemPress(item)}
+          >
+            <View style={styles.cardInner}>
+              <View style={styles.header}>
+                <Text
+                  numberOfLines={2}
+                  ellipsizeMode="tail"
+                  style={styles.clubName}
+                >
+                  {item.name}
                 </Text>
               </View>
+              <View style={styles.clubInfo}>
+                <View style={styles.logoWrapper}>
+                  <Image
+                    style={styles.logo}
+                    resizeMode="contain"
+                    source={Boolean(item.icon) ? { uri: item.icon } : undefined}
+                  />
+                </View>
+                <View style={styles.textWrapper}>
+                  <View style={styles.photoWrapper}>
+                    {item.randomUsers.map((user, i) => {
+                      const l = item.randomUsers.length
+                      return (
+                        <Image
+                          key={`${item.id}_${Math.random()}`}
+                          style={{
+                            ...styles.photo,
+                            marginRight: (i === l - 1 ? 0 : -10),
+                            zIndex: l - i,
+                          }}
+                          resizeMode="cover"
+                          // source={require('../../../assets/images/youtube-play-btn.png')}
+                          source={Boolean(user.photo) ? { uri: user.photo } : require('../assets/no_photo.png')}
+                        />
+                      )
+                    })}
+                  </View>
+                  <Text style={styles.text}>
+                    {item.usersCount + NumeralDeclension(item.usersCount, [' участник', ' участника', ' участников'])}
+                  </Text>
+                </View>
+              </View>
             </View>
-          </View>
-        </Card>
-      ))}
-    </ScrollView>
+          </Card>
+        ))}
+      </ScrollView>
+    </>
   )
 }
 

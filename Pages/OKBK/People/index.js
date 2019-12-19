@@ -38,7 +38,7 @@ class People extends PureComponent {
   render() {
     const { users, selectedClub, personalInfo } = this.props
     return (
-      <View>
+      <View style={{ flex: 1 }}>
         {Object.entries(personalInfo).length > 0 && (
           <View
             style={{

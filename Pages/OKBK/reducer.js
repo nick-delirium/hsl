@@ -309,6 +309,7 @@ export default function (state = initialState, action) {
         personalInfo: {},
         users: fakeHistory.length === 1 ? state.users : initialState.users,
         shouldRenderFakeHeader: fakeHistory.length > 0,
+        searchData: fakeHistory.length <= 1 ? initialState.searchData : state.searchData,
       }
     }
     case GET_CLUBS_SUCCESS:
