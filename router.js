@@ -38,7 +38,7 @@ const RouterView = ({
       <View
         style={{
           position: 'absolute',
-          zIndex: 10,
+          zIndex: 20,
           top: 0,
           left: 0,
           height,

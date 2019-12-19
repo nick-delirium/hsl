@@ -24,9 +24,10 @@ const Header = ({
   currentTab,
   fakeHistory,
   openDrawer,
+  searchQueryAsked,
 }) => {
   const { activeTab: activeSearchTab } = useActiveTab()
-  const shouldRenderBackButton = currentTab !== 'okbkSearch'
+  const shouldRenderBackButton = currentTab !== 'okbkSearch' || searchQueryAsked
   const { searchFieldValue, setFieldValue, getUsers } = useMemberSearch('', activeSearchTab, actions.setFoundData)
 
   const goBackAction = () => {
@@ -138,6 +139,7 @@ const mapStateFromProps = createStructuredSelector({
   title: (state) => get(state, 'okbk.title'),
   currentTab: (state) => get(state, 'okbk.currentTab'),
   fakeHistory: (state) => get(state, 'okbk.fakeHistory'),
+  searchQueryAsked: (state) => get(state, 'okbk.searchData.asked'),
 })
 
 const mapDispatchToProps = (dispatch) => ({

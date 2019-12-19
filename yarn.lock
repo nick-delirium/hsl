@@ -8727,14 +8727,6 @@ react-native-map-clustering@^3.0.6:
     "@mapbox/geo-viewport" "^0.4.0"
     supercluster "^6.0.2"
 
-react-native-maps-super-cluster@^1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/react-native-maps-super-cluster/-/react-native-maps-super-cluster-1.6.0.tgz#ccee4d8815fd90de6eeacbfc413dff4e04fe82ae"
-  integrity sha512-Ncu5hN8VBuXjMeStBK7WBDnb9fGCetx4WP0V69Tw4by4ByI2YZXyhvIqAFabK3ss6uR/hh++bCSuLIXOHRxdKw==
-  dependencies:
-    "@mapbox/geo-viewport" "^0.4.0"
-    supercluster "^6.0.2"
-
 react-native-maps@0.26.1:
   version "0.26.1"
   resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.26.1.tgz#6ec316259b38d259c8974448d894bd7a23101da4"
