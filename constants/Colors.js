@@ -18,4 +18,5 @@ export default {
   orange: '#FCAF17',
   purple: '#333376',
   red: '#B62655',
+  blue: '#00AADB',
 }

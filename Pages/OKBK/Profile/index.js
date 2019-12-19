@@ -16,6 +16,7 @@ import {
   Linking,
 } from 'react-native'
 import fonts from '@/constants/Styles'
+import Colors from '@/constants/Colors'
 import { singOut } from '../reducer'
 
 const { width } = Dimensions.get('window')
@@ -114,12 +115,12 @@ class Profile extends React.PureComponent {
 
               <Text style={styles.heading}> Контакты </Text>
               {Boolean(displayedUser.contact_email) && (
-                <Text style={styles.smallText} onPress={() => openLink(`mailto:${displayedUser.contact_email}`)}>
+                <Text style={styles.smallLink} onPress={() => openLink(`mailto:${displayedUser.contact_email}`)}>
                   {displayedUser.contact_email}
                 </Text>
               )}
               {Boolean(displayedUser.phone) && (
-                <Text style={styles.smallText} onPress={() => openLink(`tel:${displayedUser.phone}`)}>
+                <Text style={styles.smallLink} onPress={() => openLink(`tel:${displayedUser.phone}`)}>
                   {displayedUser.phone}
                 </Text>
               )}
@@ -150,7 +151,7 @@ class Profile extends React.PureComponent {
                 )}
               </View>
 
-              {bcIcon && (
+              {Boolean(bcIcon) && (
                 <Image
                   source={{ uri: bcIcon }}
                   resizeMode="cover"
@@ -215,6 +216,13 @@ const styles = StyleSheet.create({
     fontSize: fonts.mini,
     marginBottom: 10,
     textAlign: 'center',
+  },
+  smallLink: {
+    fontSize: fonts.mini,
+    marginBottom: 10,
+    textAlign: 'center',
+    color: Colors.blue,
+    textDecorationLine: 'underline',
   },
   nameText: {
     fontSize: fonts.big,
