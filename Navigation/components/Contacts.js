@@ -4,13 +4,18 @@ import {
   View,
   TouchableOpacity,
   Text,
+  Linking,
 } from 'react-native'
 import * as WebBrowser from 'expo-web-browser'
 import { contacts } from '@/constants/contacts'
 import fonts from '@/constants/Styles'
 
 const onLinkPress = async ({ path, isEmail }) => {
-  await WebBrowser.openBrowserAsync(`${isEmail ? 'mailto:' : 'https://'}${path}`)
+  if (isEmail) {
+    Linking.openURL(`mailto:${path}`)
+  } else {
+    await WebBrowser.openBrowserAsync(`https://${path}`)
+  }
 }
 
 const Contacts = () => (

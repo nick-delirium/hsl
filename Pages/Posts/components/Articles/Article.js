@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Platform,
   Dimensions,
+  Linking,
 } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { withRouter } from 'react-router-native'
@@ -43,12 +44,16 @@ class Article extends React.Component {
       const fetchUrl = isEvent ? api.getEventBySlug(slug) : api.getPostBySlug(slug)
       findPost(type, fetchUrl, setAction, actions.togglePost)
     } else {
-      await WebBrowser.openBrowserAsync(url)
+      this.onRemoteUrlPress(url)
     }
   }
 
   onRemoteUrlPress = async (url) => {
-    await WebBrowser.openBrowserAsync(url)
+    if (url.startsWith('mailto:')) {
+      Linking.openURL(url)
+    } else {
+      await WebBrowser.openBrowserAsync(url)
+    }
   }
 
   render() {

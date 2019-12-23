@@ -7,6 +7,7 @@ import {
   ScrollView,
   Image,
   Dimensions,
+  Linking,
 } from 'react-native'
 import * as WebBrowser from 'expo-web-browser'
 import { withRouter } from 'react-router-native'
@@ -38,6 +39,8 @@ class Event extends React.PureComponent {
       const slug = urlParts[urlParts.length - 1]
       const fetchUrl = isEvent ? api.getEventBySlug(slug) : api.getPostBySlug(slug)
       findPost(type, fetchUrl, setAction, actions.togglePost)
+    } else if (url.startsWith('mailto:')) {
+      Linking.openURL(url)
     } else {
       await WebBrowser.openBrowserAsync(url)
     }

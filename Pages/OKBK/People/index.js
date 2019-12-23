@@ -8,6 +8,7 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
+  Linking,
 } from 'react-native'
 import * as WebBrowser from 'expo-web-browser'
 import get from 'lodash/get'
@@ -24,8 +25,13 @@ import PersonalCard from './components/PersonalCard'
 import Profile from '../Profile'
 
 const { width } = Dimensions.get('window')
-const openLink = async (link) => {
-  await WebBrowser.openBrowserAsync(link)
+
+const openLink = async (link, isEmail) => {
+  if (isEmail) {
+    Linking.openURL(link)
+  } else {
+    await WebBrowser.openBrowserAsync(link)
+  }
 }
 
 class People extends PureComponent {
@@ -95,7 +101,7 @@ class People extends PureComponent {
                 </Text>
               )}
               {Boolean(selectedClub.email) && (
-                <Text style={styles.сlubText} onPress={() => openLink(`mailto:${selectedClub.email}`)}>
+                <Text style={styles.сlubText} onPress={() => openLink(`mailto:${selectedClub.email}`, true)}>
                   {selectedClub.email}
                 </Text>
               )}
