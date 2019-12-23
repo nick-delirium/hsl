@@ -44,7 +44,8 @@ const TABS = [
   },
 ]
 
-// const isAndroid = () => Platform.OS === 'android'
+const shouldRenderSerachBar = ({ name }) => name === 'okbkSearch'
+
 
 class NavBar extends Component {
   shouldComponentUpdate(nextProps) {
@@ -53,14 +54,19 @@ class NavBar extends Component {
     return true
   }
 
+  changeCurrentTab = (tab) => {
+    const { actions } = this.props
+    return actions.changeCurrentTab(tab.name, tab.title, shouldRenderSerachBar(tab))
+  }
+
   render() {
-    const { actions, currentTab } = this.props
+    const { currentTab } = this.props
     return (
       <View style={styles.container}>
         {TABS.map((tab) => (
           <TouchableWithoutFeedback
             key={tab.name}
-            onPressIn={() => actions.changeCurrentTab(tab.name, tab.title, false)}
+            onPressIn={() => this.changeCurrentTab(tab)}
           >
             <View
               style={{
