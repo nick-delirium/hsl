@@ -38,7 +38,9 @@ class DrawerItem extends React.PureComponent {
   }
 
   isButtonActive = (url) => {
-    const { path } = this.props
+    const { history } = this.props
+    const path = `${history.location.pathname}`
+    path.slice(0, 1)
     return path === url
   }
 
