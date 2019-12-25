@@ -89,15 +89,17 @@ class Article extends React.Component {
               style={{ height: 200 }}
             />
           )}
-          <View style={styles.titleWrap}>
-            <HTML
-              baseFontStyle={{
-                fontWeight: 'bold',
-                fontSize: 22,
-              }}
-              html={title}
-            />
-          </View>
+          <HTML
+            baseFontStyle={{
+              fontWeight: 'bold',
+              paddingRight: 20,
+              paddingLeft: 20,
+              fontSize: 22,
+              marginBottom: 15,
+              marginTop: 15,
+            }}
+            html={title}
+          />
           <HTML
             renderers={{
               iframe: (atrs) => {
