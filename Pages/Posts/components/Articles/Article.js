@@ -2,7 +2,6 @@ import React from 'react'
 import {
   StyleSheet,
   View,
-  Text,
   ScrollView,
   Image,
   TouchableOpacity,
@@ -58,7 +57,6 @@ class Article extends React.Component {
 
   render() {
     const {
-      // match: { params: { id } },
       article,
     } = this.props
     const { OS } = Platform
@@ -91,8 +89,8 @@ class Article extends React.Component {
               style={{ height: 200 }}
             />
           )}
-          <Text
-            style={{
+          <HTML
+            baseFontStyle={{
               fontWeight: 'bold',
               paddingRight: 20,
               paddingLeft: 20,
@@ -100,9 +98,8 @@ class Article extends React.Component {
               marginBottom: 15,
               marginTop: 15,
             }}
-          >
-            {title}
-          </Text>
+            html={title}
+          />
           <HTML
             renderers={{
               iframe: (atrs) => {

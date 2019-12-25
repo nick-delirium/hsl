@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
+import HTML from 'react-native-render-html'
 import { changeLocation, togglePost } from '@/Navigation/reducer'
 import CachedImage from '@/components/CachedImage'
 import { setData } from './articleReducer'
@@ -20,9 +21,6 @@ class CardArticle extends React.PureComponent {
   onItemPress = async () => {
     const {
       setPost,
-      // changeLoc,
-      // history,
-      // path,
       title,
       data,
       link,
@@ -32,7 +30,6 @@ class CardArticle extends React.PureComponent {
       openPost,
     } = this.props
 
-    // const newPath = 'post/' + id
     const article = {
       title,
       mediaUrl,
@@ -48,8 +45,6 @@ class CardArticle extends React.PureComponent {
     } catch (e) {
       throw new Error(e)
     }
-    // history.push(newPath)
-    // changeLoc(newPath)
   }
 
   render() {
@@ -81,17 +76,14 @@ class CardArticle extends React.PureComponent {
         )}
         {!isPromo && (
           <View style={styles.cardText}>
-            <Text
-              style={{ fontWeight: 'bold', fontSize: fonts.big, paddingBottom: 4 }}
-            >
-              {title}
-            </Text>
-            <Text
-              style={{ fontSize: fonts.normal, lineHeight: 18 }}
-            >
-              {renderDescr}
-              ...
-            </Text>
+            <HTML
+              baseFontStyle={{ fontWeight: 'bold', fontSize: fonts.big, paddingBottom: 4 }}
+              html={title}
+            />
+            <HTML
+              baseFontStyle={{ fontSize: fonts.normal, lineHeight: 18 }}
+              html={`${renderDescr}...`}
+            />
             {date && (
               <Text style={{ paddingTop: 8 }}>
                 {date}

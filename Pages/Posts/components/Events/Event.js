@@ -82,7 +82,10 @@ class Event extends React.PureComponent {
               style={{ width, height: 200 }}
             />
           )}
-          <Text style={styles.title}>{title}</Text>
+          <HTML
+            baseFontStyle={styles.title}
+            html={title}
+          />
           <HTML
             html={`<div>${description}</div>`}
             tagsStyles={HTMLStyles}
