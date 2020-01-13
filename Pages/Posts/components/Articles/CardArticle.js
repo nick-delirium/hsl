@@ -76,10 +76,12 @@ class CardArticle extends React.PureComponent {
         )}
         {!isPromo && (
           <View style={styles.cardText}>
-            <HTML
-              baseFontStyle={{ fontWeight: 'bold', fontSize: fonts.big, paddingBottom: 4 }}
-              html={title}
-            />
+            <View style={{ paddingBottom: 4 }}>
+              <HTML
+                baseFontStyle={{ fontWeight: 'bold', fontSize: fonts.big }}
+                html={title}
+              />
+            </View>
             <HTML
               baseFontStyle={{ fontSize: fonts.normal, lineHeight: 18 }}
               html={`${renderDescr}...`}
