@@ -2,7 +2,6 @@ import React from 'react'
 import {
   StyleSheet,
   View,
-  Text,
   ScrollView,
   Image,
   TouchableOpacity,
@@ -58,7 +57,6 @@ class Article extends React.Component {
 
   render() {
     const {
-      // match: { params: { id } },
       article,
     } = this.props
     const { OS } = Platform
@@ -91,18 +89,15 @@ class Article extends React.Component {
               style={{ height: 200 }}
             />
           )}
-          <Text
-            style={{
-              fontWeight: 'bold',
-              paddingRight: 20,
-              paddingLeft: 20,
-              fontSize: 22,
-              marginBottom: 15,
-              marginTop: 15,
-            }}
-          >
-            {title}
-          </Text>
+          <View style={styles.titleWrap}>
+            <HTML
+              baseFontStyle={{
+                fontWeight: 'bold',
+                fontSize: 22,
+              }}
+              html={title}
+            />
+          </View>
           <HTML
             renderers={{
               iframe: (atrs) => {
@@ -162,6 +157,12 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     backgroundColor: '#fff',
     paddingBottom: 30,
+  },
+  titleWrap: {
+    paddingRight: 20,
+    paddingLeft: 20,
+    marginBottom: 15,
+    marginTop: 15,
   },
 })
 const HTMLStyles = StyleSheet.create({

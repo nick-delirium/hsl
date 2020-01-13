@@ -82,7 +82,13 @@ class Event extends React.PureComponent {
               style={{ width, height: 200 }}
             />
           )}
-          <Text style={styles.title}>{title}</Text>
+          <View style={styles.titleWrap}>
+            <HTML
+              baseFontStyle={styles.title}
+              html={title}
+            />
+          </View>
+
           <HTML
             html={`<div>${description}</div>`}
             tagsStyles={HTMLStyles}
@@ -169,14 +175,16 @@ const styles = StyleSheet.create({
     height: 20,
     resizeMode: 'contain',
   },
+  titleWrap: {
+    paddingRight: 20,
+    paddingLeft: 20,
+    marginBottom: 15,
+    marginTop: 15,
+  },
   title: {
     fontWeight: 'bold',
     fontSize: 22,
     textAlign: 'center',
-    paddingTop: 20,
-    paddingBottom: 20,
-    paddingRight: 20,
-    paddingLeft: 20,
   },
   description: {
     paddingBottom: 30,

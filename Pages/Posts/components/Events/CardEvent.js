@@ -9,6 +9,7 @@ import { Linking } from 'expo'
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
+import HTML from 'react-native-render-html'
 import CachedImage from '@/components/CachedImage'
 import { changeLocation, togglePost } from '@/Navigation/reducer'
 import { setEvent } from './eventReducer'
@@ -92,12 +93,16 @@ class CardEvent extends React.Component {
           />
         )}
         <View style={styles.cardText}>
-          <Text style={{ fontWeight: 'bold', fontSize: fonts.big, paddingBottom: 4 }}>{title}</Text>
-          <Text style={{ fontSize: fonts.normal, lineHeight: 18 }}>
-            {smallDescription}
-            ...
-          </Text>
-
+          <View style={{ paddingBottom: 4 }}>
+            <HTML
+              baseFontStyle={{ fontWeight: 'bold', fontSize: fonts.big }}
+              html={title}
+            />
+          </View>
+          <HTML
+            baseFontStyle={{ fontSize: fonts.normal, lineHeight: 18 }}
+            html={`${smallDescription}...`}
+          />
           <View
             style={{
               ...styles.row, justifyContent: 'space-between', paddingTop: 10, paddingBottom: 20,
