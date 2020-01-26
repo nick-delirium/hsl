@@ -47,7 +47,7 @@ const Contacts = () => (
 export const AdditionalInfo = (props) => {
   const { userId } = props
   return (
-    <View style={styles.background}>
+    <View style={{ ...styles.background, paddingTop: 0 }}>
       <Text style={styles.heading}>О приложении</Text>
       <Text
         style={styles.text}
@@ -55,21 +55,23 @@ export const AdditionalInfo = (props) => {
         {`версия: ${Constants.manifest.version}`}
       </Text>
       {userId && (
-        <Text
-          style={styles.text}
-        >
-          {`id: ${userId}`}
-        </Text>
+        <>
+          <Text
+            style={styles.text}
+          >
+            {`id: ${userId}`}
+          </Text>
+          <TouchableOpacity
+            onPress={() => Clipboard.setString(userId)}
+          >
+            <Text
+              style={styles.anchor}
+            >
+              скопировать
+            </Text>
+          </TouchableOpacity>
+        </>
       )}
-      <TouchableOpacity
-        onPress={() => Clipboard.setString(userId)}
-      >
-        <Text
-          style={styles.anchor}
-        >
-          скопировать
-        </Text>
-      </TouchableOpacity>
     </View>
   )
 }
