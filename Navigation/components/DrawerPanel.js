@@ -6,6 +6,7 @@ import {
   View,
   Dimensions,
   TouchableOpacity,
+  AsyncStorage,
 } from 'react-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
@@ -14,11 +15,26 @@ import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router-native'
 import pages from '@/constants/pages'
 import DrawerItem from './DrawerItem'
-import Contacts from './Contacts'
+import Contacts, { AdditionalInfo } from './Contacts'
 import Social from './Social'
 import { changeLocation, togglePost } from '../reducer'
 
 class DrawerPanel extends React.PureComponent {
+  constructor(props) {
+    super(props)
+    this.state = {
+      userId: undefined,
+    }
+  }
+
+  componentDidMount() {
+    AsyncStorage.getItem('userId', (e, userId) => {
+      if (userId) {
+        this.setState({ userId })
+      } else console.log('userId is not found')
+    })
+  }
+
   render() {
     const items = Object.keys(pages)
     const validMenuItems = items.filter((item) => Boolean(pages[item].name) && !pages[item].okbkSub)
@@ -30,6 +46,7 @@ class DrawerPanel extends React.PureComponent {
       history,
       changeLoc,
     } = this.props
+    const { userId } = this.state
     return (
       <View
         style={{
@@ -76,6 +93,7 @@ class DrawerPanel extends React.PureComponent {
             <View style={{ flex: 1, marginBottom: 'auto' }}>
               <Social />
               <Contacts />
+              <AdditionalInfo userId={userId} />
             </View>
           </View>
         </ScrollView>

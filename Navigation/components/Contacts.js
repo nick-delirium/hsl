@@ -5,7 +5,9 @@ import {
   TouchableOpacity,
   Text,
   Linking,
+  Clipboard,
 } from 'react-native'
+import Constants from 'expo-constants' // 'expo-constants' with the latest SDK to date
 import * as WebBrowser from 'expo-web-browser'
 import { contacts } from '@/constants/contacts'
 import fonts from '@/constants/Styles'
@@ -41,6 +43,36 @@ const Contacts = () => (
     ))}
   </View>
 )
+
+export const AdditionalInfo = (props) => {
+  const { userId } = props
+  return (
+    <View style={styles.background}>
+      <Text style={styles.heading}>О приложении</Text>
+      <Text
+        style={styles.text}
+      >
+        {`версия: ${Constants.manifest.version}`}
+      </Text>
+      {userId && (
+        <Text
+          style={styles.text}
+        >
+          {`id: ${userId}`}
+        </Text>
+      )}
+      <TouchableOpacity
+        onPress={() => Clipboard.setString(userId)}
+      >
+        <Text
+          style={styles.anchor}
+        >
+          (скопировать)
+        </Text>
+      </TouchableOpacity>
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
   background: {
