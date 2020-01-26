@@ -89,6 +89,7 @@ const Header = ({
         {shouldRenderBackButton ? (
           <TouchableOpacity
             onPress={onBackIconPress}
+            hitSlop={styles.hitSlop}
             style={styles.clickableZone}
           >
             <View
@@ -158,12 +159,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
+  hitSlop: {
+    top: 10,
+    bottom: 10,
+    left: 20,
+    right: 20,
+  },
   backIcon: {
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: 9,
     paddingLeft: 6,
-    paddingRight: 6,
+    paddingRight: 12,
     marginRight: -3,
     zIndex: 11,
     paddingBottom: 9,
