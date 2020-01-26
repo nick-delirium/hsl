@@ -67,7 +67,7 @@ export const AdditionalInfo = (props) => {
         <Text
           style={styles.anchor}
         >
-          (скопировать)
+          скопировать
         </Text>
       </TouchableOpacity>
     </View>

@@ -2,12 +2,12 @@ export const contacts = [
   {
     isEmail: 1,
     path: 'info@hansanglab.com',
-    text: '(общие вопросы)',
+    text: 'общие вопросы',
   },
   {
     isEmail: 1,
     path: 'mira@hansanglab.com',
-    text: '(сотрудничество)',
+    text: 'сотрудничество',
   },
   {
     isEmail: 0,
