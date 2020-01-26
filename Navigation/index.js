@@ -111,7 +111,7 @@ class RouterWithDrawer extends React.PureComponent {
   handleRedirect = (event) => {
     const { actions } = this.props
     const { path, queryParams } = Linking.parse(event.url)
-    if (path.includes('redirect')) {
+    if (path && path.includes('redirect')) {
       console.log(event.url, path, queryParams)
       const [type, id] = queryParams.type.split('Z')
       actions.fetchPosts(undefined, true)

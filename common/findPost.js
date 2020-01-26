@@ -11,7 +11,7 @@ const findPost = (type, fetchUrl, setAction, toggleAction) => {
       const post = isArray ? searchResult[0] : searchResult
       const opFailStatus = get(post, 'data.status', 0)
       if (opFailStatus === 404 || opFailStatus === 403) {
-        Alert.alert('Ошибка', post.message)
+        Alert.alert('Ошибка', 'запись не найдена')
       } else {
         const mediaUrl = get(post, '_links.wp:featuredmedia.href', null)
           || `https://hansanglab.com/wp-json/wp/v2/media/${get(post, 'featured_media')}`
