@@ -44,11 +44,15 @@ class RouterWithDrawer extends React.PureComponent {
 
     try {
       const url = await Linking.getInitialURL()
-      if (url.includes('redirect')) {
-        const { path, queryParams } = Linking.parse(url)
-        console.log('initial url', url, path, queryParams)
-        const [type, id] = queryParams.type.split('Z')
-        this.findRedirectToArticle(id, type)
+      const { path, queryParams } = Linking.parse(url)
+      const expoLink = path.includes('redirect') ? path : get(queryParams, 'expoLink')
+      const type = get(queryParams, 'type') || get(Linking.parse(expoLink), 'queryParams.type')
+      // console.log('initial url', url, expoLink, type)
+      if (expoLink && expoLink.includes('redirect')) {
+        const [postType, id] = type.split('Z')
+        this.findRedirectToArticle(id, postType)
+      } else {
+        throw new Error(JSON.stringify(Linking.parse(url)))
       }
     } catch (e) {
       console.log(e)
@@ -109,13 +113,19 @@ class RouterWithDrawer extends React.PureComponent {
   }
 
   handleRedirect = (event) => {
+    // dev:  'https://hansanglab.com/2019/10/26/familiya-nam/?expoLink=exp://192.168.1.139:19000/--/redirect?type=articleZ9043'
+    // prod: 'https://hansanglab.com/2019/10/26/familiya-nam/?expoLink=hslapp://redirect?type=articleZ6625'
     const { actions } = this.props
     const { path, queryParams } = Linking.parse(event.url)
-    if (path && path.includes('redirect')) {
-      console.log(event.url, path, queryParams)
-      const [type, id] = queryParams.type.split('Z')
+    const expoLink = path.includes('redirect') ? path : get(queryParams, 'expoLink')
+    const type = get(queryParams, 'type') || get(Linking.parse(expoLink), 'queryParams.type')
+    // console.log(expoLink, type)
+    if (expoLink && expoLink.includes('redirect')) {
+      const [postType, id] = type.split('Z')
       actions.fetchPosts(undefined, true)
-      this.findRedirectToArticle(id, type)
+      this.findRedirectToArticle(id, postType)
+    } else {
+      throw new Error(JSON.stringify(Linking.parse(event.url)))
     }
   }
 
