@@ -45,10 +45,9 @@ class RouterWithDrawer extends React.PureComponent {
     try {
       const url = await Linking.getInitialURL()
       const { path, queryParams } = Linking.parse(url)
-      const expoLink = path.includes('redirect') ? path : get(queryParams, 'expoLink')
-      const type = get(queryParams, 'type') || get(Linking.parse(expoLink), 'queryParams.type')
-      // console.log('initial url', url, expoLink, type)
+      const expoLink = path && path.includes('redirect') ? path : get(queryParams, 'expoLink')
       if (expoLink && expoLink.includes('redirect')) {
+        const type = get(queryParams, 'type') || get(Linking.parse(expoLink), 'queryParams.type')
         const [postType, id] = type.split('Z')
         this.findRedirectToArticle(id, postType)
       } else {
@@ -117,10 +116,9 @@ class RouterWithDrawer extends React.PureComponent {
     // prod: 'https://hansanglab.com/2019/10/26/familiya-nam/?expoLink=hslapp://redirect?type=articleZ6625'
     const { actions } = this.props
     const { path, queryParams } = Linking.parse(event.url)
-    const expoLink = path.includes('redirect') ? path : get(queryParams, 'expoLink')
-    const type = get(queryParams, 'type') || get(Linking.parse(expoLink), 'queryParams.type')
-    // console.log(expoLink, type)
+    const expoLink = path && path.includes('redirect') ? path : get(queryParams, 'expoLink')
     if (expoLink && expoLink.includes('redirect')) {
+      const type = get(queryParams, 'type') || get(Linking.parse(expoLink), 'queryParams.type')
       const [postType, id] = type.split('Z')
       actions.fetchPosts(undefined, true)
       this.findRedirectToArticle(id, postType)
