@@ -41,20 +41,16 @@ class RouterWithDrawer extends React.PureComponent {
   async componentDidMount() {
     this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
     this.addLinkingListener()
-
     try {
       const url = await Linking.getInitialURL()
-      const { path, queryParams } = Linking.parse(url)
-      const expoLink = path && path.includes('redirect') ? path : get(queryParams, 'expoLink')
-      if (expoLink && expoLink.includes('redirect')) {
-        const type = get(queryParams, 'type') || get(Linking.parse(expoLink), 'queryParams.type')
+      const index = url.indexOf('redirect')
+      if (index !== -1) {
+        const type = url.slice(index + 14)
         const [postType, id] = type.split('Z')
         this.findRedirectToArticle(id, postType)
-      } else {
-        throw new Error(JSON.stringify(Linking.parse(url)))
       }
     } catch (e) {
-      console.log(e)
+      throw new Error(e)
     }
 
     dismissNotifications()
@@ -114,16 +110,13 @@ class RouterWithDrawer extends React.PureComponent {
   handleRedirect = (event) => {
     // dev:  'https://hansanglab.com/2019/10/26/familiya-nam/?expoLink=exp://192.168.1.139:19000/--/redirect?type=articleZ9043'
     // prod: 'https://hansanglab.com/2019/10/26/familiya-nam/?expoLink=hslapp://redirect?type=articleZ6625'
-    const { actions } = this.props
-    const { path, queryParams } = Linking.parse(event.url)
-    const expoLink = path && path.includes('redirect') ? path : get(queryParams, 'expoLink')
-    if (expoLink && expoLink.includes('redirect')) {
-      const type = get(queryParams, 'type') || get(Linking.parse(expoLink), 'queryParams.type')
+    const index = event.url.indexOf('redirect')
+    if (index !== -1) {
+      const { actions } = this.props
+      const type = event.url.slice(index + 14)
       const [postType, id] = type.split('Z')
       actions.fetchPosts(undefined, true)
       this.findRedirectToArticle(id, postType)
-    } else {
-      throw new Error(JSON.stringify(Linking.parse(event.url)))
     }
   }
 
