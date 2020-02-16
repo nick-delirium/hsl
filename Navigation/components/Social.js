@@ -8,8 +8,15 @@ import {
   Platform,
 } from 'react-native'
 import { social } from '@/constants/contacts'
+import { events } from '@/analytics'
 
-const onLinkPress = ({ url, iosUrl, andrUrl }) => {
+const onLinkPress = ({
+  url,
+  iosUrl,
+  andrUrl,
+  name,
+}) => {
+  events.clickOnSocialLink(name)
   const appUrl = Platform.OS === 'ios' ? iosUrl : andrUrl
   Linking.canOpenURL(appUrl).then((supported) => {
     if (supported) {

@@ -19,6 +19,7 @@ import { setData as setArticle } from '@/Pages/Posts/components/Articles/article
 import { setEvent } from '@/Pages/Posts/components/Events/eventReducer'
 import registerForPushNotificationsAsync, { dismissNotifications, createAndroidNotificationChanel } from '../setUpNotifications'
 import findPost from '@/common/findPost'
+import { setUpAnalytics, events } from '@/analytics'
 
 Sentry.init({
   dsn: 'https://5c75f18266074671887021dc70aa309b@sentry.io/1534014',
@@ -41,6 +42,20 @@ class RouterWithDrawer extends React.PureComponent {
   async componentDidMount() {
     this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
     this.addLinkingListener()
+
+    /* ANALYTICS */
+    const userIdToken = this.getUserToken()
+
+    try {
+      const OKBKLogin = await AsyncStorage.getItem('account')
+      setUpAnalytics(userIdToken, { OKBKLogin })
+      events.openApp(userIdToken, { OKBKLogin })
+    } catch (e) {
+      setUpAnalytics(userIdToken)
+      events.openApp(userIdToken)
+    }
+    /* ANALYTICS */
+
     try {
       const url = await Linking.getInitialURL()
       const index = url.indexOf('redirect')
@@ -58,23 +73,13 @@ class RouterWithDrawer extends React.PureComponent {
 
     registerForPushNotificationsAsync()
       .then(async (token) => {
-        const possibleToken = userToken()
-        AsyncStorage.getItem('userId', async (err, result) => {
-          if (!result) AsyncStorage.setItem('userId', possibleToken)
-          try {
-            await gqlClient.query({
-              query: subscribeToPush,
-              variables: {
-                userId: result || possibleToken,
-                token,
-              },
-            })
-          } catch (e) {
-            throw new Error(e)
-          }
+        await gqlClient.query({
+          query: subscribeToPush,
+          variables: {
+            userId: userIdToken,
+            token,
+          },
         })
-
-        console.log('push', token)
       })
       .catch((e) => {
         throw new Error(e)
@@ -85,6 +90,17 @@ class RouterWithDrawer extends React.PureComponent {
 
   componentWillUnmount() {
     this.removeLinkingListener()
+  }
+
+  getUserToken = () => {
+    const possibleToken = userToken()
+    AsyncStorage.getItem('userId', async (err, result) => {
+      if (!result) {
+        AsyncStorage.setItem('userId', possibleToken)
+        return possibleToken
+      }
+      return result
+    })
   }
 
   _handleNotification = (notification) => {
@@ -158,10 +174,12 @@ class RouterWithDrawer extends React.PureComponent {
   }
 
   closeDrawer = () => {
+    events.closeDrawer()
     this.setState({ drawerOpen: false }, () => this._drawer.close())
   }
 
   openDrawer = () => {
+    events.openDrawer()
     this.setState({ drawerOpen: true }, () => this._drawer.open())
   }
 

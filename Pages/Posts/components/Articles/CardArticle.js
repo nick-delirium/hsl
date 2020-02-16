@@ -16,6 +16,7 @@ import CachedImage from '@/components/CachedImage'
 import { setData } from './articleReducer'
 import fonts from '@/constants/Styles'
 import Card from '@/components/Card'
+import { events } from '@/analytics'
 
 class CardArticle extends React.PureComponent {
   onItemPress = async () => {
@@ -29,6 +30,8 @@ class CardArticle extends React.PureComponent {
       id,
       openPost,
     } = this.props
+
+    events.openPost(id)
 
     const article = {
       title,
