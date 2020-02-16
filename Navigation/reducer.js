@@ -1,5 +1,6 @@
 /* eslint-disable arrow-body-style */
 import api from '../api'
+import { events } from '@/analytics'
 
 export const CHANGE_LOCATION = 'app.location.change'
 const FETCH_CATEGORIES_START = 'app.categories.fetch.start'
@@ -90,6 +91,13 @@ export default function (state = initialState, action) {
         path: action.payload,
       }
     case TOGGLE_POST:
+      if (
+        state.isPostOpen === true
+        && action.payload.isPostOpen === false
+      ) {
+        events.closePost()
+      }
+
       return {
         ...state,
         isPostOpen: action.payload.isPostOpen,

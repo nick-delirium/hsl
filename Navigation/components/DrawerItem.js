@@ -10,11 +10,12 @@ import { compose } from 'redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router-native'
+import { events } from '@/analytics'
 import { changeLocation } from '../reducer'
 import fonts from '../../constants/Styles'
 
 class DrawerItem extends React.PureComponent {
-  onItemPress = async (path) => {
+  onItemPress = async (path, itemName) => {
     const {
       share,
       history,
@@ -34,6 +35,8 @@ class DrawerItem extends React.PureComponent {
     if (closePost) closePost()
     history.push(path)
     changeLoc(path)
+
+    events.clickOnDrawerNavigation(itemName)
     closeDrawer()
   }
 
@@ -50,7 +53,7 @@ class DrawerItem extends React.PureComponent {
 
     return (
       <TouchableOpacity
-        onPress={() => this.onItemPress(href)}
+        onPress={() => this.onItemPress(href, text)}
         style={styles.button}
         disabled={isActive}
       >

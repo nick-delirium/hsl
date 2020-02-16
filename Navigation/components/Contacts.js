@@ -11,8 +11,10 @@ import Constants from 'expo-constants' // 'expo-constants' with the latest SDK t
 import * as WebBrowser from 'expo-web-browser'
 import { contacts } from '@/constants/contacts'
 import fonts from '@/constants/Styles'
+import { events } from '@/analytics'
 
 const onLinkPress = async ({ path, isEmail }) => {
+  events.clickOnSocialLink(path)
   if (isEmail) {
     Linking.openURL(`mailto:${path}`)
   } else {
