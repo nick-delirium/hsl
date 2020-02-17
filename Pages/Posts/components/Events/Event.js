@@ -38,7 +38,7 @@ class Event extends React.PureComponent {
       const setAction = isEvent ? actions.setEvent : actions.setArticle
       const slug = urlParts[urlParts.length - 1]
       const fetchUrl = isEvent ? api.getEventBySlug(slug) : api.getPostBySlug(slug)
-      findPost(type, fetchUrl, setAction, actions.togglePost)
+      findPost(type, fetchUrl, setAction, actions.togglePost, true)
     } else if (url.startsWith('mailto:')) {
       Linking.openURL(url)
     } else {

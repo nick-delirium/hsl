@@ -16,6 +16,7 @@ import { setEvent } from './eventReducer'
 import { formatDate } from '@/common/format'
 import fonts from '@/constants/Styles'
 import Card from '@/components/Card'
+import { events } from '@/analytics'
 
 class CardEvent extends React.Component {
   onItemPress = async () => {
@@ -46,7 +47,9 @@ class CardEvent extends React.Component {
       place,
       allDay,
     }
-    // const newPath = 'event/' + event.slug
+
+    events.openPost({ id, source: 'feed' })
+
     try {
       const inAppLink = await Linking.makeUrl('redirect', { type: `eventZ${id}` })
       actions.setEvent({ ...event, inAppLink })

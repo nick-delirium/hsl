@@ -21,8 +21,8 @@ const events = {
   openApp: (id, okbkLogin) => {
     logEvent('open app', { user: id, okbkLogin })
   },
-  openPost: (id) => {
-    logEvent('open post', { post_id: id })
+  openPost: ({ id, source }) => {
+    logEvent('open post', { post_id: id, open_from: source })
   },
   closePost: () => {
     logEvent('close post')
@@ -39,6 +39,9 @@ const events = {
   },
   clickOnSocialLink: (type) => {
     logEvent('click on social link', { type })
+  },
+  clickOnBlogCategory: ({ catId, isSelected }) => {
+    logEvent('click on blog category', { catId, isSelected })
   },
 }
 

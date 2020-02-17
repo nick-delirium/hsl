@@ -13,6 +13,7 @@ import get from 'lodash/get'
 import fonts from '@/constants/Styles'
 import { getPostsByCategory } from '@/Pages/Posts/reducer'
 import { setSubCategories } from '@/Navigation/reducer'
+import { events } from '@/analytics'
 
 class BlogCategories extends React.Component {
   onCatPress = (cat) => {
@@ -23,6 +24,7 @@ class BlogCategories extends React.Component {
     } else {
       subCategories.push(cat.id)
     }
+    events.clickOnBlogCategory(cat.id, index === -1)
     setSubCategoriesAction(subCategories)
     const catIds = subCategories.join(',')
     const category = catIds || 4
