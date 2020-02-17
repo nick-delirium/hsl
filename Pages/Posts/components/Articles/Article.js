@@ -24,7 +24,6 @@ import { setEvent } from '@/Pages/Posts/components/Events/eventReducer'
 import findPost from '@/common/findPost'
 import api from '@/api'
 
-
 const { width } = Dimensions.get('window')
 
 class Article extends React.Component {
@@ -41,7 +40,7 @@ class Article extends React.Component {
       const setAction = isEvent ? actions.setEvent : actions.setArticle
       const slug = urlParts[urlParts.length - 1]
       const fetchUrl = isEvent ? api.getEventBySlug(slug) : api.getPostBySlug(slug)
-      findPost(type, fetchUrl, setAction, actions.togglePost)
+      findPost(type, fetchUrl, setAction, actions.togglePost, true)
     } else {
       this.onRemoteUrlPress(url)
     }

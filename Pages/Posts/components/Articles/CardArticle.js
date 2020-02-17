@@ -31,7 +31,7 @@ class CardArticle extends React.PureComponent {
       openPost,
     } = this.props
 
-    events.openPost(id)
+    events.openPost({ id, source: 'feed' })
 
     const article = {
       title,

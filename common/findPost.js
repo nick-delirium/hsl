@@ -1,9 +1,10 @@
 import get from 'lodash/get'
 import { Linking } from 'expo'
 import { Alert } from 'react-native'
+import { events } from '@/analytics'
 
 
-const findPost = (type, fetchUrl, setAction, toggleAction) => {
+const findPost = (type, fetchUrl, setAction, toggleAction, needToSendEvent) => {
   fetch(`${fetchUrl}`)
     .then((res) => res.json())
     .then(async (searchResult) => {
@@ -40,6 +41,9 @@ const findPost = (type, fetchUrl, setAction, toggleAction) => {
         const itemData = type === 'event' ? eventData : postData
         const inAppLink = await Linking.makeUrl('redirect', { type: `${type}Z${post.id}` })
 
+        if (needToSendEvent) {
+          events.openPost({ id: post.id, source: 'internal_link' })
+        }
         setAction({ ...itemData, inAppLink })
         toggleAction(false, '')
         return toggleAction(true, type)
