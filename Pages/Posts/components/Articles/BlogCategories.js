@@ -24,7 +24,7 @@ class BlogCategories extends React.Component {
     } else {
       subCategories.push(cat.id)
     }
-    events.clickOnBlogCategory(cat.id, index === -1)
+    events.clickOnBlogCategory(cat.name, index === -1)
     setSubCategoriesAction(subCategories)
     const catIds = subCategories.join(',')
     const category = catIds || 4
