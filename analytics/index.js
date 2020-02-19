@@ -11,6 +11,7 @@ const setUpAnalytics = (userId, userParams) => {
 }
 
 const logEvent = (eventName, info) => {
+  console.log('logEvent: ', eventName, info)
   if (info !== undefined) {
     return Amplitude.logEventWithProperties(eventName, info)
   }
@@ -34,14 +35,13 @@ const events = {
     logEvent('close drawer')
   },
   clickOnDrawerNavigation: (destination) => {
-    console.log('click on nav', destination)
     logEvent('click on drawer nav', { destination })
   },
   clickOnSocialLink: (type) => {
     logEvent('click on social link', { type })
   },
-  clickOnBlogCategory: ({ catId, isSelected }) => {
-    logEvent('click on blog category', { catId, isSelected })
+  clickOnBlogCategory: ({ catName, isSelected }) => {
+    logEvent('click on blog category', { category_name: catName, isSelected })
   },
 }
 

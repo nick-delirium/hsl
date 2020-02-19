@@ -45,6 +45,7 @@ class RouterWithDrawer extends React.PureComponent {
 
     /* ANALYTICS */
     const userIdToken = this.getUserToken()
+    console.log('userTocken', userIdToken)
 
     try {
       const OKBKLogin = await AsyncStorage.getItem('account')
