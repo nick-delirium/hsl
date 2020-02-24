@@ -230,7 +230,7 @@ const initialState = {
   tabHistory: ['groups'],
   title: 'ОКБК',
   fakeHistory: [],
-  titleHistory: [],
+  titleHistory: ['ОКБК'],
   prevTitle: '',
   shouldRenderFakeHeader: false,
   account: {},

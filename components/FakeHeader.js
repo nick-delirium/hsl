@@ -31,7 +31,10 @@ const Header = ({
   const { searchFieldValue, setFieldValue, getUsers } = useMemberSearch('', activeSearchTab, actions.setFoundData)
 
   const goBackAction = () => {
-    if (fakeHistory.length === 1) actions.setFoundData(defaultSearchResult)
+    if (fakeHistory.length === 1) {
+      actions.setFoundData(defaultSearchResult)
+      setFieldValue('')
+    }
     actions.goBack()
   }
 

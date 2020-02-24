@@ -10,6 +10,7 @@ import { connect } from 'react-redux'
 import get from 'lodash/get'
 import { createStructuredSelector } from 'reselect'
 import { trackPromise, usePromiseTracker } from 'react-promise-tracker'
+import Colors from '@/constants/Colors'
 import {
   changeCurrentTab,
   changeTitle,
@@ -25,7 +26,6 @@ import {
 import DefaultSearchTerms from './components/DefaultSearchTerms'
 import PersonalCard from '../People/components/PersonalCard'
 import Profile from '../Profile'
-import Colors from '@/constants/Colors'
 import useMemberSearch from './hooks/useMemberSearch'
 import useActiveTab from './hooks/useActiveTab'
 
