@@ -18,10 +18,11 @@ import { createStructuredSelector } from 'reselect'
 import HTML from 'react-native-render-html'
 import { togglePost } from '@/Navigation/reducer'
 import { setData as setArticle } from '@/Pages/Posts/components/Articles/articleReducer'
-import { setEvent } from '@/Pages/Posts/components/Events/eventReducer'
+import { setEvent, setRead } from '@/Pages/Posts/components/Events/eventReducer'
 import CachedImage from '@/components/CachedImage'
 import { formatDate } from '@/common/format'
 import findPost from '@/common/findPost'
+import isEndReached from '@/common/isEndReached'
 import api from '@/api'
 
 class Event extends React.PureComponent {
@@ -50,6 +51,7 @@ class Event extends React.PureComponent {
     const {
       // match: { params: { slug } }, // todo use slug
       event,
+      actions,
     } = this.props
 
     const {
@@ -71,7 +73,16 @@ class Event extends React.PureComponent {
     const showTime = oneDay && startDate.time !== '00:00'
 
     return (
-      <ScrollView ref="_scrollRef" contentContainerStyle={styles.scrollview}>
+      <ScrollView
+        ref="_scrollRef"
+        contentContainerStyle={styles.scrollview}
+        onScroll={({ nativeEvent }) => {
+          if (isEndReached(nativeEvent) && !event.isRead) {
+            actions.setRead(id, 'event')
+          }
+        }}
+        scrollEventThrottle={400}
+      >
         <View style={styles.description}>
           {image && (
             <CachedImage
@@ -219,6 +230,7 @@ const HTMLStyles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => ({
   actions: {
+    setRead: (id) => dispatch(setRead(id)),
     setArticle: (article) => dispatch(setArticle(article)),
     setEvent: (event) => dispatch(setEvent(event)),
     togglePost: (isOpen, type) => dispatch(togglePost(isOpen, type)),

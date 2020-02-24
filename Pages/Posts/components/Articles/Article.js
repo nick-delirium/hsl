@@ -3,13 +3,9 @@ import {
   StyleSheet,
   View,
   ScrollView,
-  Image,
-  TouchableOpacity,
-  Platform,
   Dimensions,
   Linking,
 } from 'react-native'
-import { WebView } from 'react-native-webview'
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
@@ -19,10 +15,12 @@ import { createStructuredSelector } from 'reselect'
 import * as WebBrowser from 'expo-web-browser'
 import { togglePost } from '@/Navigation/reducer'
 import CachedImage from '@/components/CachedImage'
-import { setData as setArticle } from '@/Pages/Posts/components/Articles/articleReducer'
+import { setData as setArticle, setRead } from '@/Pages/Posts/components/Articles/articleReducer'
 import { setEvent } from '@/Pages/Posts/components/Events/eventReducer'
 import findPost from '@/common/findPost'
+import isEndReached from '@/common/isEndReached'
 import api from '@/api'
+import IframeRender from './IframeRender'
 
 const { width } = Dimensions.get('window')
 
@@ -57,11 +55,10 @@ class Article extends React.Component {
   render() {
     const {
       article,
+      actions,
     } = this.props
-    const { OS } = Platform
-    // eslint-disable-next-line camelcase
-    const is_iOS = OS === 'ios'
     const {
+      id,
       title,
       content: {
         rendered: content,
@@ -78,6 +75,12 @@ class Article extends React.Component {
       <ScrollView
         ref="_scrollRef"
         contentContainerStyle={styles.scrollView}
+        onScroll={({ nativeEvent }) => {
+          if (isEndReached(nativeEvent) && !article.isRead) {
+            actions.setRead(id, 'post')
+          }
+        }}
+        scrollEventThrottle={400}
       >
         <View style={{ ...styles.card }}>
           {mediaUrl && (
@@ -99,33 +102,13 @@ class Article extends React.Component {
           </View>
           <HTML
             renderers={{
-              iframe: (atrs) => {
-                const videoId = atrs.src.split('/')[4]
-                const thumbnail = `https://img.youtube.com/vi/${videoId}/0.jpg`
-                // eslint-disable-next-line camelcase
-                if (is_iOS) {
-                  return (
-                    <WebView
-                      key={videoId}
-                      source={{ uri: atrs.src }}
-                      style={styles.videoFrameContainer}
-                    />
-                  )
-                }
-                return (
-                  <TouchableOpacity
-                    key={videoId}
-                    style={styles.videoFrameContainer}
-                    onPress={() => this.onRemoteUrlPress(atrs.src)}
-                  >
-                    <Image source={{ uri: thumbnail }} style={styles.videoFrameContainer} />
-                    <Image
-                      source={require('@/assets/images/youtube-play-btn.png')}
-                      style={{ position: 'absolute', top: (0.56 * (width - 40) - 56) / 2, right: (width - 40 - 80) / 2 }}
-                    />
-                  </TouchableOpacity>
-                )
-              },
+              iframe: (atrs) => (
+                <IframeRender
+                  atrs={atrs}
+                  onRemoteUrlPress={this.onRemoteUrlPress}
+                  styles={styles}
+                />
+              ),
             }}
             html={`<div>${videoContent}</div>`}
             imagesMaxWidth={Dimensions.get('window').width - 50}
@@ -196,6 +179,7 @@ const HTMLStyles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => ({
   actions: {
+    setRead: (id) => dispatch(setRead(id)),
     setArticle: (article) => dispatch(setArticle(article)),
     setEvent: (event) => dispatch(setEvent(event)),
     togglePost: (isOpen, type) => dispatch(togglePost(isOpen, type)),

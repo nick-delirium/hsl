@@ -28,6 +28,9 @@ const events = {
   closePost: () => {
     logEvent('close post')
   },
+  postReaded: ({ id, type }) => {
+    logEvent('post readed', { post_id: id, type })
+  },
   openDrawer: () => {
     logEvent('open drawer')
   },
