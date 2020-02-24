@@ -46,6 +46,9 @@ const events = {
   clickOnBlogCategory: ({ catName, isSelected }) => {
     logEvent('click on blog category', { category_name: catName, isSelected })
   },
+  clickOnSearch: (query) => {
+    logEvent('click on search', { query })
+  },
 }
 
 export {

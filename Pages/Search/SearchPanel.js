@@ -12,6 +12,7 @@ import { createStructuredSelector } from 'reselect'
 import get from 'lodash/get'
 import Icon from '@/assets/images/search-icon.png'
 import { togglePost } from '@/Navigation/reducer'
+import { events } from '@/analytics'
 import { searchPosts } from './reducer'
 
 class SearchPanel extends React.Component {
@@ -27,6 +28,7 @@ class SearchPanel extends React.Component {
   onSearchPress = () => {
     const { isSearch, closePost, history } = this.props
     const { inputValue } = this.state
+    events.clickOnSearch(inputValue)
     if (!isSearch) {
       closePost()
       history.push('/search')

@@ -12,21 +12,24 @@ import CardArticle from '@/Pages/Posts/components/Articles/CardArticle'
 import CardEvent from '@/Pages/Posts/components/Events/CardEvent'
 import Article from '@/Pages/Posts/components/Articles/Article'
 import Event from '@/Pages/Posts/components/Events/Event'
-const height = Dimensions.get('window').height
+
+const { height } = Dimensions.get('window')
 
 class AllPosts extends React.PureComponent {
-  constructor(props) {
-    super(props)
-    this.state = {
-      treshold: 0
-    }
-  }
+  // constructor(props) {
+  //   super(props)
+  //   this.state = {
+  //     treshold: 0,
+  //   }
+  // }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.posts.length !== this.props.posts.length) {
+    const { posts } = this.props
+    if (prevProps.posts.length !== posts.length) {
       this.refs._scrollRef.scrollToOffset({ offset: 0, animated: false })
     }
   }
+
   renderCardItem = ({ item }) => {
     const { categories, type } = this.props
     if (type === 'events') {
@@ -38,7 +41,7 @@ class AllPosts extends React.PureComponent {
           title={item.title}
           dateStart={item.start_date} //utc_start_date
           dateEnd={item.end_date}
-          image={get(item, `image.url`)}
+          image={get(item, 'image.url')}
           organizer={item.organizer} //array [0].organizer, url
           url={item.website}
           place={item.venue}
@@ -59,7 +62,7 @@ class AllPosts extends React.PureComponent {
         title={item.title.rendered}
         descr={item.excerpt.rendered || item.description}
         mediaUrl={item.mediaUrl ? item.mediaUrl : null}
-        categories={categories.filter(cat => (item.categories.includes(cat.id)))}
+        categories={categories.filter((cat) => (item.categories.includes(cat.id)))}
         content={get(item, 'content.rendered')}
         type={type}
       />
@@ -86,6 +89,7 @@ class AllPosts extends React.PureComponent {
   }
 
   render() {
+    // eslint-disable-next-line object-curly-newline
     const { posts, isLoading, isPostOpen, postType } = this.props
 
     const dataWithMedia = posts && posts.map((item) => {
@@ -100,7 +104,7 @@ class AllPosts extends React.PureComponent {
       <View style={{ position: 'relative', flex: 1 }}>
         {isPostOpen && this.renderPost(postType)}
         <FlatList
-          ref='_scrollRef'
+          ref="_scrollRef"
           style={{ flex: 1 }}
           data={dataWithMedia}
           renderItem={this.renderCardItem}
@@ -126,7 +130,7 @@ const styles = StyleSheet.create({
     height,
     backgroundColor: '#E1E1E1',
     flex: 1,
-  }
+  },
 })
 
 const mapStateFromProps = createStructuredSelector({
