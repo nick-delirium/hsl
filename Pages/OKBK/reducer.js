@@ -1,4 +1,5 @@
 import { AsyncStorage } from 'react-native'
+import get from 'lodash/get'
 import {
   client,
   auth,
@@ -64,6 +65,7 @@ export const singIn = (account) => (
         dispatch({ type: SING_IN_SUCCESS, payload: accountInfo })
         try {
           await AsyncStorage.setItem('account', JSON.stringify(accountInfo))
+          // await AsyncStorage.setItem('userId', get(accountInfo, 'user.id'))
         } catch (error) {
           console.log(error)
         }

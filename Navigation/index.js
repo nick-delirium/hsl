@@ -1,3 +1,4 @@
+/* eslint-disable no-async-promise-executor */
 import React from 'react'
 import { BackHandler, Keyboard, AsyncStorage } from 'react-native'
 import Drawer from 'react-native-drawer'
@@ -44,13 +45,13 @@ class RouterWithDrawer extends React.PureComponent {
     this.addLinkingListener()
 
     /* ANALYTICS */
-    const userIdToken = this.getUserToken()
-    console.log('userTocken', userIdToken)
+    const userIdToken = await this.getUserToken()
 
     try {
       const OKBKLogin = await AsyncStorage.getItem('account')
-      setUpAnalytics(userIdToken, { OKBKLogin })
-      events.openApp(userIdToken, { OKBKLogin })
+      const userId = get(JSON.parse(OKBKLogin), 'user.id')
+      setUpAnalytics(userIdToken, { OKBKLogin: userId })
+      events.openApp(userIdToken, userId)
     } catch (e) {
       setUpAnalytics(userIdToken)
       events.openApp(userIdToken)
@@ -93,16 +94,17 @@ class RouterWithDrawer extends React.PureComponent {
     this.removeLinkingListener()
   }
 
-  getUserToken = () => {
+  getUserToken = () => new Promise(async (resolve) => {
     const possibleToken = userToken()
-    AsyncStorage.getItem('userId', async (err, result) => {
-      if (!result) {
-        AsyncStorage.setItem('userId', possibleToken)
-        return possibleToken
-      }
-      return result
-    })
-  }
+    try {
+      const result = await AsyncStorage.getItem('userId')
+      console.log('hello', result)
+      resolve(result)
+    } catch (e) {
+      await AsyncStorage.setItem('userId', possibleToken)
+      resolve(possibleToken)
+    }
+  })
 
   _handleNotification = (notification) => {
     const isRedirectPush = Boolean(notification.data.id)
