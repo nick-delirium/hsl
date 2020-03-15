@@ -67,7 +67,7 @@ class Article extends React.Component {
     } = article
     const contentWithSpaces = content
       .replace(/<span class="symbols">.?<\/span>/g, ' ')
-      .replace(/<br.?\/>/, '')
+      // .replace(/<br.?\/>/, '')
       .replace(/<iframe/, '<iframe allowfullscreen frameBorder="0" ')
     const videoContent = contentWithSpaces
       .replace(/<span data-mce-type="bookmark" style="display: inline-block; width: 0px; overflow: hidden; line-height: 0;" class="mce_SELRES_start">.*<\/span>/g, '')

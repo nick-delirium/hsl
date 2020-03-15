@@ -95,6 +95,7 @@ class Feed extends React.PureComponent {
         descr={descrRendered || descrItem}
         mediaUrl={item.mediaUrl ? item.mediaUrl : null}
         content={get(item, 'content.rendered')}
+        comment={{ author: { name: 'Сергей', lastname: 'Пак' }, comment: 'С учётом сложившейся международной обстановки, разбавленное изрядной долей эмпатии, рациональное мышление обеспечивает актуальность вывода текущих активов' }}
       />
     )
   }
@@ -148,7 +149,7 @@ const styles = StyleSheet.create({
   postWrapper: {
     position: 'absolute',
     top: 0,
-    paddingBottom: 92, // height of header
+    // paddingBottom: 92, // height of header
     left: 0,
     zIndex: 9,
     height: height - 92,

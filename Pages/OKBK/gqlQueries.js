@@ -176,3 +176,162 @@ export const subscribeToPush = gql`
     }
   }
 `
+
+export const getOKBKposts = gql`
+  query postsList(
+    $page: Int!
+    $per_page: Int,
+    $categories: String
+  )
+  {
+    postsList (
+      page: $page,
+      per_page: $per_page,
+      categories: $categories
+    )
+    {
+      result,
+      code,
+      message,
+      posts {
+        id,
+        date,
+        guid { rendered },
+        modified,
+        modified_gmt,
+        slug,
+        status,
+        type,
+        link,
+        title { rendered },
+        content { rendered,protected },
+        excerpt { rendered,protected },
+        author,
+        featured_media,
+        comment_status,
+        ping_status,
+        sticky,
+        template,
+        format,
+        meta { _tribe_blocks_recurrence_rules, _tribe_blocks_recurrence_exclusions, _tribe_blocks_recurrence_description },
+        categories,
+        tags,
+        _links {
+          self { href },
+          collection { href },
+          about { href },
+          author { href, embeddable } ,
+          replies { href, embeddable } ,
+          versionHistory { count, href, },
+          predecessorVersion { id, href, },
+          wpFeaturedmedia { embeddable, href },
+          wpAttachment { href },
+          wpTerm { taxonomy, embeddable, href },
+          curies { name, templated, href }
+        },
+        comments { commentId, comment, author { userId, name, lastname, photo },
+          likes,
+          parentId { commentId, comment, author { userId, name, lastname, photo } },
+          date
+        },
+        topComment { commentId, comment, author { userId, name, lastname, photo }, likes},
+        likes {
+          count,
+          authors { userId, photo }
+        }
+      }
+    }
+  }
+`
+
+export const addCommentQuery = gql`
+  mutation addComment (
+    $postId: Int!
+    $comment: String!
+  )
+  {
+    addComment (
+      postId: $postId,
+      comment: $comment
+    )
+    {
+      result,
+      code,
+      message
+    }
+  }
+`
+
+export const deleteCommentQuery = gql`
+  mutation removeComment (
+    $commentId: Int!
+  )
+  {
+    removeComment (
+      commentId: $commentId
+    )
+    {
+      result,
+      code,
+      message
+    }
+  }
+`
+
+export const addReplayQuery = gql`
+  mutation addCommentToComment (
+    $postId: Int!
+    $comment: String!
+    $userId: Int!
+    $parentId: Int!
+  )
+  {
+    addCommentToComment (
+      postId: $postId,
+      comment: $comment,
+      userId: $userId,
+      parentId: $parentId
+    )
+    {
+      result,
+      code,
+      message
+    }
+  }
+`
+
+export const addCommentLikeQuery = gql`
+  mutation addCommentLike (
+    $commentId: Int!
+    $userId: Int!
+  )
+  {
+    addCommentLike (
+      commentId: $commentId,
+      userId: $userId
+    )
+    {
+      result,
+      code,
+      message
+    }
+  }
+`
+
+export const removeCommentLikeQuery = gql`
+mutation removeCommentLike (
+  $commentId: Int!
+  $userId: Int!
+)
+{
+  removeCommentLike (
+    commentId: $commentId,
+    userId: $userId
+  )
+  {
+    result,
+    code,
+    message
+  }
+}
+`

@@ -13,10 +13,11 @@ import { createStructuredSelector } from 'reselect'
 import HTML from 'react-native-render-html'
 import { changeLocation, togglePost } from '@/Navigation/reducer'
 import CachedImage from '@/components/CachedImage'
-import { setData } from './articleReducer'
 import fonts from '@/constants/Styles'
 import Card from '@/components/Card'
+import SingleComment from '@/components/comments/SingleComment'
 import { events } from '@/analytics'
+import { setData } from './articleReducer'
 
 class CardArticle extends React.PureComponent {
   onItemPress = async () => {
@@ -59,6 +60,7 @@ class CardArticle extends React.PureComponent {
       type,
       htmlView,
       date,
+      comment,
     } = this.props
     const renderDescr = htmlView ? descr : descr.split('\n<')[0]
     const isPromo = categories.map((c) => c.id).includes(617)
@@ -96,12 +98,26 @@ class CardArticle extends React.PureComponent {
             )}
           </View>
         )}
+        {comment && (
+          <View style={styles.comment}>
+            <SingleComment
+              author={comment.author}
+              comment={comment.comment}
+            />
+          </View>
+        )}
       </Card>
     )
   }
 }
 
 const styles = StyleSheet.create({
+  comment: {
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 5,
+    paddingBottom: 10,
+  },
   cardText: {
     paddingLeft: 15,
     paddingBottom: 15,

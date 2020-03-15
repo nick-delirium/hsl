@@ -5,8 +5,8 @@ import {
   auth,
   getClubsQuery,
   getUsersQuery,
+  getOKBKposts,
 } from './gqlQueries'
-import api from '@/api'
 
 // Auth
 const SING_IN = 'app.okbk.sing_in'
@@ -200,20 +200,30 @@ export const getNews = (
   isRefresh = false,
   page = 1,
   isInitial = true,
-) => (dispatch) => {
-  dispatch(getNewsRequest(limit, isRefresh))
-  console.log(limit, isRefresh, page)
-  fetch(api.getPostsByCategory(792, limit, page))
-    .then((response) => response.json())
-    .then((posts) => {
-      if (isInitial) return dispatch(getNewsInitialSuccess(posts))
-      return dispatch(getNewsSuccess(posts))
-    })
-    .catch((e) => {
-      console.log(e)
+) => (
+  async (dispatch) => {
+    dispatch(getNewsRequest(limit, isRefresh))
+    console.log(limit, isRefresh, page)
+    try {
+      const response = await client.query({
+        query: getOKBKposts,
+        variables: {
+          page,
+          per_page: limit,
+          categories: '792',
+        },
+      })
+      const res = get(response, 'data.postsList')
+      if (res.posts) {
+        if (isInitial) return dispatch(getNewsInitialSuccess(res.posts))
+        return dispatch(getNewsSuccess(res.posts))
+      }
+    } catch (e) {
+      console.error(e)
       return dispatch(getNewsFalure(e))
-    })
-}
+    }
+  }
+)
 
 
 export const defaultSearchResult = {
