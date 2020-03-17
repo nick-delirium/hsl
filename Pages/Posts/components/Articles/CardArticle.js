@@ -60,7 +60,7 @@ class CardArticle extends React.PureComponent {
       type,
       htmlView,
       date,
-      comment,
+      topComment,
     } = this.props
     const renderDescr = htmlView ? descr : descr.split('\n<')[0]
     const isPromo = categories.map((c) => c.id).includes(617)
@@ -98,11 +98,11 @@ class CardArticle extends React.PureComponent {
             )}
           </View>
         )}
-        {comment && (
+        {topComment && (
           <View style={styles.comment}>
             <SingleComment
-              author={comment.author}
-              comment={comment.comment}
+              author={topComment.author}
+              comment={topComment.comment}
             />
           </View>
         )}

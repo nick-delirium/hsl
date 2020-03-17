@@ -86,6 +86,7 @@ class Feed extends React.PureComponent {
       .split('')
       .join('')
     return (
+      // TODO: get real topComment
       <CardArticle
         key={item.id}
         id={item.id}
@@ -95,7 +96,7 @@ class Feed extends React.PureComponent {
         descr={descrRendered || descrItem}
         mediaUrl={item.mediaUrl ? item.mediaUrl : null}
         content={get(item, 'content.rendered')}
-        comment={{ author: { name: 'Сергей', lastname: 'Пак' }, comment: 'С учётом сложившейся международной обстановки, разбавленное изрядной долей эмпатии, рациональное мышление обеспечивает актуальность вывода текущих активов' }}
+        topComment={{ author: { name: 'Сергей', lastname: 'Пак' }, comment: 'С учётом сложившейся международной обстановки, разбавленное изрядной долей эмпатии, рациональное мышление обеспечивает актуальность вывода текущих активов' }}
       />
     )
   }

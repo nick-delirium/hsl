@@ -15,6 +15,7 @@ import { createStructuredSelector } from 'reselect'
 import * as WebBrowser from 'expo-web-browser'
 import { togglePost } from '@/Navigation/reducer'
 import CachedImage from '@/components/CachedImage'
+import CommentThread from '@/components/comments/CommentThread'
 import { setData as setArticle, setRead } from '@/Pages/Posts/components/Articles/articleReducer'
 import { setEvent } from '@/Pages/Posts/components/Events/eventReducer'
 import findPost from '@/common/findPost'
@@ -116,6 +117,22 @@ class Article extends React.Component {
             containerStyles={{ flex: 1, maxWidth: width - 50 }}
             tagsStyles={HTMLStyles}
             ignoredStyles={['fontFamily', 'font-family', 'width', 'height']}
+          />
+        </View>
+        <View style={{ ...styles.titleWrap, paddingBottom: 60 }}>
+          {/* TODO: clean here */}
+          <CommentThread
+            comments={[
+              { commentId: 1, author: { name: 'Сергей', lastname: 'Пак' }, comment: 'С учётом сложившейся международной обстановки, разбавленное изрядной долей эмпатии, рациональное мышление обеспечивает актуальность вывода текущих активов' },
+              { commentId: 2, author: { name: 'Анна', lastname: 'Ким' }, comment: 'Зачем мыслить логически, если можно мыслить водически?' },
+              { commentId: 3, parentId: 2, author: { name: 'Кот', lastname: 'Водический' }, comment: 'Согласен' },
+              { commentId: 4, parentId: 3, author: { name: 'Сергей', lastname: 'Пак' }, comment: 'raplay to 3, рациональное мышление обеспечивает актуальность вывода текущих активов' },
+              { commentId: 5, author: { name: 'Анна', lastname: 'Ким' }, comment: 'Зачем мыслить логически, если можно мыслить водически?' },
+              { commentId: 6, parentId: 2, author: { name: 'Кот', lastname: 'Водический' }, comment: 'Согласен' },
+              { commentId: 7, author: { name: 'Сергей', lastname: 'Пак' }, comment: 'С учётом сложившейся международной обстановки, разбавленное изрядной долей эмпатии, рациональное мышление обеспечивает актуальность вывода текущих активов' },
+              { commentId: 8, author: { name: 'Анна', lastname: 'Ким' }, comment: 'Зачем мыслить логически, если можно мыслить водически?' },
+              { commentId: 9, parentId: 1, author: { name: 'Кот', lastname: 'Водический' }, comment: 'replay to 1' },
+            ]}
           />
         </View>
       </ScrollView>

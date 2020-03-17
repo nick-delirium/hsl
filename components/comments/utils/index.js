@@ -5,6 +5,7 @@ export const formatDate = (date) => {
 }
 
 export const formatComments = (comments) => {
+  // TODO: do it recursively
   const commentArray = comments.filter((comment) => !comment.parentId)
   const commentsWithSubcomments = commentArray.map((comment) => {
     const { commentId } = comment
