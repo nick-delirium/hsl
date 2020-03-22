@@ -15,7 +15,7 @@ import { changeLocation, togglePost } from '@/Navigation/reducer'
 import CachedImage from '@/components/CachedImage'
 import fonts from '@/constants/Styles'
 import Card from '@/components/Card'
-import SingleComment from '@/components/comments/SingleComment'
+import InArticleComments from '@/components/comments/InArticleComments'
 import { events } from '@/analytics'
 import { setData } from './articleReducer'
 
@@ -30,6 +30,7 @@ class CardArticle extends React.PureComponent {
       mediaUrl,
       id,
       openPost,
+      comments,
     } = this.props
 
     events.openPost({ id, source: 'feed' })
@@ -41,6 +42,7 @@ class CardArticle extends React.PureComponent {
       link,
       categories,
       content: data.content,
+      comments,
     }
     try {
       const inAppLink = await Linking.makeUrl('redirect', { type: `articleZ${id}` })
@@ -61,6 +63,7 @@ class CardArticle extends React.PureComponent {
       htmlView,
       date,
       topComment,
+      comments,
     } = this.props
     const renderDescr = htmlView ? descr : descr.split('\n<')[0]
     const isPromo = categories.map((c) => c.id).includes(617)
@@ -100,9 +103,10 @@ class CardArticle extends React.PureComponent {
         )}
         {topComment && (
           <View style={styles.comment}>
-            <SingleComment
-              author={topComment.author}
-              comment={topComment.comment}
+            <InArticleComments
+              comments={[topComment]}
+              commentsLength={comments.length}
+              isInCard
             />
           </View>
         )}

@@ -107,7 +107,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.10,
     shadowRadius: 2,
-
     elevation: 3,
   },
   iconsContainer: {

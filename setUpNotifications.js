@@ -25,7 +25,7 @@ function registerForPushNotificationsAsync() {
       const token = await Notifications.getExpoPushTokenAsync()
       resolve(token)
     } catch (e) {
-      throw new Error(e)
+      reject(e)
     }
   })
 }

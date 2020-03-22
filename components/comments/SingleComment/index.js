@@ -7,13 +7,17 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native'
+import dateFormat from '../utils/dateFormat'
 
 const SingleComment = ({
+  likes,
   author,
   comment,
   date,
   commentId,
   isWithActions,
+  isChild,
+  parentAuthor,
 }) => (
   <View style={{ flexDirection: 'column', paddingBottom: 10 }}>
     <View style={{ flexDirection: 'row' }}>
@@ -29,8 +33,27 @@ const SingleComment = ({
           <Text style={styles.name}>
             {`${author.lastname} ${author.name}  `}
           </Text>
+          {isChild && (
+            <Text style={{ color: '#959595' }}>
+              {`${parentAuthor.lastname} ${parentAuthor.name}`}
+              {'\n'}
+            </Text>
+          )}
           {comment}
         </Text>
+        {isWithActions && (
+          <View style={styles.actions}>
+            <Text style={{ color: '#525252' }}>{dateFormat(date)}</Text>
+            <TouchableOpacity
+              onClick={() => console.log(commentId)}
+              style={{ marginLeft: 30, color: '#525252' }}
+            >
+              <Text>
+                Ответить
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
       <View style={styles.likeWrapper}>
         <Image
@@ -38,14 +61,11 @@ const SingleComment = ({
           resizeMode="cover"
           source={require('@/assets/images/like_icon_border.png')}
         />
+        {likes > 0 && (
+          <Text style={styles.likesCount}>{likes}</Text>
+        )}
       </View>
     </View>
-    {isWithActions && (
-      <View>
-        <Text>{date}</Text>
-        <TouchableOpacity onClick={() => console.log(commentId)}> Ответить </TouchableOpacity>
-      </View>
-    )}
   </View>
 )
 
@@ -71,7 +91,18 @@ const styles = StyleSheet.create({
   likeWrapper: {
     flex: 1,
     height: 21,
-    width: 21,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 10,
+  },
+  likesCount: {
+    color: '#B62655',
+    marginLeft: 5,
+  },
+  actions: {
+    marginTop: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 })
 

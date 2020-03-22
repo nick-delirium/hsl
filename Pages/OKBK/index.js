@@ -5,6 +5,7 @@ import {
   AsyncStorage,
   SafeAreaView,
   StyleSheet,
+  KeyboardAvoidingView,
 } from 'react-native'
 import { connect } from 'react-redux'
 import get from 'lodash/get'
@@ -17,6 +18,7 @@ import Profile from './Profile'
 import Feed from './Feed'
 import { authErrors } from './queriesErrors'
 import Navbar from './components/NavBar'
+import CommentField from './components/CommentField'
 import { accountConfirmed } from './reducer'
 
 class OKBK extends PureComponent {
@@ -67,6 +69,7 @@ class OKBK extends PureComponent {
       isLoggedIn,
       isLoading,
       error,
+      isPostOpen,
     } = this.props
 
     if (isLoading) return <Text>loading</Text>
@@ -78,12 +81,17 @@ class OKBK extends PureComponent {
     }
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF', zIndex: 10 }}>
-        <View style={styles.main}>
+        <KeyboardAvoidingView
+          behavior="padding"
+          enabled
+          style={styles.main}
+          keyboardVerticalOffset={90}
+        >
           <View style={{ flex: 1, paddingBottom: 60 }}>
             {this.returnTabView()}
           </View>
-          <Navbar />
-        </View>
+          {isPostOpen ? <CommentField /> : <Navbar />}
+        </KeyboardAvoidingView>
       </SafeAreaView>
     )
   }
@@ -102,6 +110,7 @@ const mapStateToProps = createStructuredSelector({
   account: (state) => get(state, 'okbk.account'),
   error: (state) => get(state, 'okbk.error'),
   currentTab: (state) => get(state, 'okbk.currentTab'),
+  isPostOpen: (state) => get(state, 'url.isPostOpen'),
 })
 const mapDispatchToProps = (dispatch) => ({
   actions: {

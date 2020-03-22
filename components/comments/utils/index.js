@@ -6,10 +6,11 @@ export const formatDate = (date) => {
 
 export const formatComments = (comments) => {
   // TODO: do it recursively
-  const commentArray = comments.filter((comment) => !comment.parentId)
+  const sortedByDate = comments.sort((a, b) => a.date - b.date)
+  const commentArray = sortedByDate.filter((comment) => !comment.parentId)
   const commentsWithSubcomments = commentArray.map((comment) => {
     const { commentId } = comment
-    const childs = comments.filter(({ parentId }) => parentId === commentId)
+    const childs = sortedByDate.filter(({ parentId }) => parentId === commentId)
 
     return {
       ...comment,

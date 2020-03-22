@@ -7,34 +7,36 @@ import fonts from '@/constants/Styles'
 import SingleComment from '../SingleComment'
 import { formatComments } from '../utils'
 
-const CommentThread = ({ comments }) => {
-  const formattedComments = formatComments(comments)
+const CommentThread = ({ comments, isInCard }) => {
+  const formattedComments = isInCard ? comments : formatComments(comments)
   return (
-    <View>
+    <>
       {formattedComments.map((comment) => (
-        <>
+        <React.Fragment key={comment.commentId}>
           <SingleComment
-            // isWithActions
-            key={comment.commentId}
+            isWithActions={!isInCard}
+            likes={comment.likes}
+            date={comment.date}
             author={comment.author}
             comment={comment.comment}
           />
-          {comment.childs ? comment.childs.map((childComment) => (
-            <View style={styles.childComment}>
+          {comment.childs && !isInCard ? comment.childs.map((childComment) => (
+            <View style={styles.childComment} key={childComment.commentId}>
               <SingleComment
-                // isWithActions
-                key={comment.commentId}
+                isChild
+                parentAuthor={comment.author}
+                isWithActions={!isInCard}
                 author={childComment.author}
+                likes={childComment.likes}
                 comment={childComment.comment}
-                // likes={childComment.likes}
-                // date={childComment.date}
+                date={childComment.date}
                 commentId={childComment.commentId}
               />
             </View>
           )) : null}
-        </>
+        </React.Fragment>
       ))}
-    </View>
+    </>
   )
 }
 

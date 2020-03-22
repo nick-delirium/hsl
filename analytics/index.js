@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import * as Amplitude from 'expo-analytics-amplitude'
 
 const AmplitudeAPIKey = 'bbca3d5fb31f12780ba56d2d245b5ab6'
@@ -11,6 +12,7 @@ const setUpAnalytics = (userId, userParams) => {
 }
 
 const logEvent = (eventName, info) => {
+  if (__DEV__) return null
   console.log('logEvent: ', eventName, info)
   if (info !== undefined) {
     return Amplitude.logEventWithProperties(eventName, info)

@@ -9,6 +9,8 @@ import {
 import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
+import { getCategories, setFeedType } from '@/Navigation/reducer'
+import { formatDateAsNumeric, formatEventDate } from '@/common/format'
 import CardArticle from './components/Articles/CardArticle'
 import CardEvent from './components/Events/CardEvent'
 import {
@@ -17,8 +19,6 @@ import {
   getEvents,
   rmRefreshFlag,
 } from './reducer'
-import { getCategories, setFeedType } from '@/Navigation/reducer'
-import { formatDateAsNumeric, formatEventDate } from '@/common/format'
 import Article from './components/Articles/Article'
 import Event from './components/Events/Event'
 import BlogCategories from './components/Articles/BlogCategories'
@@ -269,7 +269,7 @@ class AllPosts extends React.PureComponent {
       )
     }
     return (
-      <View style={{ position: 'relative', flex: 1, paddingBottom: 10 }}>
+      <View style={{ position: 'relative', flex: 1 }}>
         {isPostOpen && this.renderPost(postType)}
         {dataWithMedia.length > 0 && (
           <FlatList

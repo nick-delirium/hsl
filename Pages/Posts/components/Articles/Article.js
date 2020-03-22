@@ -5,6 +5,7 @@ import {
   ScrollView,
   Dimensions,
   Linking,
+  KeyboardAvoidingView,
 } from 'react-native'
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
@@ -15,15 +16,15 @@ import { createStructuredSelector } from 'reselect'
 import * as WebBrowser from 'expo-web-browser'
 import { togglePost } from '@/Navigation/reducer'
 import CachedImage from '@/components/CachedImage'
-import CommentThread from '@/components/comments/CommentThread'
 import { setData as setArticle, setRead } from '@/Pages/Posts/components/Articles/articleReducer'
 import { setEvent } from '@/Pages/Posts/components/Events/eventReducer'
 import findPost from '@/common/findPost'
 import isEndReached from '@/common/isEndReached'
 import api from '@/api'
+import InArticleComments from '@/components/comments/InArticleComments'
 import IframeRender from './IframeRender'
 
-const { width } = Dimensions.get('window')
+const { width, height } = Dimensions.get('window')
 
 class Article extends React.Component {
   componentDidMount() {
@@ -65,6 +66,7 @@ class Article extends React.Component {
         rendered: content,
       },
       mediaUrl,
+      comments,
     } = article
     const contentWithSpaces = content
       .replace(/<span class="symbols">.?<\/span>/g, ' ')
@@ -73,69 +75,69 @@ class Article extends React.Component {
     const videoContent = contentWithSpaces
       .replace(/<span data-mce-type="bookmark" style="display: inline-block; width: 0px; overflow: hidden; line-height: 0;" class="mce_SELRES_start">.*<\/span>/g, '')
     return (
-      <ScrollView
-        ref="_scrollRef"
-        contentContainerStyle={styles.scrollView}
-        onScroll={({ nativeEvent }) => {
-          if (isEndReached(nativeEvent) && !article.isRead) {
-            actions.setRead(id, 'post')
-          }
-        }}
-        scrollEventThrottle={400}
-      >
-        <View style={{ ...styles.card }}>
-          {mediaUrl && (
-            <CachedImage
-              source={mediaUrl}
-              title={mediaUrl.slice(-4)}
-              categories={undefined}
-              style={{ height: 200 }}
-            />
-          )}
-          <View style={styles.titleWrap}>
+      <KeyboardAvoidingView style={{ flex: 1, height: '100%' }} keyboardVerticalOffset={60} behavior="position">
+        <ScrollView
+          ref="_scrollRef"
+          contentContainerStyle={styles.scrollView}
+          onScroll={({ nativeEvent }) => {
+            if (isEndReached(nativeEvent) && !article.isRead) {
+              actions.setRead(id, 'post')
+            }
+          }}
+          scrollEventThrottle={400}
+        >
+          <View style={{ ...styles.card }}>
+            {mediaUrl && (
+              <CachedImage
+                source={mediaUrl}
+                title={mediaUrl.slice(-4)}
+                categories={undefined}
+                style={{ height: 200 }}
+              />
+            )}
+            <View style={styles.titleWrap}>
+              <HTML
+                baseFontStyle={{
+                  fontWeight: 'bold',
+                  fontSize: 22,
+                }}
+                html={title}
+              />
+            </View>
             <HTML
-              baseFontStyle={{
-                fontWeight: 'bold',
-                fontSize: 22,
+              renderers={{
+                iframe: (atrs) => (
+                  <IframeRender
+                    atrs={atrs}
+                    onRemoteUrlPress={this.onRemoteUrlPress}
+                    styles={styles}
+                  />
+                ),
               }}
-              html={title}
+              html={`<div>${videoContent}</div>`}
+              imagesMaxWidth={Dimensions.get('window').width - 50}
+              onLinkPress={(e, url) => this.onLinkPress(url)}
+              containerStyles={{ flex: 1, maxWidth: width - 50 }}
+              tagsStyles={HTMLStyles}
+              ignoredStyles={['fontFamily', 'font-family', 'width', 'height']}
             />
-          </View>
-          <HTML
-            renderers={{
-              iframe: (atrs) => (
-                <IframeRender
-                  atrs={atrs}
-                  onRemoteUrlPress={this.onRemoteUrlPress}
-                  styles={styles}
+
+            {comments && (
+              <View
+                style={{
+                  ...styles.titleWrap,
+                  paddingBottom: 60,
+                }}
+              >
+                <InArticleComments
+                  comments={comments}
+                  commentsLength={comments.length}
                 />
-              ),
-            }}
-            html={`<div>${videoContent}</div>`}
-            imagesMaxWidth={Dimensions.get('window').width - 50}
-            onLinkPress={(e, url) => this.onLinkPress(url)}
-            containerStyles={{ flex: 1, maxWidth: width - 50 }}
-            tagsStyles={HTMLStyles}
-            ignoredStyles={['fontFamily', 'font-family', 'width', 'height']}
-          />
-        </View>
-        <View style={{ ...styles.titleWrap, paddingBottom: 60 }}>
-          {/* TODO: clean here */}
-          <CommentThread
-            comments={[
-              { commentId: 1, author: { name: 'Сергей', lastname: 'Пак' }, comment: 'С учётом сложившейся международной обстановки, разбавленное изрядной долей эмпатии, рациональное мышление обеспечивает актуальность вывода текущих активов' },
-              { commentId: 2, author: { name: 'Анна', lastname: 'Ким' }, comment: 'Зачем мыслить логически, если можно мыслить водически?' },
-              { commentId: 3, parentId: 2, author: { name: 'Кот', lastname: 'Водический' }, comment: 'Согласен' },
-              { commentId: 4, parentId: 3, author: { name: 'Сергей', lastname: 'Пак' }, comment: 'raplay to 3, рациональное мышление обеспечивает актуальность вывода текущих активов' },
-              { commentId: 5, author: { name: 'Анна', lastname: 'Ким' }, comment: 'Зачем мыслить логически, если можно мыслить водически?' },
-              { commentId: 6, parentId: 2, author: { name: 'Кот', lastname: 'Водический' }, comment: 'Согласен' },
-              { commentId: 7, author: { name: 'Сергей', lastname: 'Пак' }, comment: 'С учётом сложившейся международной обстановки, разбавленное изрядной долей эмпатии, рациональное мышление обеспечивает актуальность вывода текущих активов' },
-              { commentId: 8, author: { name: 'Анна', lastname: 'Ким' }, comment: 'Зачем мыслить логически, если можно мыслить водически?' },
-              { commentId: 9, parentId: 1, author: { name: 'Кот', lastname: 'Водический' }, comment: 'replay to 1' },
-            ]}
-          />
-        </View>
-      </ScrollView>
+              </View>
+            )}
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     )
   }
 }
@@ -156,6 +158,7 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     backgroundColor: '#fff',
     paddingBottom: 30,
+    minHeight: height - 100,
   },
   titleWrap: {
     paddingRight: 20,

@@ -21,6 +21,80 @@ import {
 
 const { height } = Dimensions.get('window')
 
+const comments = [
+  {
+    commentId: 1,
+    likes: 3,
+    date: 1584862200000,
+    author: { name: 'Сергей', lastname: 'Пак' },
+    comment:
+            'С учётом сложившейся международной обстановки, разбавленное изрядной долей эмпатии, рациональное мышление обеспечивает актуальность вывода текущих активов',
+  },
+  {
+    commentId: 2,
+    likes: 1,
+    date: 1584780000000,
+    author: { name: 'Анна', lastname: 'Ким' },
+    comment: 'Зачем мыслить логически, если можно мыслить водически?',
+  },
+  {
+    commentId: 3,
+    parentId: 2,
+    likes: 1,
+    date: 1584693600000,
+    author: { name: 'Кот', lastname: 'Водический' },
+    comment: 'Согласен',
+  },
+  {
+    commentId: 4,
+    parentId: 3,
+    likes: 1,
+    date: 1584693600000,
+    author: { name: 'Сергей', lastname: 'Пак' },
+    comment:
+            'raplay to 3, рациональное мышление обеспечивает актуальность вывода текущих активов',
+  },
+  {
+    commentId: 5,
+    likes: 1,
+    date: 1584693600000,
+    author: { name: 'Анна', lastname: 'Ким' },
+    comment: 'Зачем мыслить логически, если можно мыслить водически?',
+  },
+  {
+    commentId: 6,
+    parentId: 2,
+    likes: 1,
+    date: 1584693600000,
+    author: { name: 'Кот', lastname: 'Водический' },
+    comment: 'Согласен',
+  },
+  {
+    commentId: 7,
+    likes: 1,
+    date: 1584693600000,
+    author: { name: 'Сергей', lastname: 'Пак' },
+    comment:
+            'С учётом сложившейся международной обстановки, разбавленное изрядной долей эмпатии, рациональное мышление обеспечивает актуальность вывода текущих активов',
+  },
+  {
+    commentId: 8,
+    likes: 1,
+    date: 1584693600000,
+    author: { name: 'Анна', lastname: 'Ким' },
+    comment: 'Зачем мыслить логически, если можно мыслить водически?',
+  },
+  {
+    commentId: 9,
+    parentId: 1,
+    likes: 1,
+    date: 1584693600000,
+    author: { name: 'Кот', lastname: 'Водический' },
+    comment: 'replay to 1',
+  },
+]
+const topComment = comments.sort((a, b) => b.likes - a.likes)[0]
+
 class Feed extends React.PureComponent {
   constructor(props) {
     super(props)
@@ -96,7 +170,8 @@ class Feed extends React.PureComponent {
         descr={descrRendered || descrItem}
         mediaUrl={item.mediaUrl ? item.mediaUrl : null}
         content={get(item, 'content.rendered')}
-        topComment={{ author: { name: 'Сергей', lastname: 'Пак' }, comment: 'С учётом сложившейся международной обстановки, разбавленное изрядной долей эмпатии, рациональное мышление обеспечивает актуальность вывода текущих активов' }}
+        comments={comments}
+        topComment={topComment}
       />
     )
   }
