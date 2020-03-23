@@ -23,7 +23,7 @@
   "dependencies": {
     "@expo/samples": "3.0.3",
     "apollo-boost": "^0.4.4",
-    "babel-plugin-module-resolver": "^3.2.0",
+    "babel-plugin-module-resolver": "^4.0.0",
     "expo": "^36.0.2",
     "expo-analytics-amplitude": "~8.0.0",
     "expo-asset": "~8.0.0",
@@ -43,8 +43,8 @@
     "react-native-maps": "0.26.1",
     "react-native-render-html": "^4.2.0",
     "react-native-webview": "7.4.3",
-    "react-promise-tracker": "^2.0.5",
-    "react-redux": "^7.1.1",
+    "react-promise-tracker": "^2.1.0",
+    "react-redux": "^7.2.0",
     "react-router-native": "^5.1.2",
     "redux": "^4.0.0",
     "redux-thunk": "^2.3.0",
@@ -54,7 +54,7 @@
   "devDependencies": {
     "babel-eslint": "^10.0.3",
     "babel-plugin-transform-remove-console": "^6.9.4",
-    "babel-preset-expo": "^7.0.0",
+    "babel-preset-expo": "^8.0.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-react-16": "^1.14.0",
     "eslint": "^6.4.0",
