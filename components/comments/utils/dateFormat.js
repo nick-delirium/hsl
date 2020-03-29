@@ -1,5 +1,6 @@
 const dateFormat = (date) => {
-  const dateObj = new Date(date)
+  const replaced = date.replace(' ', 'T')
+  const dateObj = new Date(replaced)
   const time = `${dateObj.getHours()}:${dateObj.getMinutes()}`
   const today = new Date()
 

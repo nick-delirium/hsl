@@ -8,11 +8,13 @@ import CommentThread from '../CommentThread'
 
 const InArticleComments = ({ comments, isInCard, commentsLength }) => (
   <>
-    <Text style={styles.commentsCount}>
-      Всего комментариев:
-      {' '}
-      {commentsLength}
-    </Text>
+    {commentsLength > 0 && (
+      <Text style={styles.commentsCount}>
+        Всего комментариев:
+        {' '}
+        {commentsLength}
+      </Text>
+    )}
     <View style={styles.topCommentWrapper}>
       <CommentThread
         isInCard={isInCard}

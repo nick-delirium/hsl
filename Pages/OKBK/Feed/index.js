@@ -93,7 +93,7 @@ const comments = [
     comment: 'replay to 1',
   },
 ]
-const topComment = comments.sort((a, b) => b.likes - a.likes)[0]
+// const topComment = comments.sort((a, b) => b.likes - a.likes)[0]
 
 class Feed extends React.PureComponent {
   constructor(props) {
@@ -170,8 +170,8 @@ class Feed extends React.PureComponent {
         descr={descrRendered || descrItem}
         mediaUrl={item.mediaUrl ? item.mediaUrl : null}
         content={get(item, 'content.rendered')}
-        comments={comments}
-        topComment={topComment}
+        comments={item.comments}
+        topComment={item.topComment}
       />
     )
   }

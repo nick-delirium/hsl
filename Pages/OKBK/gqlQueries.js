@@ -248,11 +248,13 @@ export const addCommentQuery = gql`
   mutation addComment (
     $postId: Int!
     $comment: String!
+    $userId: Int!
   )
   {
     addComment (
       postId: $postId,
-      comment: $comment
+      comment: $comment,
+      userId: $userId
     )
     {
       result,

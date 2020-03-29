@@ -6,6 +6,8 @@ import {
   getClubsQuery,
   getUsersQuery,
   getOKBKposts,
+  addCommentQuery,
+  addReplayQuery,
 } from './gqlQueries'
 
 // Auth
@@ -215,6 +217,7 @@ export const getNews = (
       })
       const res = get(response, 'data.postsList')
       if (res.posts) {
+        console.log(res.posts[1].comments)
         if (isInitial) return dispatch(getNewsInitialSuccess(res.posts))
         return dispatch(getNewsSuccess(res.posts))
       }
@@ -225,6 +228,54 @@ export const getNews = (
   }
 )
 
+const ADD_COMMENT = 'app.okbk.add_comment'
+const ADD_COMMENT_SUCCESS = 'app.okbk.add_comment_succsess'
+const ADD_COMMENT_FALURE = 'app.okbk.add_comment_falure'
+const ADD_COMMENT_REPLY = 'app.okbk.add_comment_reply'
+
+const addCommentRequest = () => ({
+  type: ADD_COMMENT,
+})
+const addCommentSuccess = (comment) => ({
+  type: ADD_COMMENT_SUCCESS,
+  payload: comment,
+})
+const addCommentFalure = (error) => ({
+  type: ADD_COMMENT_FALURE,
+})
+
+export const addComment = (
+  postId,
+  comment,
+  userId,
+  parentId,
+) => (
+  async (dispatch) => {
+    dispatch(addCommentRequest())
+    const mutation = parentId ? addReplayQuery : addCommentQuery
+    const variables = parentId
+      ? { postId, comment, userId, parentId }
+      : { postId, comment, userId }
+    try {
+      const response = await client.mutate({
+        mutation,
+        variables,
+      })
+      const res = get(response, 'data.addComment') || get(response, 'data.addCommentToComment')
+      if (res) {
+        return dispatch(addCommentSuccess())
+      }
+    } catch (e) {
+      console.error(e)
+      return dispatch(addCommentFalure(e))
+    }
+  }
+)
+
+export const addReplay = (parentId) => ({
+  type: ADD_COMMENT_REPLY,
+  payload: parentId,
+})
 
 export const defaultSearchResult = {
   asked: false,
@@ -253,6 +304,7 @@ const initialState = {
   error: null,
   isRefresh: false,
   posts: [],
+  currentComment: undefined,
 }
 
 export default function (state = initialState, action) {
@@ -360,6 +412,11 @@ export default function (state = initialState, action) {
         ...state,
         posts: [...state.posts, ...action.payload],
         isLoading: false,
+      }
+    case ADD_COMMENT_REPLY:
+      return {
+        ...state,
+        currentComment: action.payload,
       }
     case SING_OUT:
       return initialState

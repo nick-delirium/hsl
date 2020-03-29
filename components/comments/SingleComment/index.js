@@ -1,5 +1,9 @@
 /* eslint-disable no-extra-boolean-cast */
 import React from 'react'
+import { connect } from 'react-redux'
+import get from 'lodash/get'
+import { createStructuredSelector } from 'reselect'
+
 import {
   View,
   Text,
@@ -7,6 +11,7 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from 'react-native'
+import { addReplay } from '@/Pages/OKBK/reducer'
 import dateFormat from '../utils/dateFormat'
 
 const SingleComment = ({
@@ -18,6 +23,7 @@ const SingleComment = ({
   isWithActions,
   isChild,
   parentAuthor,
+  actions,
 }) => (
   <View style={{ flexDirection: 'column', paddingBottom: 10 }}>
     <View style={{ flexDirection: 'row' }}>
@@ -25,7 +31,7 @@ const SingleComment = ({
         <Image
           style={styles.photo}
           resizeMode="cover"
-          source={Boolean(author.photo) ? { uri: author.photo } : require('@/assets/images/no_photo.png')}
+          source={Boolean(author && author.photo) ? { uri: author.photo } : require('@/assets/images/no_photo.png')}
         />
       </View>
       <View style={{ flex: 15 }}>
@@ -45,7 +51,10 @@ const SingleComment = ({
           <View style={styles.actions}>
             <Text style={{ color: '#525252' }}>{dateFormat(date)}</Text>
             <TouchableOpacity
-              onClick={() => console.log(commentId)}
+              onClick={() => {
+                console.log('replay to', commentId)
+                actions.addReplay(commentId)
+              }}
               style={{ marginLeft: 30, color: '#525252' }}
             >
               <Text>
@@ -106,4 +115,14 @@ const styles = StyleSheet.create({
   },
 })
 
-export default SingleComment
+const mapStateToProps = createStructuredSelector({
+  account: (state) => get(state, 'okbk.account'),
+  currentPost: (state) => get(state, 'article.id'),
+})
+const mapDispatchToProps = (dispatch) => ({
+  actions: {
+    addReplay: (postId, comment, userId, parentId) => dispatch(addReplay(postId, comment, userId, parentId)),
+  },
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(SingleComment)

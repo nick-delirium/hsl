@@ -19,13 +19,25 @@ import Feed from './Feed'
 import { authErrors } from './queriesErrors'
 import Navbar from './components/NavBar'
 import CommentField from './components/CommentField'
-import { accountConfirmed } from './reducer'
+import { accountConfirmed, addComment } from './reducer'
 
 class OKBK extends PureComponent {
+  constructor(props) {
+    super(props)
+
+    this.commentInputRef = React.createRef()
+  }
+
   componentDidMount() {
     const { account } = this.props
     const isAccountEmpty = Object.entries(account).length === 0
     if (isAccountEmpty) this.checkAuth()
+  }
+
+  componentDidUpdate(props) {
+    if (props.currentComment && this.commentInputRef.current) {
+      this.commentInputRef.current.focus()
+    }
   }
 
   checkAuth = () => {
@@ -64,12 +76,20 @@ class OKBK extends PureComponent {
     }
   }
 
+  onCommentSubmit = (e, parentId) => {
+    const { actions, account, currentPost } = this.props
+    if (e.nativeEvent.text) {
+      actions.addComment(currentPost, e.nativeEvent.text, get(account, 'user.id'), parentId)
+    }
+  }
+
   render() {
     const {
       isLoggedIn,
       isLoading,
       error,
       isPostOpen,
+      currentComment,
     } = this.props
 
     if (isLoading) return <Text>loading</Text>
@@ -90,7 +110,10 @@ class OKBK extends PureComponent {
           <View style={{ flex: 1, paddingBottom: 60 }}>
             {this.returnTabView()}
           </View>
-          {isPostOpen ? <CommentField /> : <Navbar />}
+          {/* TODO: set param is it replay */}
+          {isPostOpen
+            ? <CommentField onSubmit={(e) => this.onCommentSubmit(e, currentComment)} ref={this.commentInputRef} />
+            : <Navbar /> }
         </KeyboardAvoidingView>
       </SafeAreaView>
     )
@@ -111,10 +134,13 @@ const mapStateToProps = createStructuredSelector({
   error: (state) => get(state, 'okbk.error'),
   currentTab: (state) => get(state, 'okbk.currentTab'),
   isPostOpen: (state) => get(state, 'url.isPostOpen'),
+  currentPost: (state) => get(state, 'article.id'),
+  currentComment: (state) => get(state, 'okbk.currentComment'),
 })
 const mapDispatchToProps = (dispatch) => ({
   actions: {
     accountConfirmed: (account) => dispatch(accountConfirmed(account)),
+    addComment: (postId, comment, userId, parentId) => dispatch(addComment(postId, comment, userId, parentId)),
   },
 })
 

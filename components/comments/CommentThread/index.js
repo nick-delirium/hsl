@@ -19,6 +19,7 @@ const CommentThread = ({ comments, isInCard }) => {
             date={comment.date}
             author={comment.author}
             comment={comment.comment}
+            commentId={comment.commentId}
           />
           {comment.childs && !isInCard ? comment.childs.map((childComment) => (
             <View style={styles.childComment} key={childComment.commentId}>

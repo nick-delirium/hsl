@@ -6,7 +6,7 @@ import {
 } from 'react-native'
 import fonts from '@/constants/Styles'
 
-const CommentField = () => (
+const CommentField = (props) => (
   <View
     style={styles.container}
   >
@@ -18,6 +18,9 @@ const CommentField = () => (
       keyboardType="default"
       placeholder="Комментарий"
       placeholderTextColor="#959595"
+      returnKeyType="send"
+      ref={props.ref}
+      onSubmitEditing={props.onSubmit}
       style={{
         width: '100%',
         zIndex: 13,
