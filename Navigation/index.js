@@ -9,18 +9,18 @@ import * as Sentry from 'sentry-expo'
 import Constants from 'expo-constants'
 import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router-native'
-import DrawerPanel from './components/DrawerPanel'
-import RouterView from '../router'
-import { togglePost, changeLocation } from './reducer'
 import { goBack } from '@/Pages/OKBK/reducer'
 import { client as gqlClient, subscribeToPush } from '@/Pages/OKBK/gqlQueries'
 import api from '@/api'
 import { getPosts } from '@/Pages/Posts/reducer'
 import { setData as setArticle } from '@/Pages/Posts/components/Articles/articleReducer'
 import { setEvent } from '@/Pages/Posts/components/Events/eventReducer'
-import registerForPushNotificationsAsync, { dismissNotifications, createAndroidNotificationChanel } from '../setUpNotifications'
 import findPost from '@/common/findPost'
 import { setUpAnalytics, events } from '@/analytics'
+import registerForPushNotificationsAsync, { dismissNotifications, createAndroidNotificationChanel } from '../setUpNotifications'
+import { togglePost, changeLocation } from './reducer'
+import RouterView from '../router'
+import DrawerPanel from './components/DrawerPanel'
 
 Sentry.init({
   dsn: 'https://5c75f18266074671887021dc70aa309b@sentry.io/1534014',
@@ -109,6 +109,7 @@ class RouterWithDrawer extends React.PureComponent {
   _handleNotification = (notification) => {
     const isRedirectPush = Boolean(notification.data.id)
     if (isRedirectPush) {
+      this.closeDrawer()
       const { id, type } = notification.data
       console.log(notification.data)
       this.findRedirectToArticle(id, type, true)
@@ -133,6 +134,7 @@ class RouterWithDrawer extends React.PureComponent {
     // prod: 'https://hansanglab.com/2019/10/26/familiya-nam/?expoLink=hslapp://redirect?type=articleZ6625'
     const index = event.url.indexOf('redirect')
     if (index !== -1) {
+      this.closeDrawer()
       const { actions } = this.props
       const type = event.url.slice(index + 14)
       const [postType, id] = type.split('Z')
