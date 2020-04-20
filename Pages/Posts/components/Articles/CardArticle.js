@@ -13,10 +13,10 @@ import { createStructuredSelector } from 'reselect'
 import HTML from 'react-native-render-html'
 import { changeLocation, togglePost } from '@/Navigation/reducer'
 import CachedImage from '@/components/CachedImage'
-import { setData } from './articleReducer'
 import fonts from '@/constants/Styles'
 import Card from '@/components/Card'
 import { events } from '@/analytics'
+import { setData } from './articleReducer'
 
 class CardArticle extends React.PureComponent {
   onItemPress = async () => {

@@ -42,7 +42,7 @@ const Header = ({
     : isEventArticle ? navTitle.eventTitle : undefined
   const specificUrl = isArticle ? url.articleUrl : url.eventUrl
   const specificInApp = isArticle ? url.articleInApp : url.eventInApp
-  const title = isOKBK
+  const title = isOKBK && !isPostOpen
     ? okbkTitle : shouldRenderSpecificTitle
       ? specificTitle : pageTitles[location.pathname].toUpperCase()
   const shouldRenderBackButton = shouldRenderSpecificTitle
@@ -80,7 +80,6 @@ const Header = ({
       fetchPosts(undefined, true)
     }
   }
-
   return (
     <View style={styles.nav}>
       <View

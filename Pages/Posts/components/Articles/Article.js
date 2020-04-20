@@ -5,6 +5,7 @@ import {
   ScrollView,
   Dimensions,
   Linking,
+  Text,
 } from 'react-native'
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
@@ -73,6 +74,10 @@ class Article extends React.Component {
       .replace(/<iframe/, '<iframe allowfullscreen frameBorder="0" ')
     const videoContent = contentWithSpaces
       .replace(/<span data-mce-type="bookmark" style="display: inline-block; width: 0px; overflow: hidden; line-height: 0;" class="mce_SELRES_start">.*<\/span>/g, '')
+
+    const links = videoContent.match(/(https?:\/\/(?:www\.|(?!www))[^\s.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})(ig_embed)/gi)
+    const uniqLinks = [...new Set(links)]
+
     return (
       <ScrollView
         ref="_scrollRef"
@@ -104,6 +109,7 @@ class Article extends React.Component {
           </View>
           <HTML
             renderers={{
+              blockquote: () => null,
               iframe: (atrs) => (
                 <IframeRender
                   atrs={atrs}
@@ -119,6 +125,11 @@ class Article extends React.Component {
             tagsStyles={HTMLStyles}
             ignoredStyles={['fontFamily', 'font-family', 'width', 'height']}
           />
+          <View style={{ paddingLeft: 20 }}>
+            {uniqLinks.map((link) => (
+              <Text onPress={() => this.onRemoteUrlPress(link)} style={{ color: '#5757b5', marginTop: 15, fontSize: 15 }}>{link.replace('?utm_source=ig_embed', '')}</Text>
+            ))}
+          </View>
         </View>
       </ScrollView>
     )
