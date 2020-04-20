@@ -1,6 +1,6 @@
 /* eslint-disable arrow-body-style */
-import api from '../api'
 import { events } from '@/analytics'
+import api from '../api'
 
 export const CHANGE_LOCATION = 'app.location.change'
 const FETCH_CATEGORIES_START = 'app.categories.fetch.start'

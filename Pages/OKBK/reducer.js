@@ -1,12 +1,11 @@
 import { AsyncStorage } from 'react-native'
-import get from 'lodash/get'
+import api from '@/api'
 import {
   client,
   auth,
   getClubsQuery,
   getUsersQuery,
 } from './gqlQueries'
-import api from '@/api'
 
 // Auth
 const SING_IN = 'app.okbk.sing_in'
