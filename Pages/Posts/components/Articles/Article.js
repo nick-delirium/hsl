@@ -32,6 +32,9 @@ class Article extends React.Component {
   onLinkPress = async (url) => {
     const { actions } = this.props
     if (url.startsWith('https://hansanglab.com')) {
+      if (/wp-content/.test(url)) {
+        await WebBrowser.openBrowserAsync(url)
+      }
       const urlParts = url.split('/').filter(Boolean)
       const isEvent = urlParts[2] === 'event'
       const type = isEvent ? 'event' : 'article'
@@ -67,7 +70,6 @@ class Article extends React.Component {
     } = article
     const contentWithSpaces = content
       .replace(/<span class="symbols">.?<\/span>/g, ' ')
-      .replace(/<br.?\/>/, '')
       .replace(/<iframe/, '<iframe allowfullscreen frameBorder="0" ')
     const videoContent = contentWithSpaces
       .replace(/<span data-mce-type="bookmark" style="display: inline-block; width: 0px; overflow: hidden; line-height: 0;" class="mce_SELRES_start">.*<\/span>/g, '')
