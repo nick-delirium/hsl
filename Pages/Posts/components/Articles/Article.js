@@ -81,7 +81,6 @@ class Article extends React.Component {
       .replace(/<\/figure>/, '')
       .replace(/<a id="embed" style="display: none"([^<]+)<\/a>/g, '<inst $1 />')
 
-    console.log(contentWithoutEmbed)
     return (
       <ScrollView
         ref="_scrollRef"
