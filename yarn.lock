@@ -7485,6 +7485,11 @@ react-native-drawer@^2.5.1:
     prop-types "^15.5.8"
     tween-functions "^1.0.1"
 
+react-native-embed-instagram@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-embed-instagram/-/react-native-embed-instagram-0.1.1.tgz#de1f984008569025e0750e17fd0f7e6d0b97d765"
+  integrity sha512-fvJWAO4HxGN5xI630nP+eJpgrJZccanticbfeUpSxjHm7mzmxPreX0ZrfC6LQrdSIdnGtaTIXpgAtaKvTD1WDQ==
+
 react-native-map-clustering@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/react-native-map-clustering/-/react-native-map-clustering-3.1.2.tgz#87683fa57c64ee4c0f92defb165733439510478e"
