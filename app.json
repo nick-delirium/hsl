@@ -9,7 +9,7 @@
       "ios",
       "android"
     ],
-    "version": "1.2.5",
+    "version": "1.2.6",
     "orientation": "portrait",
     "icon": "./assets/images/appIcons/playstore_icon_HSL.png",
     "updates": {
@@ -59,7 +59,7 @@
         "com.sonyericsson.home.permission.BROADCAST_BADGE",
         "com.google.android.c2dm.permission.RECEIVE"
       ],
-      "versionCode": 25,
+      "versionCode": 26,
       "package": "com.hansanglab.hansanglabapp",
       "icon": "./assets/images/appIcons/playstore_icon_HSL.png",
       "config": {
