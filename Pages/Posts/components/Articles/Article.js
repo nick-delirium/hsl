@@ -34,7 +34,7 @@ class Article extends React.Component {
     const { actions } = this.props
     if (url.startsWith('https://hansanglab.com')) {
       if (/wp-content/.test(url)) {
-        await WebBrowser.openBrowserAsync(url)
+        return Linking.openURL(url)
       }
       const urlParts = url.split('/').filter(Boolean)
       const isEvent = urlParts[2] === 'event'
