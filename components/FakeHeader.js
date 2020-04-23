@@ -4,6 +4,7 @@ import {
   View,
   Text,
   Image,
+  Platform,
   TouchableOpacity,
 } from 'react-native'
 import get from 'lodash/get'
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: '100%',
-    paddingTop: 35,
+    paddingTop: Platform.OS === 'ios' ? 35 : 15,
     paddingLeft: 15,
     paddingRight: 15,
     paddingBottom: 10,

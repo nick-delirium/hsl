@@ -11,8 +11,10 @@ const setUpAnalytics = (userId, userParams) => {
 }
 
 const logEvent = (eventName, info) => {
-  console.log('logEvent: ', eventName, info)
-  if (info !== undefined) {
+  // eslint-disable-next-line no-undef
+  if (__DEV__) {
+    console.log('logEvent: ', eventName, info)
+  } else if (info !== undefined) {
     return Amplitude.logEventWithProperties(eventName, info)
   }
   return Amplitude.logEvent(eventName)

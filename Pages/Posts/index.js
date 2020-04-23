@@ -296,6 +296,8 @@ const styles = StyleSheet.create({
   postWrapper: {
     position: 'absolute',
     top: 0,
+    height,
+    paddingBottom: 65,
     left: 0,
     zIndex: 9,
     backgroundColor: '#E1E1E1',
