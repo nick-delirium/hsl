@@ -4,7 +4,6 @@ import {
   View,
   FlatList,
   StyleSheet,
-  Dimensions,
   SafeAreaView,
 } from 'react-native'
 import get from 'lodash/get'
@@ -18,8 +17,6 @@ import {
   rmRefreshFlag,
   getNews,
 } from '../reducer'
-
-const { height } = Dimensions.get('window')
 
 class Feed extends React.PureComponent {
   constructor(props) {
@@ -127,6 +124,7 @@ class Feed extends React.PureComponent {
         {isPostOpen && this.renderPost()}
         {dataWithMedia.length > 0 && (
           <FlatList
+            contentContainerStyle={{ paddingBottom: 20 }}
             data={dataWithMedia}
             style={{ flex: 1 }}
             ref={(r) => this._FlatList = r}
@@ -148,10 +146,8 @@ const styles = StyleSheet.create({
   postWrapper: {
     position: 'absolute',
     top: 0,
-    paddingBottom: 92, // height of header
     left: 0,
     zIndex: 9,
-    height: height - 92,
     backgroundColor: '#ffffff',
     flex: 1,
   },

@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
     paddingBottom: 9,
   },
   nav: {
-    paddingTop: 45,
+    paddingTop: 35,
     paddingLeft: 15,
     paddingRight: 15,
     paddingBottom: 10,

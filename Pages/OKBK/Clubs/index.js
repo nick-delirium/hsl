@@ -43,7 +43,7 @@ const Clubs = ({
   return (
     <>
       {users.length > 0 && (
-        <View style={{ minHeight: height - 150, backgroundColor: 'white' }}>
+        <View style={{ minHeight: height - 50, backgroundColor: 'white' }}>
           <People />
         </View>
       )}

@@ -44,7 +44,7 @@ class People extends PureComponent {
   render() {
     const { users, selectedClub, personalInfo } = this.props
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: Colors.backgroundGray }}>
         {Object.entries(personalInfo).length > 0 && (
           <View
             style={{
@@ -54,6 +54,7 @@ class People extends PureComponent {
               top: 0,
               left: 0,
               zIndex: 30,
+              paddingBottom: 80,
             }}
           >
             <Profile />
@@ -126,7 +127,7 @@ class People extends PureComponent {
 const styles = StyleSheet.create({
   pageWrapper: {
     flexGrow: 1,
-    paddingBottom: 80,
+    paddingBottom: 120,
     backgroundColor: Colors.backgroundGray,
   },
   topWrapper: {

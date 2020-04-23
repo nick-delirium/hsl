@@ -269,12 +269,12 @@ class AllPosts extends React.PureComponent {
       )
     }
     return (
-      <View style={{ position: 'relative', flex: 1, paddingBottom: 10 }}>
+      <View style={{ position: 'relative', flex: 1, paddingBottom: 0 }}>
         {isPostOpen && this.renderPost(postType)}
         {dataWithMedia.length > 0 && (
           <FlatList
+            contentContainerStyle={{ paddingBottom: 20 }}
             data={dataWithMedia}
-            style={{ flex: 1 }}
             ref={this._FlatList}
             renderItem={this.renderCardItem}
             onRefresh={this.refreshData}
@@ -296,10 +296,8 @@ const styles = StyleSheet.create({
   postWrapper: {
     position: 'absolute',
     top: 0,
-    paddingBottom: 92, // height of header
     left: 0,
     zIndex: 9,
-    height,
     backgroundColor: '#E1E1E1',
     flex: 1,
   },
