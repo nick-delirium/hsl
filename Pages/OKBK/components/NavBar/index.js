@@ -94,10 +94,10 @@ const styles = StyleSheet.create({
   container: {
     zIndex: 10,
     position: 'absolute',
-    bottom: 0,
     backgroundColor: '#FFFFFF',
     padding: 10,
-    paddingBottom: 0,
+    bottom: -40, // for iphone with
+    paddingBottom: 40, // fridge
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     shadowColor: '#000',
