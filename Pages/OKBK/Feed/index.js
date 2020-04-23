@@ -4,7 +4,7 @@ import {
   View,
   FlatList,
   StyleSheet,
-  SafeAreaView,
+  Dimensions,
 } from 'react-native'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
@@ -17,6 +17,8 @@ import {
   rmRefreshFlag,
   getNews,
 } from '../reducer'
+
+const { height } = Dimensions.get('window')
 
 class Feed extends React.PureComponent {
   constructor(props) {
@@ -97,11 +99,9 @@ class Feed extends React.PureComponent {
   }
 
   renderPost = () => (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#FFFFFF', zIndex: 10 }}>
-      <View style={styles.postWrapper}>
-        <Article id />
-      </View>
-    </SafeAreaView>
+    <View style={styles.postWrapper}>
+      <Article id />
+    </View>
   )
 
   render() {
@@ -146,6 +146,8 @@ const styles = StyleSheet.create({
   postWrapper: {
     position: 'absolute',
     top: 0,
+    height,
+    paddingBottom: 120,
     left: 0,
     zIndex: 9,
     backgroundColor: '#ffffff',
