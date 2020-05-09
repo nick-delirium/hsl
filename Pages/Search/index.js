@@ -124,10 +124,10 @@ const styles = StyleSheet.create({
   postWrapper: {
     position: 'absolute',
     top: 0,
-    paddingBottom: 100,
+    height,
+    paddingBottom: 65,
     left: 0,
     zIndex: 9,
-    height,
     backgroundColor: '#E1E1E1',
     flex: 1,
   },
