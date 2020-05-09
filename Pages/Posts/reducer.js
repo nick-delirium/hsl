@@ -1,7 +1,7 @@
-import api from '../../api'
 import {
   CHANGE_LOCATION,
 } from '@/Navigation/reducer'
+import api from '../../api'
 
 const FETCH_INITIAL_SUCCESS = 'app.data.fetch.initial.success'
 
@@ -198,7 +198,6 @@ export const getEvents = (
 }
 
 const initialState = {
-  posts: [],
   data: [],
   isLoading: true,
   isError: false,

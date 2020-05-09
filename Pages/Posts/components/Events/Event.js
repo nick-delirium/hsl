@@ -33,13 +33,21 @@ class Event extends React.PureComponent {
   onLinkPress = async (url) => {
     const { actions } = this.props
     if (url.startsWith('https://hansanglab.com')) {
-      const urlParts = url.split('/').filter(Boolean)
-      const isEvent = urlParts[2] === 'event'
-      const type = isEvent ? 'event' : 'article'
-      const setAction = isEvent ? actions.setEvent : actions.setArticle
-      const slug = urlParts[urlParts.length - 1]
-      const fetchUrl = isEvent ? api.getEventBySlug(slug) : api.getPostBySlug(slug)
-      findPost(type, fetchUrl, setAction, actions.togglePost, true)
+      if (/wp-content/.test(url)) {
+        return Linking.openURL(url)
+      }
+      try {
+        const urlParts = url.split('/').filter(Boolean)
+        const isEvent = urlParts[2] === 'event'
+        const type = isEvent ? 'event' : 'article'
+        const setAction = isEvent ? actions.setEvent : actions.setArticle
+        const slug = urlParts[urlParts.length - 1]
+        const fetchUrl = isEvent ? api.getEventBySlug(slug) : api.getPostBySlug(slug)
+        await findPost(type, fetchUrl, setAction, actions.togglePost, true)
+      } catch (e) {
+        console.log(e)
+        await WebBrowser.openBrowserAsync(url)
+      }
     } else if (url.startsWith('mailto:')) {
       Linking.openURL(url)
     } else {

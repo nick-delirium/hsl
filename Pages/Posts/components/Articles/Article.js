@@ -36,13 +36,18 @@ class Article extends React.Component {
       if (/wp-content/.test(url)) {
         return Linking.openURL(url)
       }
-      const urlParts = url.split('/').filter(Boolean)
-      const isEvent = urlParts[2] === 'event'
-      const type = isEvent ? 'event' : 'article'
-      const setAction = isEvent ? actions.setEvent : actions.setArticle
-      const slug = urlParts[urlParts.length - 1]
-      const fetchUrl = isEvent ? api.getEventBySlug(slug) : api.getPostBySlug(slug)
-      findPost(type, fetchUrl, setAction, actions.togglePost, true)
+      try {
+        const urlParts = url.split('/').filter(Boolean)
+        const isEvent = urlParts[2] === 'event'
+        const type = isEvent ? 'event' : 'article'
+        const setAction = isEvent ? actions.setEvent : actions.setArticle
+        const slug = urlParts[urlParts.length - 1]
+        const fetchUrl = isEvent ? api.getEventBySlug(slug) : api.getPostBySlug(slug)
+        await findPost(type, fetchUrl, setAction, actions.togglePost, true)
+      } catch (e) {
+        console.log(e)
+        this.onRemoteUrlPress(url)
+      }
     } else {
       this.onRemoteUrlPress(url)
     }

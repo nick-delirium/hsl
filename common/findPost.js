@@ -1,18 +1,17 @@
 import get from 'lodash/get'
 import { Linking } from 'expo'
-import { Alert } from 'react-native'
 import { events } from '@/analytics'
 
 
-const findPost = (type, fetchUrl, setAction, toggleAction, needToSendEvent) => {
-  fetch(`${fetchUrl}`)
+const findPost = async (type, fetchUrl, setAction, toggleAction, needToSendEvent) => {
+  await fetch(`${fetchUrl}`)
     .then((res) => res.json())
     .then(async (searchResult) => {
       const isArray = Array.isArray(searchResult)
       const post = isArray ? searchResult[0] : searchResult
       const opFailStatus = get(post, 'data.status', 0)
-      if (opFailStatus === 404 || opFailStatus === 403) {
-        Alert.alert('Ошибка', 'запись не найдена')
+      if (!post || opFailStatus === 404 || opFailStatus === 403) {
+        throw new Error('Article was not found')
       } else {
         const mediaUrl = get(post, '_links.wp:featuredmedia.href', null)
           || `https://hansanglab.com/wp-json/wp/v2/media/${get(post, 'featured_media')}`
@@ -49,7 +48,9 @@ const findPost = (type, fetchUrl, setAction, toggleAction, needToSendEvent) => {
         return toggleAction(true, type)
       }
     })
-    .catch((e) => console.error(e))
+    .catch((e) => {
+      throw e
+    })
 }
 
 export default findPost

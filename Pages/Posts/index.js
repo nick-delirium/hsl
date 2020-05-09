@@ -249,9 +249,8 @@ class AllPosts extends React.PureComponent {
       postType,
     } = this.props
 
-    const displayingPosts = data
-    const dataWithMedia = displayingPosts && displayingPosts.length
-      ? displayingPosts.map((item) => {
+    const dataWithMedia = data && data.length
+      ? data.map((item) => {
         const mediaUrl = get(item, '_links.wp:featuredmedia.href', null)
           || `https://hansanglab.com/wp-json/wp/v2/media/${get(item, 'featured_media')}`
         return {

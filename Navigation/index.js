@@ -116,17 +116,18 @@ class RouterWithDrawer extends React.PureComponent {
     }
   }
 
-  findRedirectToArticle = (id, type, fromPush) => {
-    const { history, actions } = this.props
+  findRedirectToArticle = async (id, type, fromPush) => {
+    const { actions } = this.props
     const isEvent = type === 'event'
-    const route = isEvent ? '/events' : '/'
+    // const route = isEvent ? '/events' : '/'
     const setAction = isEvent ? actions.setEvent : actions.setArticle
     console.log('fromPush', fromPush)
     events.openPost({ id, source: fromPush ? 'push' : 'link' })
-    history.push(route)
-    actions.changeLocation(route)
+    /* article reducer row #308 */
+    // history.push(route)
+    // actions.changeLocation(route)
     const fetchUrl = api.getPost(id, isEvent)
-    findPost(type, fetchUrl, setAction, actions.togglePost)
+    await findPost(type, fetchUrl, setAction, actions.togglePost)
   }
 
   handleRedirect = (event) => {
