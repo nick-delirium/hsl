@@ -98,7 +98,10 @@ class RouterWithDrawer extends React.PureComponent {
     const possibleToken = userToken()
     try {
       const result = await AsyncStorage.getItem('userId')
-      console.log('hello', result)
+      console.log('user token:', result)
+      if (!result) {
+        throw new Error('userId not found')
+      }
       resolve(result)
     } catch (e) {
       await AsyncStorage.setItem('userId', possibleToken)
