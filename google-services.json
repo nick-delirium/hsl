@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "688313830048",
+    "firebase_url": "https://hansang-lab-app.firebaseio.com",
+    "project_id": "hansang-lab-app",
+    "storage_bucket": "hansang-lab-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:688313830048:android:e9b764349163b591",
+        "android_client_info": {
+          "package_name": "com.hansanglab.hansanglabapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "688313830048-8uasb60l7r0ml7s1kek5lnmbfpadckc3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hansanglab.hansanglabapp",
+            "certificate_hash": "defb9f6592648fef171536b0b09501ccf9cc5507"
+          }
+        },
+        {
+          "client_id": "688313830048-10oerp6fdkjt00hab2lmoji49arfgrpt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAw297jOd7UAKJ2ZRSvC-nBYWcAWmQajtg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "688313830048-10oerp6fdkjt00hab2lmoji49arfgrpt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "688313830048-0puuq4ldo5efmqpfjpbuele59kjkf7bm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "hansanglab.com",
+                "app_store_id": "1449856463"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

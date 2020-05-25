@@ -1,4 +1,5 @@
 import * as Amplitude from 'expo-analytics-amplitude'
+import * as Analytics from 'expo-firebase-analytics'
 
 const AmplitudeAPIKey = 'bbca3d5fb31f12780ba56d2d245b5ab6'
 
@@ -12,12 +13,23 @@ const setUpAnalytics = (userId, userParams) => {
 
 const logEvent = (eventName, info) => {
   // eslint-disable-next-line no-undef
+  if (eventName === 'open app') {
+    Analytics.setUserId(info.user)
+  }
+  if (info && info.okbkLogin) {
+    Analytics.setUserProperty('okbkLogin', String(info.okbkLogin))
+  }
   if (__DEV__) {
     console.log('logEvent: ', eventName, info)
-  } else if (info !== undefined) {
-    return Amplitude.logEventWithProperties(eventName, info)
+    Analytics.setDebugModeEnabled(true)
+    // Analytics.logEvent(getUnderscoredName(eventName), info)
+  } else {
+    Analytics.logEvent(getUnderscoredName(eventName), info)
+    if (info !== undefined) {
+      return Amplitude.logEventWithProperties(eventName, info)
+    }
+    return Amplitude.logEvent(eventName)
   }
-  return Amplitude.logEvent(eventName)
 }
 
 const events = {
@@ -52,6 +64,10 @@ const events = {
     logEvent('click on search', { query })
   },
 }
+
+const getUnderscoredName = (name) => (
+  name.replace(/\s/g, '_')
+)
 
 export {
   setUpAnalytics,

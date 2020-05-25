@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>688313830048-0puuq4ldo5efmqpfjpbuele59kjkf7bm.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.688313830048-0puuq4ldo5efmqpfjpbuele59kjkf7bm</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>688313830048-8uasb60l7r0ml7s1kek5lnmbfpadckc3.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAFU_PpPC-YUB2ppk8EsxvWOeVvggYqgvw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>688313830048</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>hansanglab.com</string>
+	<key>PROJECT_ID</key>
+	<string>hansang-lab-app</string>
+	<key>STORAGE_BUCKET</key>
+	<string>hansang-lab-app.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:688313830048:ios:df72de6faa606f51</string>
+	<key>DATABASE_URL</key>
+	<string>https://hansang-lab-app.firebaseio.com</string>
+</dict>
+</plist>

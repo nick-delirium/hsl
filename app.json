@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "1.2.10",
+    "version": "1.2.11",
     "orientation": "portrait",
     "icon": "./assets/images/appIcons/playstore_icon_HSL.png",
     "updates": {
@@ -42,7 +42,8 @@
       "icon": "./assets/images/appIcons/app_store_icon_HSL.png",
       "config": {
         "googleMapsApiKey": "key"
-      }
+      },
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "permissions": [
@@ -58,7 +59,7 @@
         "com.sonyericsson.home.permission.BROADCAST_BADGE",
         "com.google.android.c2dm.permission.RECEIVE"
       ],
-      "versionCode": 30,
+      "versionCode": 31,
       "package": "com.hansanglab.hansanglabapp",
       "icon": "./assets/images/appIcons/playstore_icon_HSL.png",
       "config": {
@@ -81,7 +82,22 @@
             "DEFAULT"
           ]
         }
-      ]
+      ],
+      "googleServicesFile": "./google-services.json"
+    },
+    "web": {
+      "config": {
+        "firebase": {
+          "apiKey": "AIzaSyDz9_cdqfiyEkWBJuNBm0IIhhOXt4yVYDo",
+          "authDomain": "hansang-lab-app.firebaseapp.com",
+          "databaseURL": "https://hansang-lab-app.firebaseio.com",
+          "projectId": "hansang-lab-app",
+          "storageBucket": "hansang-lab-app.appspot.com",
+          "messagingSenderId": "688313830048",
+          "appId": "1:688313830048:web:d420d5b7a80a28970157c5",
+          "measurementId": "G-CT59WBCKVH"
+        }
+      }
     }
   }
 }
