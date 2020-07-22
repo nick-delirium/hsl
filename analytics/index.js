@@ -64,6 +64,9 @@ const events = {
   clickOnSearch: (query) => {
     logEvent('click on search', { query })
   },
+  notificationsDisabled: () => {
+    logEvent('notification disabled')
+  },
 }
 
 const getUnderscoredName = (name) => name.replace(/\s/g, '_')

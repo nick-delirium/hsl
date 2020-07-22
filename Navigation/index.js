@@ -17,7 +17,10 @@ import { setData as setArticle } from '@/Pages/Posts/components/Articles/article
 import { setEvent } from '@/Pages/Posts/components/Events/eventReducer'
 import findPost from '@/common/findPost'
 import { setUpAnalytics, events } from '@/analytics'
-import registerForPushNotificationsAsync, { dismissNotifications, createAndroidNotificationChanel } from '../setUpNotifications'
+import registerForPushNotificationsAsync, {
+  dismissNotifications,
+  createAndroidNotificationChanel,
+} from '../setUpNotifications'
 import { togglePost, changeLocation } from './reducer'
 import RouterView from '../router'
 import DrawerPanel from './components/DrawerPanel'
@@ -28,7 +31,10 @@ Sentry.init({
 })
 Sentry.setRelease(Constants.manifest.revisionId)
 
-const rand = () => Math.random().toString(36).substr(2)
+const rand = () =>
+  Math.random()
+    .toString(36)
+    .substr(2)
 const userToken = () => rand() + rand()
 
 class RouterWithDrawer extends React.PureComponent {
@@ -41,7 +47,10 @@ class RouterWithDrawer extends React.PureComponent {
   }
 
   async componentDidMount() {
-    this.backHandler = BackHandler.addEventListener('hardwareBackPress', this.handleBackPress)
+    this.backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackPress,
+    )
     this.addLinkingListener()
 
     /* ANALYTICS */
@@ -83,31 +92,38 @@ class RouterWithDrawer extends React.PureComponent {
           },
         })
       })
-      .catch((e) => {
-        throw new Error(e)
+      .catch(() => {
+        AsyncStorage.getItem('notifications_disabled', (_, result) => {
+          if (result) return null
+          events.notificationsDisabled()
+          AsyncStorage.setItem('notifications_disabled', 1)
+        })
       })
 
-    this._notificationSubscription = Notifications.addListener(this._handleNotification)
+    this._notificationSubscription = Notifications.addListener(
+      this._handleNotification,
+    )
   }
 
   componentWillUnmount() {
     this.removeLinkingListener()
   }
 
-  getUserToken = () => new Promise(async (resolve) => {
-    const possibleToken = userToken()
-    try {
-      const result = await AsyncStorage.getItem('userId')
-      console.log('user token:', result)
-      if (!result) {
-        throw new Error('userId not found')
+  getUserToken = () =>
+    new Promise(async (resolve) => {
+      const possibleToken = userToken()
+      try {
+        const result = await AsyncStorage.getItem('userId')
+        console.log('user token:', result)
+        if (!result) {
+          throw new Error('userId not found')
+        }
+        resolve(result)
+      } catch (e) {
+        await AsyncStorage.setItem('userId', possibleToken)
+        resolve(possibleToken)
       }
-      resolve(result)
-    } catch (e) {
-      await AsyncStorage.setItem('userId', possibleToken)
-      resolve(possibleToken)
-    }
-  })
+    })
 
   _handleNotification = (notification) => {
     const isRedirectPush = Boolean(notification.data.id)
@@ -199,14 +215,18 @@ class RouterWithDrawer extends React.PureComponent {
     const { drawerOpen, drawerDisabled } = this.state
     return (
       <Drawer
-        ref={(ref) => this._drawer = ref}
+        ref={(ref) => (this._drawer = ref)}
         type="overlay"
         content={<DrawerPanel isOpen={drawerOpen} closeDrawer={this.closeDrawer} />}
         onOpen={() => {
-          setTimeout(() => { this.setState({ drawerOpen: true }) }, 0)
+          setTimeout(() => {
+            this.setState({ drawerOpen: true })
+          }, 0)
         }}
         onClose={() => {
-          setTimeout(() => { this.setState({ drawerOpen: false }) }, 0)
+          setTimeout(() => {
+            this.setState({ drawerOpen: false })
+          }, 0)
         }}
         tweenDuration={100}
         panThreshold={0.08}
@@ -250,7 +270,4 @@ const mapDispatchToProps = (dispatch) => ({
 
 const RouterWithRouter = withRouter(RouterWithDrawer)
 
-export default connect(
-  mapStateFromProps,
-  mapDispatchToProps,
-)(RouterWithRouter)
+export default connect(mapStateFromProps, mapDispatchToProps)(RouterWithRouter)
