@@ -17,7 +17,7 @@
         "preset": "jest-expo",
         "timers": "fake",
         "transformIgnorePatterns": [
-            "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|react-router-native|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|sentry-expo|native-base)"
+            "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|react-router-native|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|@sentry|sentry-expo|native-base)"
         ]
     },
     "dependencies": {
