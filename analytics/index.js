@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import * as Amplitude from 'expo-analytics-amplitude'
 import * as Analytics from 'expo-firebase-analytics'
 
@@ -65,11 +66,6 @@ const events = {
   },
 }
 
-const getUnderscoredName = (name) => (
-  name.replace(/\s/g, '_')
-)
+const getUnderscoredName = (name) => name.replace(/\s/g, '_')
 
-export {
-  setUpAnalytics,
-  events,
-}
+export { setUpAnalytics, events }
