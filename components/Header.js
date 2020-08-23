@@ -47,7 +47,7 @@ const Header = ({
     ? okbkTitle : shouldRenderSpecificTitle
       ? specificTitle : pageTitles[location.pathname].toUpperCase()
   const shouldRenderBackButton = shouldRenderSpecificTitle
-  const shouldRenderSearch = (/news|blogs|programs|media|search/i.test(location.pathname) || location.pathname === '/') && !isPostOpen
+  const shouldRenderSearch = (/news|blogs|programs|partners|media|search/i.test(location.pathname) || location.pathname === '/') && !isPostOpen
 
   const onBackIconPress = isSearch && !isPostOpen ? goBack : closePost
   const share = async () => {

@@ -24,6 +24,11 @@ const pages = {
     path: '/programs',
     okbkSub: false,
   },
+  partners: {
+    name: 'Партнёры',
+    path: '/partners',
+    okbkSub: false,
+  },
   media: {
     name: 'Медиа',
     path: '/media',
@@ -62,8 +67,13 @@ export const pageTitles = {
   [pages.news.path]: pages.news.name,
   [pages.blogs.path]: pages.blogs.name,
   [pages.programs.path]: pages.programs.name,
+  [pages.partners.path]: pages.partners.name,
   [pages.media.path]: pages.media.name,
   [pages.places.path]: pages.places.name,
   [pages.okbk.path]: 'ОКБК: Новости',
 }
 export default pages
+
+export const pagesWithSubcategories = [
+  'blogs', 'partners',
+]

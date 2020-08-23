@@ -15,9 +15,13 @@ import { getPostsByCategory } from '@/Pages/Posts/reducer'
 import { setSubCategories } from '@/Navigation/reducer'
 import { events } from '@/analytics'
 
-class BlogCategories extends React.Component {
+class SubCategories extends React.Component {
   onCatPress = (cat) => {
-    const { subCategories, setSubCategoriesAction, fetchByCategory } = this.props
+    const {
+      subCategories, setSubCategoriesAction, fetchByCategory, categories, type,
+    } = this.props
+    const parentTypeId = categories.find((item) => item.slug === type)?.id
+
     const index = subCategories.indexOf(cat.id)
     if (index > -1) {
       subCategories.splice(index, 1)
@@ -27,20 +31,21 @@ class BlogCategories extends React.Component {
     events.clickOnBlogCategory({ catName: cat.name, isSelected: index === -1 })
     setSubCategoriesAction(subCategories)
     const catIds = subCategories.join(',')
-    const category = catIds || 4
-    fetchByCategory(category, undefined, false, 4)
+    const category = catIds || parentTypeId
+    fetchByCategory(category, undefined, false, parentTypeId)
   }
 
   render() {
-    const { categories, subCategories } = this.props
-    const blogCategories = categories.filter((cat) => cat.parent === 4)
+    const { categories, subCategories, type } = this.props
+    const parentTypeId = categories.find((item) => item.slug === type)?.id
+    const currentSubCategories = categories.filter((cat) => cat.parent === parentTypeId)
     return (
       <ScrollView
         horizontal
         contentContainerStyle={{ padding: 10, flexDirection: 'row', alignItems: 'center' }}
         showsHorizontalScrollIndicator={false}
       >
-        {blogCategories && blogCategories.map((cat) => (
+        {currentSubCategories && currentSubCategories.map((cat) => (
           <TouchableOpacity
             key={cat.id}
             style={{
@@ -80,4 +85,4 @@ const withConnect = connect(mapStateFromProps, mapDispatchToProps)
 export default compose(
   withRouter,
   withConnect,
-)(BlogCategories)
+)(SubCategories)

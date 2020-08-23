@@ -10,6 +10,7 @@ import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { getCategories, setFeedType } from '@/Navigation/reducer'
+import { pagesWithSubcategories } from '@/constants/pages'
 import { formatDateAsNumeric, formatEventDate } from '@/common/format'
 import CardArticle from './components/Articles/CardArticle'
 import CardEvent from './components/Events/CardEvent'
@@ -21,7 +22,7 @@ import {
 } from './reducer'
 import Article from './components/Articles/Article'
 import Event from './components/Events/Event'
-import BlogCategories from './components/Articles/BlogCategories'
+import SubCategories from './components/Articles/SubCategories'
 
 const { height } = Dimensions.get('window')
 
@@ -267,10 +268,11 @@ class AllPosts extends React.PureComponent {
         </View>
       )
     }
+    const needSubcategories = pagesWithSubcategories.includes(type) && dataWithMedia.length >= 10
     return (
       <View style={{ position: 'relative', flex: 1, paddingBottom: 0 }}>
         {isPostOpen && this.renderPost(postType)}
-        {dataWithMedia.length > 0 && (
+        {dataWithMedia && (
           <FlatList
             contentContainerStyle={{ paddingBottom: 20 }}
             data={dataWithMedia}
@@ -283,7 +285,7 @@ class AllPosts extends React.PureComponent {
             removeClippedSubviews
             maxToRenderPerBatch={8}
             onEndReachedThreshold={0.5}
-            ListHeaderComponent={type === 'blogs' ? (<BlogCategories />) : undefined}
+            ListHeaderComponent={needSubcategories ? (<SubCategories type={type} />) : undefined}
           />
         )}
       </View>

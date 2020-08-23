@@ -63,6 +63,7 @@ const RouterView = ({
     <Route path={pages.events.path} render={() => (<Posts type="events" />)} />
     <Route path={pages.blogs.path} render={() => (<Posts type="blogs" />)} />
     <Route path={pages.programs.path} render={() => (<Posts type="programs" />)} />
+    <Route path={pages.partners.path} render={() => (<Posts type="partners" />)} />
     <Route path={pages.media.path} render={() => (<Posts type="media" />)} />
     <Route path={pages.search.path} render={() => (<Search />)} />
     <Route path={pages.post.path} render={() => (<Article />)} />
