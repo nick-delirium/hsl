@@ -4,10 +4,10 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  Linking,
   Image,
   Share,
 } from 'react-native'
+import * as Linking from 'expo-linking'
 import { formatText } from '@/common/format'
 import fonts from '@/constants/Styles'
 

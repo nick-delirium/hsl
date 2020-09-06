@@ -1,5 +1,5 @@
 import get from 'lodash/get'
-import { Linking } from 'expo'
+import * as Linking from 'expo-linking'
 import { events } from '@/analytics'
 
 

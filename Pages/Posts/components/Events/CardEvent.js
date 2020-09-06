@@ -5,18 +5,18 @@ import {
   Text,
   Image,
 } from 'react-native'
-import { Linking } from 'expo'
+import * as Linking from 'expo-linking'
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import HTML from 'react-native-render-html'
 import CachedImage from '@/components/CachedImage'
 import { changeLocation, togglePost } from '@/Navigation/reducer'
-import { setEvent } from './eventReducer'
+import { events } from '@/analytics'
 import { formatDate } from '@/common/format'
 import fonts from '@/constants/Styles'
 import Card from '@/components/Card'
-import { events } from '@/analytics'
+import { setEvent } from './eventReducer'
 
 class CardEvent extends React.Component {
   onItemPress = async () => {

@@ -52,22 +52,33 @@ export const getPlaces = (city) => {
         const res = city ? resultArray.filter((place) => place.city === city) : resultArray
         const transformedMarkers = []
         res.forEach((item) => {
-          if (
-            !transformedMarkers.find((OC) => OC.geo_lat === item.geo_lat && (OC.id !== item.id))
-          ) {
+          if (item.location && item.location.lat) {
+            // check if there are several markers on one place and add some space
+            if (!transformedMarkers.find(
+              (OC) => OC.location.lat === item.location.lat && (OC.id !== item.id),
+            )) {
+              transformedMarkers.push({
+                ...item,
+                location: {
+                  latitude: parseFloat(item.location.lat),
+                  longitude: parseFloat(item.location.lng),
+                },
+              })
+            } else {
+              transformedMarkers.push({
+                ...item,
+                location: {
+                  latitude: parseFloat(item.location.lat) + 0.00005,
+                  longitude: parseFloat(item.location.lng),
+                },
+              })
+            } // wierd thing: somehow some points may have only theese coords
+          } else if (item.geo_lat && item.geo_lng) {
             transformedMarkers.push({
               ...item,
               location: {
-                latitude: item.geo_lat,
-                longitude: item.geo_lng,
-              },
-            })
-          } else {
-            transformedMarkers.push({
-              ...item,
-              location: {
-                latitude: item.geo_lat + 0.00005,
-                longitude: item.geo_lng,
+                latitude: parseFloat(item.geo_lat),
+                longitude: parseFloat(item.geo_lng),
               },
             })
           }

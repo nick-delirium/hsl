@@ -13,8 +13,8 @@ import {
   TouchableWithoutFeedback,
   Dimensions,
   Alert,
-  Linking,
 } from 'react-native'
+import * as Linking from 'expo-linking'
 import fonts from '@/constants/Styles'
 import Colors from '@/constants/Colors'
 import { singOut } from '../reducer'

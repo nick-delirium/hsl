@@ -124,8 +124,8 @@ class Places extends PureComponent {
                 key={location.id}
                 pinColor={rusCats[location.type] ? rusCats[location.type].color : '#000'}
                 coordinate={{
-                  latitude: location.location.latitude,
-                  longitude: location.location.longitude,
+                  latitude: location.location.latitude || 0,
+                  longitude: location.location.longitude || 0,
                 }}
                 title={location.venue}
                 description={location.address}

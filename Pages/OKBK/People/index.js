@@ -8,9 +8,9 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
-  Linking,
 } from 'react-native'
 import * as WebBrowser from 'expo-web-browser'
+import * as Linking from 'expo-linking'
 import get from 'lodash/get'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'

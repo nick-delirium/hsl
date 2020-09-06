@@ -7,9 +7,9 @@ import {
   StyleSheet,
   Dimensions,
   Text,
-  Linking,
 } from 'react-native'
 import { connect } from 'react-redux'
+import * as Linking from 'expo-linking'
 import colors from '@/constants/Colors'
 import fonts from '@/constants/Styles'
 import { singIn } from '../reducer'

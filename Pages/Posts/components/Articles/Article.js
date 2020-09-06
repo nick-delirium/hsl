@@ -4,7 +4,6 @@ import {
   View,
   ScrollView,
   Dimensions,
-  Linking,
 } from 'react-native'
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
@@ -13,6 +12,7 @@ import get from 'lodash/get'
 import HTML from 'react-native-render-html'
 import InstagramEmbed from 'react-native-embed-instagram'
 import { createStructuredSelector } from 'reselect'
+import * as Linking from 'expo-linking'
 import * as WebBrowser from 'expo-web-browser'
 import { togglePost } from '@/Navigation/reducer'
 import CachedImage from '@/components/CachedImage'

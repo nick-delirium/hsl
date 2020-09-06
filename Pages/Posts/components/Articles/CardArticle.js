@@ -4,7 +4,7 @@ import {
   View,
   Text,
 } from 'react-native'
-import { Linking } from 'expo'
+import * as Linking from 'expo-linking'
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'
 import { compose } from 'redux'

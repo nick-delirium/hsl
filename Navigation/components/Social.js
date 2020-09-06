@@ -2,11 +2,11 @@ import React from 'react'
 import {
   StyleSheet,
   View,
-  Linking,
   Image,
   TouchableOpacity,
   Platform,
 } from 'react-native'
+import * as Linking from 'expo-linking'
 import { social } from '@/constants/contacts'
 import { events } from '@/analytics'
 

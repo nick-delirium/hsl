@@ -106,6 +106,7 @@ class AppIndex extends React.Component {
             {
               toValue: 1,
               duration: 500,
+              useNativeDriver: false,
             },
           ).start(() => {
             this.setState({ isAppReady: true })

@@ -7,8 +7,8 @@ import {
   ScrollView,
   Image,
   Dimensions,
-  Linking,
 } from 'react-native'
+import * as Linking from 'expo-linking'
 import * as WebBrowser from 'expo-web-browser'
 import { withRouter } from 'react-router-native'
 import { connect } from 'react-redux'

@@ -3,10 +3,11 @@ import React from 'react'
 import { BackHandler, Keyboard, AsyncStorage } from 'react-native'
 import Drawer from 'react-native-drawer'
 import get from 'lodash/get'
-import { Linking, Notifications } from 'expo'
+import { Notifications } from 'expo'
 import { connect } from 'react-redux'
 import * as Sentry from 'sentry-expo'
 import Constants from 'expo-constants'
+import * as Linking from 'expo-linking'
 import { createStructuredSelector } from 'reselect'
 import { withRouter } from 'react-router-native'
 import { goBack } from '@/Pages/OKBK/reducer'
@@ -96,7 +97,7 @@ class RouterWithDrawer extends React.PureComponent {
         AsyncStorage.getItem('notifications_disabled', (_, result) => {
           if (result) return null
           events.notificationsDisabled()
-          AsyncStorage.setItem('notifications_disabled', 1)
+          AsyncStorage.setItem('notifications_disabled', '1')
         })
       })
 

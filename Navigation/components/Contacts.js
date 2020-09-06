@@ -4,10 +4,10 @@ import {
   View,
   TouchableOpacity,
   Text,
-  Linking,
   Clipboard,
 } from 'react-native'
 import Constants from 'expo-constants' // 'expo-constants' with the latest SDK to date
+import * as Linking from 'expo-linking'
 import * as WebBrowser from 'expo-web-browser'
 import { contacts } from '@/constants/contacts'
 import fonts from '@/constants/Styles'
