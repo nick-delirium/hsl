@@ -16,6 +16,7 @@ import CachedImage from '@/components/CachedImage'
 import fonts from '@/constants/Styles'
 import Card from '@/components/Card'
 import { events } from '@/analytics'
+import findPost from '@/common/findPost'
 import { setData } from './articleReducer'
 
 class CardArticle extends React.PureComponent {
@@ -42,9 +43,14 @@ class CardArticle extends React.PureComponent {
       content: data.content,
     }
     try {
-      const inAppLink = await Linking.makeUrl('redirect', { type: `articleZ${id}` })
-      setPost({ ...article, inAppLink })
-      openPost(true, 'article')
+      if (article.content !== undefined) {
+        const inAppLink = await Linking.makeUrl('redirect', { type: `articleZ${id}` })
+        setPost({ ...article, inAppLink })
+        openPost(true, 'article')
+      } else { // similar posts have no data.content
+        const fetchUrl = get(data, '_links.self[0].href')
+        await findPost('article', fetchUrl, setPost, openPost, 'similar_post')
+      }
     } catch (e) {
       throw new Error(e)
     }

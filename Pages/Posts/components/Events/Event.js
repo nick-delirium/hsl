@@ -43,7 +43,7 @@ class Event extends React.PureComponent {
         const setAction = isEvent ? actions.setEvent : actions.setArticle
         const slug = urlParts[urlParts.length - 1]
         const fetchUrl = isEvent ? api.getEventBySlug(slug) : api.getPostBySlug(slug)
-        await findPost(type, fetchUrl, setAction, actions.togglePost, true)
+        await findPost(type, fetchUrl, setAction, actions.togglePost, 'internal_link')
       } catch (e) {
         console.log(e)
         await WebBrowser.openBrowserAsync(url)

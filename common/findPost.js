@@ -3,7 +3,7 @@ import * as Linking from 'expo-linking'
 import { events } from '@/analytics'
 
 
-const findPost = async (type, fetchUrl, setAction, toggleAction, needToSendEvent) => {
+const findPost = async (type, fetchUrl, setAction, toggleAction, sourceEvent) => {
   await fetch(`${fetchUrl}`)
     .then((res) => res.json())
     .then(async (searchResult) => {
@@ -40,8 +40,8 @@ const findPost = async (type, fetchUrl, setAction, toggleAction, needToSendEvent
         const itemData = type === 'event' ? eventData : postData
         const inAppLink = await Linking.makeUrl('redirect', { type: `${type}Z${post.id}` })
 
-        if (needToSendEvent) {
-          events.openPost({ id: post.id, source: 'internal_link' })
+        if (sourceEvent) {
+          events.openPost({ id: post.id, source: sourceEvent })
         }
         setAction({ ...itemData, inAppLink })
         toggleAction(false, '')
