@@ -55,6 +55,7 @@ const fetchAdsFail = (reason) => ({
   type: FETCH_ADS_FAIL,
   payload: reason,
 })
+
 const fetchInitialSuccess = (data) => ({
   type: FETCH_INITIAL_SUCCESS,
   payload: data,

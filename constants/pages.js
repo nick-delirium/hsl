@@ -4,9 +4,14 @@ const pages = {
     path: '/',
     okbkSub: false,
   },
-  news: {
-    name: 'Новости',
-    path: '/news',
+  // news: {
+  //   name: 'Новости',
+  //   path: '/news',
+  //   okbkSub: false,
+  // },
+  partners: {
+    name: 'Партнёры',
+    path: '/partners',
     okbkSub: false,
   },
   events: {
@@ -24,16 +29,11 @@ const pages = {
     path: '/programs',
     okbkSub: false,
   },
-  partners: {
-    name: 'Партнёры',
-    path: '/partners',
-    okbkSub: false,
-  },
-  media: {
-    name: 'Медиа',
-    path: '/media',
-    okbkSub: false,
-  },
+  // media: {
+  //   name: 'Медиа',
+  //   path: '/media',
+  //   okbkSub: false,
+  // },
   places: {
     name: 'Карта',
     path: '/places',
@@ -64,11 +64,11 @@ const pages = {
 export const pageTitles = {
   [pages.all.path]: 'KORYOSARAM SYNERGY',
   [pages.events.path]: pages.events.name,
-  [pages.news.path]: pages.news.name,
+  // [pages.news.path]: pages.news.name,
   [pages.blogs.path]: pages.blogs.name,
   [pages.programs.path]: pages.programs.name,
   [pages.partners.path]: pages.partners.name,
-  [pages.media.path]: pages.media.name,
+  // [pages.media.path]: pages.media.name,
   [pages.places.path]: pages.places.name,
   [pages.okbk.path]: 'ОКБК: Новости',
 }
