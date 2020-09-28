@@ -6,6 +6,7 @@ import {
   StatusBar,
   Animated,
   AsyncStorage,
+  Alert,
 } from 'react-native'
 import { AppLoading, SplashScreen } from 'expo'
 import { Asset } from 'expo-asset'
@@ -131,7 +132,7 @@ class AppIndex extends React.Component {
         <AppLoading
           startAsync={this._cacheSplashResourcesAsync}
           onFinish={() => this.setState({ isSplashReady: true })}
-          onError={console.warn}
+          onError={(e) => Alert(e)}
           autoHideSplash={false}
         />
       )

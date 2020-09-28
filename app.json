@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "1.2.13",
+    "version": "1.2.14",
     "orientation": "portrait",
     "icon": "./assets/images/appIcons/playstore_icon_HSL.png",
     "updates": {
@@ -40,6 +40,9 @@
       "supportsTablet": true,
       "bundleIdentifier": "hansanglab.com",
       "icon": "./assets/images/appIcons/app_store_icon_HSL.png",
+      "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true
+      },
       "config": {
         "googleMapsApiKey": "key"
       },
@@ -98,6 +101,10 @@
           "measurementId": "G-CT59WBCKVH"
         }
       }
+    },
+    "locales": {
+      "ru": "./languages/russian.json",
+      "en": "./languages/english.json"
     }
   }
 }
